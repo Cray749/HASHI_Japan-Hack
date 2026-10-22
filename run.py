@@ -28,13 +28,14 @@ def main() -> None:
 
     import uvicorn
 
-    from hashi.main import app, lan_ip
+    from hashi.main import app
+    from hashi.netinfo import candidate_ips, lan_ip
 
     ip = lan_ip()
     ssl = {}
     if args.https:
         from hashi.cert import ensure_cert
-        cert, key = ensure_cert(ROOT / "certs", ip)
+        cert, key = ensure_cert(ROOT / "certs", candidate_ips())
         ssl = {"ssl_certfile": str(cert), "ssl_keyfile": str(key)}
     scheme = "https" if args.https else "http"
     print(f"\n  HASHI cabin server\n  crew tablet : {scheme}://{ip}:{args.port}/crew/"

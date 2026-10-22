@@ -17,8 +17,8 @@ export function PassengerChips({ p }: { p?: Passenger }) {
   );
 }
 
-export default function RequestCard({ req, cat, pax, send }: {
-  req: Request; cat: Catalog; pax?: Passenger; send: (m: object) => void;
+export default function RequestCard({ req, cat, pax, send, speaks = false }: {
+  req: Request; cat: Catalog; pax?: Passenger; send: (m: object) => void; speaks?: boolean;
 }) {
   const now = useNow(5000);
   const intent = cat.intents.find((i) => i.id === req.intent);
@@ -42,6 +42,7 @@ export default function RequestCard({ req, cat, pax, send }: {
         </div>
         <PassengerChips p={pax} />
         <p className="meta">
+          {speaks && <span className="chip green"><Icon name="Languages" size={14} /> あなたの言語 You speak this</span>}
           {req.via === 'voice' && <span className="chip"><Icon name="Mic" size={14} /> 音声 Voice {req.confidence ? `${Math.round(req.confidence * 100)}%` : ''}</span>}
           <span className="chip">{STATUS_LABEL[req.status].ja} {STATUS_LABEL[req.status].en}</span>
           {lastReply && (req.understood_at

@@ -16,19 +16,21 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
 
 
-def ensure_cert(directory: Path, ip: str) -> tuple[Path, Path]:
+def ensure_cert(directory: Path, ips: list[str]) -> tuple[Path, Path]:
     directory.mkdir(parents=True, exist_ok=True)
-    cert_path, key_path = directory / f"hashi-{ip}.crt", directory / f"hashi-{ip}.key"
+    tag = "-".join(sorted(ips))[:60]
+    cert_path, key_path = directory / f"hashi-{tag}.crt", directory / f"hashi-{tag}.key"
     if cert_path.exists() and key_path.exists():
         return cert_path, key_path
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "HASHI cabin server")])
     now = datetime.datetime.now(datetime.timezone.utc)
     sans = [x509.DNSName("localhost"), x509.IPAddress(ipaddress.ip_address("127.0.0.1"))]
-    try:
-        sans.append(x509.IPAddress(ipaddress.ip_address(ip)))
-    except ValueError:
-        pass
+    for ip in ips:
+        try:
+            sans.append(x509.IPAddress(ipaddress.ip_address(ip)))
+        except ValueError:
+            pass
     cert = (x509.CertificateBuilder().subject_name(name).issuer_name(name)
             .public_key(key.public_key()).serial_number(x509.random_serial_number())
             .not_valid_before(now - datetime.timedelta(days=1))

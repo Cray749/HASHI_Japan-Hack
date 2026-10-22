@@ -28,7 +28,8 @@ class WhisperBackend(ASRBackend):
         self.size = size or os.environ.get("HASHI_ASR_MODEL", "small")
         local = MODELS_DIR / f"whisper-{self.size}"
         source = str(local) if local.exists() else self.size
-        self.model = WhisperModel(source, device="cpu", compute_type="int8",
+        threads = int(os.environ.get("HASHI_ASR_THREADS", min(8, max(4, (os.cpu_count() or 8) // 2))))
+        self.model = WhisperModel(source, device="cpu", compute_type="int8", cpu_threads=threads,
                                   download_root=str(MODELS_DIR) if not local.exists() else None,
                                   local_files_only=os.environ.get("HASHI_OFFLINE", "") == "1")
 
@@ -37,6 +38,9 @@ class WhisperBackend(ASRBackend):
         segments, info = self.model.transcribe(
             pcm.astype(np.float32), language=lang if lang in ("hi", "pa", "en", "ja") else None,
             task=task, beam_size=3, vad_filter=False, condition_on_previous_text=False,
+            # requests are one short sentence: no retry loop on noisy audio, and a hard cap
+            # on length so a hallucinated run-on cannot stall the passenger's phone
+            temperature=0.0, max_new_tokens=64, no_speech_threshold=0.9,
             initial_prompt=_PROMPTS.get(lang) if task == "transcribe" else None)
         text = " ".join(s.text.strip() for s in segments).strip()
         return ASRResult(text=text, language=info.language, seconds=time.time() - t0)

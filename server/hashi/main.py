@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import logging
 import os
-import socket
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -18,6 +17,7 @@ from .demo import seed as seed_demo
 from .hub import Hub
 from .intents import DATA_DIR, LANGS, announcements, catalog, greetings
 from .matcher import get_matcher
+from .netinfo import candidate_ips, lan_ip
 
 log = logging.getLogger("hashi")
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,18 +25,6 @@ WEB_DIST = Path(os.environ.get("HASHI_WEB", ROOT / "web" / "dist"))
 VERSION = "0.1.0"
 
 hub = Hub()
-
-
-def lan_ip() -> str:
-    """Best guess at the address phones can reach (the laptop hotspot address)."""
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(("10.255.255.255", 1))  # no packet is sent; this only picks an interface
-        return s.getsockname()[0]
-    except OSError:
-        return "127.0.0.1"
-    finally:
-        s.close()
 
 
 @asynccontextmanager
@@ -97,7 +85,8 @@ def join_info(request_host: str | None = None):
     port = int(os.environ.get("HASHI_PORT", "8000"))
     scheme = os.environ.get("HASHI_SCHEME", "http")
     url = f"{scheme}://{lan_ip()}:{port}/p/"
-    return {"url": url, "crew_url": f"{scheme}://{lan_ip()}:{port}/crew/"}
+    return {"url": url, "crew_url": f"{scheme}://{lan_ip()}:{port}/crew/",
+            "others": [f"{scheme}://{ip}:{port}/p/" for ip in candidate_ips() if ip != lan_ip()]}
 
 
 @app.get("/api/qr.svg")

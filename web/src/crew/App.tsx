@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Announcement, Catalog, ExitCheck, Passenger, Request } from '../shared/types';
+import type { Announcement, Catalog, ExitCheck, Passenger, PaxLang, Request } from '../shared/types';
 import { LiveSocket, loadCatalog, type SocketStatus } from '../shared/net';
-import { Bridge, Icon } from '../shared/ui';
+import { Bridge, Icon, save, store } from '../shared/ui';
 import AnnouncePanel from './Announce';
 import ExitRowPanel from './ExitRow';
 import GreetingPanel from './Greeting';
 import RequestCard from './RequestCard';
 import SeatMap from './SeatMap';
-import { URGENCY } from './labels';
+import { LANG_LABEL, URGENCY } from './labels';
 
 type Tab = 'requests' | 'seats' | 'announce' | 'exit' | 'greet';
 
@@ -52,6 +52,13 @@ export default function App() {
   const [sound, setSound] = useState(false);
   const [showQr, setShowQr] = useState(false);
   const [filter, setFilter] = useState<'open' | 'all'>('open');
+  // languages this crew member can speak; matching requests are flagged so they take them
+  const [speaks, setSpeaks] = useState<PaxLang[]>(() => store<PaxLang[]>('hashi.crew.speaks', []));
+  const toggleSpeak = (l: PaxLang) => {
+    const next = speaks.includes(l) ? speaks.filter((x) => x !== l) : [...speaks, l];
+    setSpeaks(next);
+    save('hashi.crew.speaks', next);
+  };
   const wide = useWide();
   const sock = useRef<LiveSocket | null>(null);
   const audio = useRef<AudioContext | null>(null);
@@ -122,6 +129,7 @@ export default function App() {
                 <Icon name="Siren" size={30} />
                 <strong className="useat">{r.seat}</strong>
                 <span lang="ja" className="ja">{URGENCY[3].ja}: {i?.labels.ja}</span>
+                {speaks.includes(r.lang) && <span className="chip green"><Icon name="Languages" size={14} /> あなたの言語 Your language</span>}
                 <span className="en">{i?.labels.en}</span>
                 {r.status === 'new' && (
                   <button className="btn" onClick={() => send({ t: 'seen', req_id: r.id })}>向かいます · On my way</button>
@@ -145,7 +153,7 @@ export default function App() {
           <small>橋 · पुल · ਪੁਲ</small>
         </div>
       ) : (
-        shown.map((r) => <RequestCard key={r.id} req={r} cat={cat} pax={pax[r.seat]} send={send} />)
+        shown.map((r) => <RequestCard key={r.id} req={r} cat={cat} pax={pax[r.seat]} send={send} speaks={speaks.includes(r.lang)} />)
       )}
     </section>
   );
@@ -178,6 +186,14 @@ export default function App() {
           <span className={`stat ${urgent.length ? 'alert' : ''}`}><Icon name="TriangleAlert" size={16} /> {urgent.length} <small>緊急 urgent</small></span>
           <span className="stat"><Icon name="BadgeCheck" size={16} /> {waitingUnderstood} <small>理解待ち</small></span>
           <span className="stat"><Icon name="Megaphone" size={16} /> {unconfirmed} <small>未確認</small></span>
+        </span>
+        <span className="speaks" role="group" aria-label="Languages I speak">
+          <small>話せる言語 I speak</small>
+          {(['pa', 'hi'] as const).map((l) => (
+            <button key={l} className="hbtn sm" aria-pressed={speaks.includes(l)} onClick={() => toggleSpeak(l)}>
+              {LANG_LABEL[l].ja}
+            </button>
+          ))}
         </span>
         <button className="hbtn" aria-pressed={sound} onClick={() => {
           if (!audio.current) audio.current = new AudioContext();
@@ -212,7 +228,7 @@ export default function App() {
 }
 
 function QrModal({ onClose }: { onClose: () => void }) {
-  const [info, setInfo] = useState<{ url: string; crew_url: string } | null>(null);
+  const [info, setInfo] = useState<{ url: string; crew_url: string; others?: string[] } | null>(null);
   useEffect(() => { fetch('/api/join').then((r) => r.json()).then(setInfo).catch(() => undefined); }, []);
   return (
     <div className="modal" role="dialog" aria-label="Passenger QR" onClick={onClose}>
@@ -220,6 +236,9 @@ function QrModal({ onClose }: { onClose: () => void }) {
         <h2>乗客用QR <small>Passenger QR</small></h2>
         <img src="/api/qr.svg" alt="QR code to open HASHI on a phone" width={260} height={260} />
         <p className="url">{info?.url ?? '…'}</p>
+        {info?.others && info.others.length > 0 && (
+          <p className="hint">他のアドレス Other addresses: {info.others.join('  ')}</p>
+        )}
         <p className="hint">スマホのカメラで読み取る · Scan with the phone camera. Same Wi-Fi as this tablet.</p>
         <button className="btn primary" onClick={onClose}>閉じる · Close</button>
       </div>

@@ -612,3 +612,19 @@ small {
   .seat-col { flex-direction: row; min-width: 0; }
   .seat-cell { width: 44px; }
 }
+
+.speaks {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hbtn.sm {
+  min-height: 40px;
+  padding: 2px 10px;
+}
+
+.urgent-row .en,
+.urgent-row .ja {
+  color: #fff;
+}

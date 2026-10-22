@@ -151,6 +151,7 @@ export default function App() {
   const tiles = cat.intents.filter((i) => i.tile && i.id !== 'help');
   const help = cat.intents.find((i) => i.id === 'help')!;
   const firstAnn = anns[0];
+  const voiceBtn = <VoiceButton p={p} disabled={conn !== 'online'} onResult={onVoice} onProblem={setNotice} />;
 
   return (
     <div className={`app ${p.senior ? 'senior' : ''}`}>
@@ -188,6 +189,7 @@ export default function App() {
             </div>
           )}
           <h1 className="ask">{t(lang, 'askWhat')}</h1>
+          {!p.picturesFirst && voiceBtn}
           <div className="grid">
             {tiles.map((i) => <Tile key={i.id} intent={i} lang={lang} senior={p.senior} onPick={(x) => sendIntent(x)} />)}
             <button className={`tile tint-grey ${p.senior ? 'senior' : ''}`} onClick={() => setScreen('more')}>
@@ -196,7 +198,7 @@ export default function App() {
               {lang !== 'en' && <span className="tile-en">More</span>}
             </button>
           </div>
-          <VoiceButton p={p} disabled={conn !== 'online'} onResult={onVoice} onProblem={setNotice} />
+          {p.picturesFirst && voiceBtn}
         </main>
       )}
 

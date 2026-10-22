@@ -99,7 +99,7 @@ def main() -> int:
                     "C_top3": [c.intent for c in bc.candidates], "C_mode": bc.mode,
                     "asr_seconds": tx.seconds,
                 })
-            if (n + 1) % 10 == 0:
+            if (n + 1) % 5 == 0:
                 print(f"  {lang} {n + 1}/{len(clips)}  elapsed {time.time() - t_start:.0f}s", flush=True)
 
     meta = {"model": f"faster-whisper {args.model} (int8, CPU)", "date": time.strftime("%Y-%m-%d"),
