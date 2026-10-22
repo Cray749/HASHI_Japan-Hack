@@ -135,3 +135,19 @@ def test_tap_reaches_crew_well_inside_two_seconds(client):
             pax.send_json({"t": "request", "intent": "water", "via": "tap"})
             crew.receive_json()
             assert time.perf_counter() - started < 0.5
+
+
+def test_crew_pin_protects_crew_socket_and_landing(client, monkeypatch):
+    from starlette.websockets import WebSocketDisconnect
+
+    import hashi.main as main
+    monkeypatch.setattr(main, "CREW_PIN", "4321")
+    assert client.get("/api/health").json()["crew_pin_required"] is True
+    with client.websocket_connect("/ws/crew?pin=0000") as ws:
+        with pytest.raises(WebSocketDisconnect) as err:
+            ws.receive_json()
+        assert err.value.code == 4401
+    with client.websocket_connect("/ws/crew?pin=4321") as ws:
+        assert ws.receive_json()["t"] == "snapshot"
+    assert client.post("/api/landing").status_code == 401
+    assert client.post("/api/landing", headers={"X-Crew-Pin": "4321"}).status_code == 200

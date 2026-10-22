@@ -60,6 +60,10 @@ export default function App() {
     save('hashi.crew.speaks', next);
   };
   const wide = useWide();
+  // optional crew PIN (server HASHI_CREW_PIN): asked once per tablet session
+  const [needPin, setNeedPin] = useState<boolean | null>(null);
+  const [pin, setPin] = useState(() => { try { return sessionStorage.getItem('hashi.crew.pin') ?? ''; } catch { return ''; } });
+  const [pinWrong, setPinWrong] = useState(false);
   const sock = useRef<LiveSocket | null>(null);
   const audio = useRef<AudioContext | null>(null);
   const soundRef = useRef(false);
@@ -73,7 +77,17 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const s = new LiveSocket('/ws/crew', (m) => {
+    let alive = true;
+    const go = () => fetch('/api/health').then((r) => r.json())
+      .then((h) => alive && setNeedPin(!!h.crew_pin_required))
+      .catch(() => window.setTimeout(go, 1500));
+    void go();
+    return () => { alive = false; };
+  }, []);
+
+  useEffect(() => {
+    if (needPin === null || (needPin && !pin)) return;
+    const s = new LiveSocket(`/ws/crew?pin=${encodeURIComponent(pin)}`, (m) => {
       switch (m.t) {
         case 'snapshot':
           setPax(Object.fromEntries((m.passengers as Passenger[]).map((p) => [p.seat, p])));
@@ -95,10 +109,14 @@ export default function App() {
           setExits((o) => ({ ...o, [m.exit.id]: m.exit }));
           break;
       }
-    }, setConn);
+    }, setConn, undefined, () => {
+      try { sessionStorage.removeItem('hashi.crew.pin'); } catch { /* ignore */ }
+      setPin('');
+      setPinWrong(true);
+    });
     sock.current = s;
     return () => s.close();
-  }, []);
+  }, [needPin, pin]);
 
   const send = useCallback((m: object) => sock.current?.send(m), []);
 
@@ -114,6 +132,13 @@ export default function App() {
     (n, a) => n + Object.values(a.acks).filter((x) => x.state === 'sent').length, 0);
   const waitingUnderstood = open.filter((r) => r.replies.length && !r.understood_at).length;
 
+  if (needPin && !pin) {
+    return <PinGate wrong={pinWrong} onSubmit={(p) => {
+      try { sessionStorage.setItem('hashi.crew.pin', p); } catch { /* ignore */ }
+      setPinWrong(false);
+      setPin(p);
+    }} />;
+  }
   if (!cat) {
     return <main className="boot"><Bridge size={140} color="#fff" /><p>HASHI Crew · 読み込み中 Loading…</p></main>;
   }
@@ -206,7 +231,7 @@ export default function App() {
         <button className="hbtn" onClick={() => setShowQr(true)}><Icon name="QrCode" size={18} /> QR</button>
         <button className="hbtn" onClick={() => {
           if (window.confirm('着陸しました。全データを削除します。\nLanded: delete all flight data?')) {
-            fetch('/api/landing', { method: 'POST' }).catch(() => undefined);
+            fetch('/api/landing', { method: 'POST', headers: { 'X-Crew-Pin': pin } }).catch(() => undefined);
           }
         }}><Icon name="PlaneLanding" size={18} /> 着陸 Landed</button>
       </header>
@@ -248,5 +273,20 @@ function QrModal({ onClose }: { onClose: () => void }) {
         <button className="btn primary" onClick={onClose}>閉じる · Close</button>
       </div>
     </div>
+  );
+}
+
+function PinGate({ wrong, onSubmit }: { wrong: boolean; onSubmit: (pin: string) => void }) {
+  const [v, setV] = useState('');
+  return (
+    <main className="boot">
+      <Bridge size={120} color="#fff" />
+      <form onSubmit={(e) => { e.preventDefault(); if (v) onSubmit(v); }} className="pin-form">
+        <label htmlFor="pin">乗務員PIN · Crew PIN</label>
+        <input id="pin" type="password" inputMode="numeric" autoFocus value={v} onChange={(e) => setV(e.target.value)} />
+        {wrong && <p role="alert" className="pin-wrong">PINが違います · Wrong PIN</p>}
+        <button className="btn primary" type="submit">開く · Open</button>
+      </form>
+    </main>
   );
 }

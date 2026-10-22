@@ -7,7 +7,16 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import segno
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import (
+    FastAPI,
+    File,
+    Form,
+    Header,
+    HTTPException,
+    UploadFile,
+    WebSocket,
+    WebSocketDisconnect,
+)
 from fastapi.responses import JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -23,6 +32,7 @@ log = logging.getLogger("hashi")
 ROOT = Path(__file__).resolve().parents[2]
 WEB_DIST = Path(os.environ.get("HASHI_WEB", ROOT / "web" / "dist"))
 VERSION = "0.1.0"
+CREW_PIN = os.environ.get("HASHI_CREW_PIN", "")  # optional: protects the crew tablet
 
 hub = Hub()
 
@@ -45,7 +55,8 @@ app = FastAPI(title="HASHI cabin server", version=VERSION, lifespan=lifespan)
 def health():
     backend = asr._backend  # may still be loading
     return {"ok": True, "version": VERSION, "asr": backend.name if backend else "loading",
-            "asr_ready": bool(backend and backend.ready), "passengers": len(hub.flight.passengers),
+            "asr_ready": bool(backend and backend.ready), "crew_pin_required": bool(CREW_PIN),
+            "passengers": len(hub.flight.passengers),
             "crew_connected": len(hub.crew)}
 
 
@@ -99,7 +110,9 @@ def qr(seat: str = ""):
 
 
 @app.post("/api/landing")
-async def landing():
+async def landing(x_crew_pin: str = Header("")):
+    if CREW_PIN and x_crew_pin != CREW_PIN:
+        raise HTTPException(401, "crew PIN needed")
     await hub.land()
     return {"ok": True}
 
@@ -127,8 +140,11 @@ async def ws_passenger(ws: WebSocket, seat: str = ""):
 
 
 @app.websocket("/ws/crew")
-async def ws_crew(ws: WebSocket):
+async def ws_crew(ws: WebSocket, pin: str = ""):
     await ws.accept()
+    if CREW_PIN and pin != CREW_PIN:
+        await ws.close(code=4401)  # the tablet sees this code and asks for the PIN again
+        return
     await hub.crew_connect(ws)
     try:
         while True:

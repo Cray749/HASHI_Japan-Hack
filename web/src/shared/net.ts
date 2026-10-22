@@ -47,6 +47,7 @@ export class LiveSocket {
     private onMessage: (msg: any) => void,
     private onStatus: (s: SocketStatus) => void,
     private onOpen?: () => void,
+    private onReject?: () => void,
   ) {
     this.connect();
     this.beat = window.setInterval(() => this.heartbeat(), 10000);
@@ -97,7 +98,13 @@ export class LiveSocket {
         /* ignore malformed frames */
       }
     };
-    ws.onclose = () => {
+    ws.onclose = (ev) => {
+      if (ev.code === 4401) {
+        // the server refused us (wrong crew PIN): stop retrying and let the app ask again
+        this.closed = true;
+        this.onReject?.();
+        return;
+      }
       if (this.ws === ws) this.scheduleRetry();
     };
     ws.onerror = () => ws.close();

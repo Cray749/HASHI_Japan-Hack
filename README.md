@@ -96,6 +96,7 @@ BENCHMARK_SUMMARY
 * **Mocked:** passenger Comfort Profiles come from the passenger's own phone or from the demo seeding script; there is no airline reservation, meal or crew-roster link.
 * **Closed list.** Requests outside the list fall back to pictures or a human by design.
 * **Reply audio** is prepared in advance by a setup script that uses online voices; the cabin server never needs the internet afterwards. If a file is missing the phone reads the text itself.
+* **No crew login by default.** Anyone on the cabin network can open `/crew`. Set `HASHI_CREW_PIN` to require a PIN on the tablet; a proper per-crew login is future work.
 * **Crew routing by language** is a visual flag on the tablet, not an automatic assignment.
 
 ## Repository layout
