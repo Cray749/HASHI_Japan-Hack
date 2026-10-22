@@ -1,6 +1,6 @@
 # Noise benchmark report
 
-Run on 2026-10-22 · faster-whisper small (int8, CPU) · AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD / Windows · took 2986 s
+Run on 2026-10-22 · faster-whisper small (int8, CPU) · AMD64 Family 23 Model 96 Stepping 1, AuthenticAMD / Windows · took 2906 s
 
 Clip sources: **synthetic**. Speakers: hi-madhur, hi-madhur-fast, hi-swara, pa-gtts, pa-gtts-quick, pa-gtts-slow.
 
@@ -14,75 +14,81 @@ Success means the top request equals the request the speaker meant.
 
 ## Results
 
-| Language | Noise | A: speech-to-text + translation | B: HASHI | B+: HASHI with cleanup | B+ right request in top 3 |
+| Language | Noise | A: speech-to-text + translation | B: HASHI | B+: HASHI with cleanup | B: right request in top 3 |
 | --- | --- | --- | --- | --- | --- |
-| Hindi | clean | 82% (49/60) | 88% (53/60) | 88% (53/60) | 93% (56/60) |
-| Hindi | 10 dB | 82% (49/60) | 93% (56/60) | 93% (56/60) | 95% (57/60) |
-| Hindi | 0 dB | 68% (41/60) | 72% (43/60) | 60% (36/60) | 68% (41/60) |
-| Punjabi | clean | 52% (31/60) | 90% (54/60) | 90% (54/60) | 95% (57/60) |
+| Hindi | clean | 82% (49/60) | 95% (57/60) | 95% (57/60) | 95% (57/60) |
+| Hindi | 10 dB | 82% (49/60) | 95% (57/60) | 93% (56/60) | 97% (58/60) |
+| Hindi | 0 dB | 68% (41/60) | 75% (45/60) | 58% (35/60) | 87% (52/60) |
+| Punjabi | clean | 52% (31/60) | 90% (54/60) | 90% (54/60) | 97% (58/60) |
 | Punjabi | 10 dB | 53% (32/60) | 87% (52/60) | 88% (53/60) | 95% (57/60) |
-| Punjabi | 0 dB | 37% (22/60) | 58% (35/60) | 48% (29/60) | 65% (39/60) |
+| Punjabi | 0 dB | 37% (22/60) | 58% (35/60) | 48% (29/60) | 70% (42/60) |
 
 ### Overall by noise level (both languages)
 
 | Noise | A | B | B+ |
 | --- | --- | --- | --- |
-| clean | 67% (80/120) | 89% (107/120) | 89% (107/120) |
-| 10 dB | 68% (81/120) | 90% (108/120) | 91% (109/120) |
-| 0 dB | 52% (63/120) | 65% (78/120) | 54% (65/120) |
+| clean | 67% (80/120) | 92% (111/120) | 92% (111/120) |
+| 10 dB | 68% (81/120) | 91% (109/120) | 91% (109/120) |
+| 0 dB | 52% (63/120) | 67% (80/120) | 53% (64/120) |
 
-### What the passenger would see (B+)
+### Reading the numbers
+
+* **clean:** HASHI (B) is +26 points against plain speech-to-text plus translation (A); the cleanup step (B+) is +0 points against B.
+* **10 dB:** HASHI (B) is +23 points against plain speech-to-text plus translation (A); the cleanup step (B+) is +0 points against B.
+* **0 dB:** HASHI (B) is +14 points against plain speech-to-text plus translation (A); the cleanup step (B+) is -13 points against B.
+
+### What the passenger would see (B, the shipped setting)
 
 HASHI only sends straight away when it is confident; otherwise it shows the top pictures to confirm.
 
 | Noise | Sent directly and right | Sent directly but wrong | Asked to confirm | Fell back to tiles |
 | --- | --- | --- | --- | --- |
-| clean | 61 | 2 | 57 | 0 |
-| 10 dB | 49 | 0 | 68 | 3 |
-| 0 dB | 24 | 11 | 64 | 21 |
+| clean | 57 | 0 | 61 | 2 |
+| 10 dB | 54 | 0 | 60 | 6 |
+| 0 dB | 27 | 1 | 78 | 14 |
 
-### By speaker (B+, all noise levels)
+### By speaker (B, all noise levels)
 
 | Speaker | Right request |
 | --- | --- |
-| hi-madhur | 80% (48/60) |
-| hi-madhur-fast | 78% (47/60) |
-| hi-swara | 83% (50/60) |
-| pa-gtts | 78% (47/60) |
-| pa-gtts-quick | 77% (46/60) |
-| pa-gtts-slow | 72% (43/60) |
+| hi-madhur | 87% (52/60) |
+| hi-madhur-fast | 90% (54/60) |
+| hi-swara | 88% (53/60) |
+| pa-gtts | 82% (49/60) |
+| pa-gtts-quick | 78% (47/60) |
+| pa-gtts-slow | 75% (45/60) |
 
-Speech engine time per clip on this machine: median 2.8 s.
+Speech engine time per clip on this machine: median 2.7 s.
 
-## Failures at 0 dB (B+), for inspection
+## Failures at 0 dB (B), for inspection
 
 | Language | Meant | HASHI picked | Engine heard |
 | --- | --- | --- | --- |
-| Hindi | water | unwell | तबीयत नहीं है, तबीयत नहीं है, तबीयत नहीं है, तबीयत नहीं है, तब |
-| Hindi | blanket | water | एक गलास पानी, एक कंबल लाए दीजीए |
-| Hindi | blanket | unwell | तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, |
-| Hindi | blanket | unwell | तबीवाई, तबीवाई, तबीवाई, तबीवाई, तबीवाई, तबीवा� |
-| Hindi | food | unwell | बहुत फुप लगी है, उचाने को मिलेगा |
-| Hindi | toilet | wheelchair | तोलिक किस तरफ है? |
-| Hindi | toilet | wheelchair | तवाले किस तरव है, तवाली किस तरव है |
-| Hindi | toilet | unwell | तबीयत ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक � |
-| Hindi | help | unwell | तबीयत बाई नहीं है, तबीयत नहीं है, तबीयत नहीं है, तबीयत नहीं है |
-| Hindi | tea_coffee | unwell | तबीयत ठीक, तबीयत ठीक, तबीयत ठीक, ठीक, ठीक, ठीक, ठीक, ठीक, ठी |
-| Hindi | tea_coffee | unwell | तबीयत, बाई, बाई, बाई, बाई, बाई, बाई, बाई, बाई, बाई, ब |
-| Hindi | tea_coffee | unwell | तबीयत ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक ठीक � |
-| Hindi | pillow | unwell | तबीयत दवाई, तबीयत नहीं है |
-| Hindi | pillow | unwell | तबीयत देदीजीए |
-| Hindi | too_hot | breathing | आई साहिए, आई साहिए, आई साहिए, आई साहिए, आई साहिए, आई साहि� |
-| Hindi | too_hot | too_cold | यहाँ बवोड़ तरनी लग रही है |
-| Hindi | headphones | medicine | फिल्म देखनी है, है भों देवीजीगी |
-| Hindi | headphones | medicine | प्रुम दिखनी है, प्रुम देदीजे |
-| Hindi | breathing | food | तबाई साहिए, साहिए, साहिए, साहिए, साहिए, साहिए, साहिए, साहिए, स |
-| Hindi | breathing | unwell | तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, तबीयत, |
-| Hindi | form_help | help | यह जापान वाला फोम रहने में मदध की जी |
-| Hindi | form_help | help | यह जाबान बाला फुर्म शौचने में मदध की जी |
-| Hindi | juice | unwell | तबीयत बाई, बाई, बाई, बाई, बाई, बाई, बाई, बाई, बाई, बा |
-| Hindi | charger | unwell | तबीयत नहीं है, तबीयत नहीं है |
-| Punjabi | blanket | help | इक सब वल्दि आद्यो ती लाए इस् |
+| Hindi | food | unwell | बहुत फुट लगी है, उचाने को मिल |
+| Hindi | medicine | meal_time | भी बवाई काने का समय होगया है |
+| Hindi | dizzy | tea_coffee | मुझे चग्गर आरगीजें |
+| Hindi | tea_coffee | juice | अग, तब चाए मिल सकती है क्या? |
+| Hindi | tea_coffee | juice | एक सब चाई मिल सक्ती है क्या? |
+| Hindi | tea_coffee | juice | एक भब चाई मिल सबती है क्या? |
+| Hindi | veg_meal | food | मैं सर्फ शाखा हरी खाना काता |
+| Hindi | veg_meal | food | मैं सर्व शाका हारी खाना काता |
+| Hindi | pillow | water | एक पक्या दे दीजिये |
+| Hindi | pillow | allergy | यह दख्या देड़ीजीए |
+| Hindi | headphones | wheelchair | पिल्म देखनी है, हेट्फों दै दी� |
+| Hindi | headphones | chest_pain | फिल्म देखनी है, है पुन दिल भी ज |
+| Hindi | headphones | medicine | विन दिखनी है रेफों देदीजे |
+| Hindi | breathing | too_cold | तब आद बाद़़ी बच्छाएगे � |
+| Hindi | juice | toilet_help | तुब आप तो बज़़ा तरीए बा� |
+| Punjabi | blanket | language_help | इक सब वल्जी आदी अटी लाए। |
+| Punjabi | food | screen_help | बाद बोखलगती है, पुच खानू मि |
+| Punjabi | food | unwell | बहुत पोख लगी है, पुज़ खान � |
+| Punjabi | toilet | thanks | तालिट किस पासे है जी |
+| Punjabi | toilet | family_seat | ताईलिप के स्पासे हैजी |
+| Punjabi | toilet | thanks | तालिप की सबासे है जी? |
+| Punjabi | help | baby_help | ॐ ृ ौ ू ॉ ै ु ॑ ो ॄ � |
+| Punjabi | dizzy | unwell | मैंनु चब्रा रहीं लेए। |
+| Punjabi | tea_coffee | meal_time | इक कब जा मिल सकती है |
+| Punjabi | tea_coffee | meal_time | इस कब चाल मिल सकती है |
 
 ## Sample of baseline A output (0 dB)
 

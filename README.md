@@ -84,7 +84,24 @@ two noise levels for Hindi and Punjabi, and writes [bench/REPORT.md](bench/REPOR
 there first: clips are synthetic voices and synthetic cabin noise until the team adds real recordings
 (instructions in [bench/README.md](bench/README.md)).
 
-BENCHMARK_SUMMARY
+Result of the latest run (faster-whisper small on a laptop CPU, 20 requests per language, three synthetic
+voices each, synthetic cabin noise). Share of requests where the crew card shows the right request:
+
+| Language | Noise | Plain speech-to-text + translation | HASHI intent matching |
+| --- | --- | --- | --- |
+| Hindi | clean | 82% | 95% |
+| Hindi | 10 dB | 82% | 95% |
+| Hindi | 0 dB | 68% | 75% |
+| Punjabi | clean | 52% | 90% |
+| Punjabi | 10 dB | 53% | 87% |
+| Punjabi | 0 dB | 37% | 58% |
+
+Both languages together: 67% against 92% when clean, 68% against 91% at 10 dB, 52% against 67% at 0 dB.
+At 0 dB HASHI still misses a third of requests, but it rarely sends a wrong one without asking (1 of 120 clips
+sent directly and wrong); the rest become "Did you mean…?" pictures or fall back to tiles. The noise
+cleanup step made things worse at 0 dB, so it is off by default. These are synthetic voices and noise: expect
+real seniors in a real cabin to score lower. Full tables, failures and limits are in
+[bench/REPORT.md](bench/REPORT.md).
 
 ## Limitations (honest list)
 
@@ -92,7 +109,7 @@ BENCHMARK_SUMMARY
 * **Language content is unreviewed.** Hindi, Punjabi and Japanese strings, including the katakana greetings, have not been checked by native speakers. The checklist is `data/intents/REVIEW.md`.
 * **Benchmark uses synthetic voices and noise.** Real accents, seniors and real cabin noise will score lower.
 * **Speech engine.** Whisper-family (small, CPU) is used because it installs reliably; Punjabi quality is the weakest link, which is why the closed list and the confirm step exist. IndicConformer is the planned upgrade behind the same interface.
-* **Noise cleanup** is simple spectral gating, not a trained suppressor.
+* **Noise cleanup** is simple spectral gating, not a trained suppressor, and it is off by default because it lowered accuracy in loud noise.
 * **Mocked:** passenger Comfort Profiles come from the passenger's own phone or from the demo seeding script; there is no airline reservation, meal or crew-roster link.
 * **Closed list.** Requests outside the list fall back to pictures or a human by design.
 * **Reply audio** is prepared in advance by a setup script that uses online voices; the cabin server never needs the internet afterwards. If a file is missing the phone reads the text itself.

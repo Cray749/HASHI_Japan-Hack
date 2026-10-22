@@ -38,7 +38,7 @@ def write_report(meta: dict, rows: list[dict], path: Path) -> None:
             "Success means the top request equals the request the speaker meant.", ""]
 
     out += ["## Results", "",
-            "| Language | Noise | A: speech-to-text + translation | B: HASHI | B+: HASHI with cleanup | B+ right request in top 3 |",
+            "| Language | Noise | A: speech-to-text + translation | B: HASHI | B+: HASHI with cleanup | B: right request in top 3 |",
             "| --- | --- | --- | --- | --- | --- |"]
     for lang in ("hi", "pa"):
         for lv in LEVELS:
@@ -48,7 +48,7 @@ def write_report(meta: dict, rows: list[dict], path: Path) -> None:
             a = _acc(rs, "A_pick")
             b = _acc(rs, "B_pick")
             c = _acc(rs, "C_pick")
-            top3 = sum(1 for r in rs if r["gold"] in r["C_top3"])
+            top3 = sum(1 for r in rs if r["gold"] in r["B_top3"])
             out.append(f"| {LANG_NAME[lang]} | {lv} | {_pct(*a)} | {_pct(*b)} | {_pct(*c)} | {_pct(top3, len(rs))} |")
     out += [""]
 
@@ -74,7 +74,7 @@ def write_report(meta: dict, rows: list[dict], path: Path) -> None:
                    "and refused to send them without the passenger confirming.")
     out += [""]
 
-    out += ["### What the passenger would see (B+)", "",
+    out += ["### What the passenger would see (B, the shipped setting)", "",
             "HASHI only sends straight away when it is confident; otherwise it shows the top pictures to confirm.",
             "",
             "| Noise | Sent directly and right | Sent directly but wrong | Asked to confirm | Fell back to tiles |",
@@ -83,28 +83,28 @@ def write_report(meta: dict, rows: list[dict], path: Path) -> None:
         rs = [r for r in rows if r["level"] == lv]
         if not rs:
             continue
-        sent = [r for r in rs if r["C_mode"] == "send"]
-        ok = sum(1 for r in sent if r["C_pick"] == r["gold"])
-        out.append(f"| {lv} | {ok} | {len(sent) - ok} | {sum(1 for r in rs if r['C_mode'] == 'confirm')} "
-                   f"| {sum(1 for r in rs if r['C_mode'] == 'tiles')} |")
+        sent = [r for r in rs if r["B_mode"] == "send"]
+        ok = sum(1 for r in sent if r["B_pick"] == r["gold"])
+        out.append(f"| {lv} | {ok} | {len(sent) - ok} | {sum(1 for r in rs if r['B_mode'] == 'confirm')} "
+                   f"| {sum(1 for r in rs if r['B_mode'] == 'tiles')} |")
     out += [""]
 
-    out += ["### By speaker (B+, all noise levels)", "", "| Speaker | Right request |", "| --- | --- |"]
+    out += ["### By speaker (B, all noise levels)", "", "| Speaker | Right request |", "| --- | --- |"]
     for sp in speakers:
         rs = [r for r in rows if r["speaker"] == sp]
-        out.append(f"| {sp} | {_pct(*_acc(rs, 'C_pick'))} |")
+        out.append(f"| {sp} | {_pct(*_acc(rs, 'B_pick'))} |")
     out += [""]
 
     secs = [r["asr_seconds"] for r in rows if r.get("asr_seconds")]
     if secs:
         out += [f"Speech engine time per clip on this machine: median {sorted(secs)[len(secs) // 2]:.1f} s.", ""]
 
-    out += ["## Failures at 0 dB (B+), for inspection", "",
+    out += ["## Failures at 0 dB (B), for inspection", "",
             "| Language | Meant | HASHI picked | Engine heard |", "| --- | --- | --- | --- |"]
-    fails = [r for r in rows if r["level"] == "0 dB" and r["C_pick"] != r["gold"]][:25]
+    fails = [r for r in rows if r["level"] == "0 dB" and r["B_pick"] != r["gold"]][:25]
     for r in fails:
-        heard = (r["C_text"] or "(nothing)").replace("|", "/")
-        out.append(f"| {LANG_NAME[r['lang']]} | {r['gold']} | {r['C_pick']} | {heard} |")
+        heard = (r["B_text"] or "(nothing)").replace("|", "/")
+        out.append(f"| {LANG_NAME[r['lang']]} | {r['gold']} | {r['B_pick']} | {heard} |")
     if not fails:
         out.append("| none | | | |")
     out += [""]

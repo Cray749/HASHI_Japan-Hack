@@ -43,3 +43,8 @@ Real clips are not committed by default (they are recordings of people). Keep co
 
 ## Reading the report
 Check the "Limits" section first. Twenty sentences per language is small, so a gap of one or two clips is noise. The failure table lists what the engine heard, which is the best guide to which phrases to add to the bank.
+
+## What the benchmark has already taught us
+* A first run showed that giving the speech engine a "cabin words" prompt made it repeat the prompt in loud noise (for example "I feel unwell" over and over), which the matcher then trusted. The prompt was removed, looping transcripts are collapsed and never sent without confirmation, and the run was repeated. If you change the speech settings, re-run the benchmark and read the failure table.
+* The spectral-gating cleanup did not help the speech engine at 0 dB, so voice requests skip it by default (`cleanup=1` on `/api/voice` turns it on).
+* `python -m bench.rescore` rebuilds the report from the saved transcripts if only the phrase bank changed.
