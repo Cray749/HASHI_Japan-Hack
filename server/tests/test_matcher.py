@@ -55,3 +55,20 @@ def test_unsure_match_asks_for_confirmation():
     # two intents share these words, so the matcher must not guess
     m = get_matcher().match("light")
     assert m.mode in ("confirm", "tiles")
+
+
+def test_collapse_repeats():
+    from hashi.phonetic import collapse_repeats
+    assert collapse_repeats("a a a a".split()) == ["a"]
+    assert collapse_repeats("a b a b a b c".split()) == ["a", "b", "c"]
+    assert collapse_repeats("mujhe pani do".split()) == ["mujhe", "pani", "do"]
+
+
+def test_engine_loop_is_never_sent_without_confirmation():
+    loop = "तबीयत नहीं है, " * 6
+    m = get_matcher().match(loop)
+    assert m.suspect and m.mode != "send"
+
+
+def test_real_repeated_plea_still_goes_through():
+    assert get_matcher().match("bachao bachao bachao").mode == "send"

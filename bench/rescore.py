@@ -31,6 +31,7 @@ def main() -> int:
         r["A_pick"] = a.candidates[0].intent if a.candidates else None
         r["B_pick"], r["B_top3"], r["B_mode"] = (b.candidates[0].intent if b.candidates else None,
                                                  [x.intent for x in b.candidates], b.mode)
+        r["B_suspect"], r["C_suspect"] = b.suspect, c.suspect
         r["C_pick"], r["C_top3"], r["C_mode"] = (c.candidates[0].intent if c.candidates else None,
                                                  [x.intent for x in c.candidates], c.mode)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")

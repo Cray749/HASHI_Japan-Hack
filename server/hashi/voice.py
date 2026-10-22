@@ -40,7 +40,8 @@ def understand(text: str) -> dict:
     return get_matcher().match(text).public()
 
 
-def process_audio(data: bytes, lang: str, cleanup: bool = True) -> dict:
+def process_audio(data: bytes, lang: str, cleanup: bool = False) -> dict:
+    # cleanup is off by default: in the benchmark it did not help the speech engine in loud noise
     t0 = time.time()
     backend = get_backend()
     if not backend.ready:

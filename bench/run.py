@@ -94,9 +94,9 @@ def main() -> int:
                     "lang": lang, "speaker": sp, "kind": kind, "level": level_name, "gold": gold,
                     "text": text, "A_text": tr.text, "A_pick": a.candidates[0].intent if a.candidates else None,
                     "B_text": tx.text, "B_pick": b.candidates[0].intent if b.candidates else None,
-                    "B_top3": [c.intent for c in b.candidates], "B_mode": b.mode,
+                    "B_top3": [c.intent for c in b.candidates], "B_mode": b.mode, "B_suspect": b.suspect,
                     "C_text": tc.text, "C_pick": bc.candidates[0].intent if bc.candidates else None,
-                    "C_top3": [c.intent for c in bc.candidates], "C_mode": bc.mode,
+                    "C_top3": [c.intent for c in bc.candidates], "C_mode": bc.mode, "C_suspect": bc.suspect,
                     "asr_seconds": tx.seconds,
                 })
             if (n + 1) % 5 == 0:

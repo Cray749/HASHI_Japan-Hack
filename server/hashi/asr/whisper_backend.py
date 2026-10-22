@@ -13,11 +13,9 @@ from .base import ASRBackend, ASRResult
 
 MODELS_DIR = Path(os.environ.get("HASHI_MODELS", Path(__file__).resolve().parents[3] / "models"))
 
-# A few cabin words as a prompt nudges Hindi toward the right vocabulary. Tested on Punjabi, a
-# Gurmukhi prompt made Whisper small loop ("ਹੈਹੈਹੈ..."), so Punjabi gets no prompt and a
-# no-repeat guard instead. Whisper often writes Punjabi speech in Devanagari; that is fine because
-# the matcher folds every script to one sound form.
-_PROMPTS = {"hi": "पानी, कंबल, खाना, दवाई, शौचालय, मदद चाहिए, तबीयत ठीक नहीं है"}
+# No vocabulary prompt on purpose. A cabin-words prompt looked helpful on clean audio, but in loud
+# noise Whisper repeated the prompt itself ("तबीयत नहीं है" many times), which the matcher then read as
+# "I feel unwell". A Gurmukhi prompt made Punjabi loop outright. The benchmark caught both.
 
 
 class WhisperBackend(ASRBackend):
@@ -47,7 +45,7 @@ class WhisperBackend(ASRBackend):
             # requests are one short sentence: no retry loop on noisy audio, and a hard cap
             # on length so a hallucinated run-on cannot stall the passenger's phone
             temperature=0.0, max_new_tokens=64, no_speech_threshold=0.9,
-            no_repeat_ngram_size=3 if lang == "pa" else 0,
-            initial_prompt=_PROMPTS.get(lang) if task == "transcribe" else None)
+            no_repeat_ngram_size=3,
+            )
         text = " ".join(s.text.strip() for s in segments).strip()
         return ASRResult(text=text, language=info.language, seconds=time.time() - t0)

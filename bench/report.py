@@ -60,6 +60,20 @@ def write_report(meta: dict, rows: list[dict], path: Path) -> None:
             out.append(f"| {lv} | {_pct(*_acc(rs, 'A_pick'))} | {_pct(*_acc(rs, 'B_pick'))} | {_pct(*_acc(rs, 'C_pick'))} |")
     out += [""]
 
+    out += ["### Reading the numbers", ""]
+    for lv in LEVELS:
+        rs = [r for r in rows if r["level"] == lv]
+        if not rs:
+            continue
+        a, b, c = (_acc(rs, k)[0] / len(rs) * 100 for k in ("A_pick", "B_pick", "C_pick"))
+        out.append(f"* **{lv}:** HASHI (B) is {b - a:+.0f} points against plain speech-to-text plus "
+                   f"translation (A); the cleanup step (B+) is {c - b:+.0f} points against B.")
+    loops = sum(1 for r in rows if r.get("B_suspect"))
+    if loops:
+        out.append(f"* The matcher flagged {loops} of {len(rows)} B transcripts as a stuck, repeating engine "
+                   "and refused to send them without the passenger confirming.")
+    out += [""]
+
     out += ["### What the passenger would see (B+)", "",
             "HASHI only sends straight away when it is confident; otherwise it shows the top pictures to confirm.",
             "",

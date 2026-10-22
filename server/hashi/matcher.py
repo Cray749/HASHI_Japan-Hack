@@ -15,12 +15,13 @@ from dataclasses import dataclass
 from rapidfuzz import fuzz
 
 from .intents import catalog
-from .phonetic import phonetic_key, skeleton
+from .phonetic import collapse_repeats, phonetic_key, skeleton
 
 ACCEPT_CONF = 0.62     # at or above this (with a clear margin) the request is sent directly
 ACCEPT_MARGIN = 0.07
 URGENT_CONF = 0.50     # urgent intents are sent at a lower bar: a false alarm is cheap
 MIN_CONF = 0.30        # below this we show the picture tiles instead of guessing
+LOOP_MIN_WORDS = 6     # a transcript this long that is mostly repeats is a stuck engine, not a person
 
 
 def _grams(text: str, n_lo: int = 2, n_hi: int = 4) -> Counter:
@@ -52,11 +53,12 @@ class Match:
     confidence: float
     margin: float
     mode: str  # "send" | "confirm" | "tiles"
+    suspect: bool = False  # the engine looped; never sent without the passenger confirming
 
     def public(self) -> dict:
         return {"candidates": [c.public() for c in self.candidates],
                 "confidence": round(self.confidence, 3), "margin": round(self.margin, 3),
-                "mode": self.mode}
+                "mode": self.mode, "suspect": self.suspect}
 
 
 class IntentMatcher:
@@ -118,7 +120,10 @@ class IntentMatcher:
 
     def match(self, text: str, top_k: int = 3, banks: tuple[str, ...] | None = None) -> Match:
         """banks limits the phrase banks used (e.g. ('en',)); the benchmark baseline uses it."""
-        key = phonetic_key(text)
+        raw_words = phonetic_key(text).split()
+        words = collapse_repeats(raw_words)
+        suspect = len(raw_words) >= LOOP_MIN_WORDS and len(words) <= len(raw_words) / 2
+        key = " ".join(words)
         if not key:
             return Match([], 0.0, 0.0, "tiles")
         skel = skeleton(key)
@@ -148,7 +153,9 @@ class IntentMatcher:
             mode = "confirm"
         else:
             mode = "tiles"
-        return Match(ranked, top.score, margin, mode)
+        if suspect and mode == "send":
+            mode = "confirm"
+        return Match(ranked, top.score, margin, mode, suspect)
 
 
 _matcher: IntentMatcher | None = None

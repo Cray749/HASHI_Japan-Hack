@@ -80,7 +80,7 @@ def match_text(body: MatchIn):
 
 @app.post("/api/voice")
 def voice_request(audio: UploadFile = File(...), lang: str = Form("hi"),
-                  cleanup: str = Form("1")):
+                  cleanup: str = Form("0")):
     data = audio.file.read(4_000_000)
     try:
         return voice.process_audio(data, lang if lang in ("hi", "pa", "en") else "hi",

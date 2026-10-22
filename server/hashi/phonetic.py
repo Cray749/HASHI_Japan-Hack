@@ -111,3 +111,27 @@ def phonetic_key(text: str) -> str:
 def skeleton(key: str) -> str:
     """Consonants only. Survives vowel mishearings ('pani' vs 'puni')."""
     return re.sub(r"[aeiou]", "", key)
+
+
+def collapse_repeats(words: list[str]) -> list[str]:
+    """Squash stuck-record output ("a b a b a b" or "a a a a") into a single pass.
+
+    Speech engines sometimes loop on noise. One pass of the loop carries all the information,
+    and counting the repeats would make the match look stronger than it is.
+    """
+    out = list(words)
+    changed = True
+    while changed:
+        changed = False
+        for n in (1, 2, 3, 4):
+            i = 0
+            res: list[str] = []
+            while i < len(out):
+                res.append(out[i])
+                i += 1
+                if len(res) >= n and out[i:i + n] == res[-n:]:
+                    while out[i:i + n] == res[-n:]:
+                        i += n
+                        changed = True
+            out = res
+    return out
