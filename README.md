@@ -10,9 +10,9 @@ crew can see who has not. It runs on one laptop over its own Wi-Fi, with no inte
 Built for the Thapar Japan Hackathon 2026, problem **JAL-PS-02** (passenger and crew communication
 across accents and language barriers).
 
-| Passenger phone (Punjabi, senior mode) | Crew tablet (Japanese with English subtitle) |
-| --- | --- |
-| ![Passenger app](docs/img/passenger-home.jpg) | ![Crew dashboard](docs/img/crew-dashboard.jpg) |
+| Passenger phone (Punjabi, senior mode) | The reply: picture, large text, audio, "understood" | Crew tablet (Japanese with English subtitle) |
+| --- | --- | --- |
+| ![Passenger app](docs/img/passenger-home.jpg) | ![Reply screen](docs/img/passenger-reply.jpg) | ![Crew dashboard](docs/img/crew-dashboard.jpg) |
 
 ## The idea
 

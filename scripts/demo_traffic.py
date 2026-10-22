@@ -5,6 +5,7 @@
     python scripts/demo_traffic.py sequence       # a short scripted run of requests
     python scripts/demo_traffic.py ack            # every seeded seat confirms the newest announcement
     python scripts/demo_traffic.py ack 24C 18E    # only these seats confirm (leaves the rest waiting)
+    python scripts/demo_traffic.py reply 24C bringing   # play the crew: one-tap reply to that seat's open request
 Needs the server to be running with `make demo`.
 """
 import asyncio
@@ -45,12 +46,26 @@ async def ack_all(only: list[str]) -> None:
         print(f"{seat} understood")
 
 
+async def crew_reply(seat: str, reply_id: str) -> None:
+    async with websockets.connect(f"ws://{HOST}/ws/crew") as crew:
+        snap = json.loads(await crew.recv())
+        open_reqs = [r for r in snap["requests"] if r["seat"] == seat and r["status"] in ("new", "seen", "replied")]
+        if not open_reqs:
+            print(f"no open request for {seat}")
+            return
+        await crew.send(json.dumps({"t": "reply", "req_id": open_reqs[-1]["id"], "reply_id": reply_id}))
+        await asyncio.sleep(0.3)
+        print(f"{seat} <- {reply_id}")
+
+
 async def main() -> None:
     args = sys.argv[1:] or ["sequence"]
     if args[0] == "sequence":
         for seat, intent in SEQUENCE:
             await request(seat, intent)
             time.sleep(1.5)
+    elif args[0] == "reply":
+        await crew_reply(args[1].upper(), args[2] if len(args) > 2 else "bringing")
     elif args[0] == "ack":
         await ack_all([x.upper() for x in args[1:]])
     else:
