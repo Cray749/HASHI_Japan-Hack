@@ -1,0 +1,58 @@
+# Announcement library. Crew pick one; the passenger sees it as icon, large text and audio
+# in their language and taps "understood". kind: safety announcements are tracked strictly.
+- id: seatbelt_on
+  icon: Link2
+  kind: safety
+  en: The seat belt sign is on. Please sit down and fasten your seat belt.
+  ja: シートベルト着用サインが点灯しました。お席に座り、シートベルトをお締めください。
+  hi: सीट बेल्ट का संकेत जल गया है। कृपया बैठ जाइए और सीट बेल्ट बाँध लीजिए।
+  pa: ਸੀਟ ਬੈਲਟ ਦਾ ਨਿਸ਼ਾਨ ਜਗ ਗਿਆ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਬੈਠ ਜਾਓ ਅਤੇ ਸੀਟ ਬੈਲਟ ਬੰਨ੍ਹ ਲਓ।
+- id: turbulence
+  icon: Waves
+  kind: safety
+  en: We expect turbulence. Please return to your seat and fasten your seat belt.
+  ja: これから揺れが予想されます。お席にお戻りになり、シートベルトをお締めください。
+  hi: आगे हवा में झटके आ सकते हैं। कृपया अपनी सीट पर लौटिए और सीट बेल्ट बाँध लीजिए।
+  pa: ਅੱਗੇ ਹਵਾ ਵਿੱਚ ਝਟਕੇ ਲੱਗ ਸਕਦੇ ਹਨ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਸੀਟ ਤੇ ਵਾਪਸ ਆਓ ਅਤੇ ਸੀਟ ਬੈਲਟ ਬੰਨ੍ਹ ਲਓ।
+- id: safety_briefing
+  icon: ShieldCheck
+  kind: safety
+  en: The safety briefing is starting. Please watch the screen or the crew. Exits are marked in red.
+  ja: 安全のご案内を始めます。モニターまたは客室乗務員をご覧ください。非常口は赤い表示です。
+  hi: सुरक्षा जानकारी शुरू हो रही है। कृपया स्क्रीन या क्रू को देखिए। निकास द्वार लाल रंग में दिखाए गए हैं।
+  pa: ਸੁਰੱਖਿਆ ਜਾਣਕਾਰੀ ਸ਼ੁਰੂ ਹੋ ਰਹੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਸਕਰੀਨ ਜਾਂ ਕਰੂ ਵੱਲ ਦੇਖੋ। ਨਿਕਾਸ ਦੇ ਦਰਵਾਜ਼ੇ ਲਾਲ ਰੰਗ ਵਿੱਚ ਦਿਖਾਏ ਗਏ ਹਨ।
+- id: electronics_off
+  icon: SmartphoneNfc
+  kind: safety
+  en: Please put your phone in flight mode or turn it off.
+  ja: 携帯電話は機内モードにするか、電源をお切りください。
+  hi: कृपया अपना फ़ोन फ़्लाइट मोड में कीजिए या बंद कर दीजिए।
+  pa: ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਫ਼ੋਨ ਫ਼ਲਾਈਟ ਮੋਡ ਵਿੱਚ ਕਰੋ ਜਾਂ ਬੰਦ ਕਰ ਦਿਓ।
+- id: meal_service
+  icon: Utensils
+  kind: info
+  en: The meal service is starting. Please wait at your seat.
+  ja: まもなくお食事をお配りします。お席でお待ちください。
+  hi: खाना परोसना शुरू हो रहा है। कृपया अपनी सीट पर रहिए।
+  pa: ਖਾਣਾ ਪਰੋਸਣਾ ਸ਼ੁਰੂ ਹੋ ਰਿਹਾ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਸੀਟ ਤੇ ਰਹੋ।
+- id: landing_soon
+  icon: PlaneLanding
+  kind: safety
+  en: We will land soon. Please return your seat upright and put the table away.
+  ja: まもなく着陸いたします。座席を元の位置に戻し、テーブルをお戻しください。
+  hi: हम जल्दी ही उतरने वाले हैं। कृपया सीट सीधी कीजिए और मेज़ बंद कर दीजिए।
+  pa: ਅਸੀਂ ਜਲਦੀ ਹੀ ਉੱਤਰਣ ਵਾਲੇ ਹਾਂ। ਕਿਰਪਾ ਕਰਕੇ ਸੀਟ ਸਿੱਧੀ ਕਰੋ ਅਤੇ ਮੇਜ਼ ਬੰਦ ਕਰ ਦਿਓ।
+- id: forms_ready
+  icon: FileText
+  kind: info
+  en: Landing cards are being handed out. Ask us if you need help filling them in.
+  ja: 入国カードをお配りしています。記入でお困りの際はお知らせください。
+  hi: लैंडिंग कार्ड बाँटे जा रहे हैं। भरने में मदद चाहिए तो हमें बताइए।
+  pa: ਲੈਂਡਿੰਗ ਕਾਰਡ ਵੰਡੇ ਜਾ ਰਹੇ ਹਨ। ਭਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੋਵੇ ਤਾਂ ਸਾਨੂੰ ਦੱਸੋ।
+- id: stay_seated_light
+  icon: Armchair
+  kind: safety
+  en: Please stay in your seat until the aircraft has stopped and the sign is off.
+  ja: 機体が完全に止まり、サインが消えるまでお席でお待ちください。
+  hi: जब तक विमान रुक न जाए और संकेत बंद न हो, कृपया अपनी सीट पर रहिए।
+  pa: ਜਦ ਤੱਕ ਜਹਾਜ਼ ਰੁਕ ਨਾ ਜਾਵੇ ਅਤੇ ਨਿਸ਼ਾਨ ਬੰਦ ਨਾ ਹੋਵੇ, ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਸੀਟ ਤੇ ਰਹੋ।

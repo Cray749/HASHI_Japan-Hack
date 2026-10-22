@@ -7,3 +7,4 @@ numpy>=1.26
 httpx>=0.27
 pytest>=8.0
 ruff>=0.4
+segno>=1.6

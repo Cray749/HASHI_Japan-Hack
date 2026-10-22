@@ -12,7 +12,7 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r server/requirements.txt
-      - run: python -m ruff check server bench scripts
+      - run: python -m ruff check server scripts run.py
       - run: python -m pytest server/tests -q
   web:
     runs-on: ubuntu-latest

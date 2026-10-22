@@ -1,0 +1,103 @@
+# One-tap crew replies. The passenger sees icon + large text + audio in their language.
+- id: bringing
+  icon: HandPlatter
+  en: I will bring it shortly.
+  ja: ただいまお持ちします。
+  hi: हम अभी लेकर आते हैं।
+  pa: ਅਸੀਂ ਹੁਣੇ ਲੈ ਕੇ ਆਉਂਦੇ ਹਾਂ।
+- id: coming
+  icon: Footprints
+  en: I am coming to your seat.
+  ja: すぐに伺います。
+  hi: हम आपकी सीट पर आ रहे हैं।
+  pa: ਅਸੀਂ ਤੁਹਾਡੀ ਸੀਟ ਤੇ ਆ ਰਹੇ ਹਾਂ।
+- id: coming_now
+  icon: Siren
+  en: Help is coming now. Please stay where you are.
+  ja: すぐに参ります。そのままお待ちください。
+  hi: मदद अभी आ रही है। कृपया वहीं रहिए।
+  pa: ਮਦਦ ਹੁਣੇ ਆ ਰਹੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਉੱਥੇ ਹੀ ਰਹੋ।
+- id: stay_seated
+  icon: Armchair
+  en: Please stay seated. We are with you soon.
+  ja: 座ったままお待ちください。すぐに参ります。
+  hi: कृपया बैठे रहिए। हम जल्दी आ रहे हैं।
+  pa: ਕਿਰਪਾ ਕਰਕੇ ਬੈਠੇ ਰਹੋ। ਅਸੀਂ ਜਲਦੀ ਆ ਰਹੇ ਹਾਂ।
+- id: wait
+  icon: Hourglass
+  en: Please wait a moment.
+  ja: 少々お待ちください。
+  hi: कृपया थोड़ा इंतज़ार कीजिए।
+  pa: ਕਿਰਪਾ ਕਰਕੇ ਥੋੜ੍ਹਾ ਇੰਤਜ਼ਾਰ ਕਰੋ।
+- id: unavailable
+  icon: CircleSlash
+  en: Sorry, we do not have that. Can we offer something else?
+  ja: 申し訳ありません、ご用意できません。他のものはいかがですか。
+  hi: माफ़ कीजिए, यह उपलब्ध नहीं है। क्या कुछ और दे सकते हैं?
+  pa: ਮਾਫ਼ ਕਰਨਾ, ਇਹ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਕੀ ਅਸੀਂ ਕੁਝ ਹੋਰ ਦੇ ਸਕਦੇ ਹਾਂ?
+- id: checking
+  icon: ScanSearch
+  en: I will check and come back to you.
+  ja: 確認してまいります。
+  hi: हम पता करके आपको बताते हैं।
+  pa: ਅਸੀਂ ਪਤਾ ਕਰਕੇ ਤੁਹਾਨੂੰ ਦੱਸਦੇ ਹਾਂ।
+- id: crew_will_check
+  icon: ClipboardCheck
+  en: A crew member will come and check with you in person.
+  ja: 係の者が直接お伺いして確認します。
+  hi: एक क्रू सदस्य आकर आपसे सीधे बात करेंगे।
+  pa: ਇੱਕ ਕਰੂ ਮੈਂਬਰ ਆ ਕੇ ਤੁਹਾਡੇ ਨਾਲ ਸਿੱਧੀ ਗੱਲ ਕਰੇਗਾ।
+- id: meal_soon
+  icon: Utensils
+  en: The meal service will start soon.
+  ja: まもなくお食事のサービスを始めます。
+  hi: खाना जल्दी ही परोसा जाएगा।
+  pa: ਖਾਣਾ ਜਲਦੀ ਹੀ ਪਰੋਸਿਆ ਜਾਵੇਗਾ।
+- id: toilet_free
+  icon: DoorOpen
+  en: The toilet is at the back and it is free now.
+  ja: お手洗いは後方にあり、今ご利用いただけます。
+  hi: शौचालय पीछे की ओर है और अभी खाली है।
+  pa: ਪਖਾਨਾ ਪਿੱਛੇ ਵੱਲ ਹੈ ਅਤੇ ਹੁਣ ਖਾਲੀ ਹੈ।
+- id: arrival_info
+  icon: PlaneLanding
+  en: The landing time is shown on your screen. I will tell you if it changes.
+  ja: 到着時刻はモニターに表示されています。変更があればお知らせします。
+  hi: पहुँचने का समय आपकी स्क्रीन पर दिख रहा है। बदलने पर हम बताएँगे।
+  pa: ਪਹੁੰਚਣ ਦਾ ਸਮਾਂ ਤੁਹਾਡੀ ਸਕਰੀਨ ਤੇ ਦਿਖ ਰਿਹਾ ਹੈ। ਬਦਲਣ ਤੇ ਅਸੀਂ ਦੱਸਾਂਗੇ।
+- id: language_speaker
+  icon: Languages
+  en: A crew member who speaks your language will come.
+  ja: あなたの言語を話せる乗務員が参ります。
+  hi: आपकी भाषा बोलने वाले क्रू सदस्य आएँगे।
+  pa: ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਬੋਲਣ ਵਾਲਾ ਕਰੂ ਮੈਂਬਰ ਆਵੇਗਾ।
+- id: show_cards
+  icon: GalleryHorizontal
+  en: I will show you pictures and writing. Please point to what you need.
+  ja: 絵と文字でご案内します。必要なものを指さしてください。
+  hi: हम तस्वीरें और लिखावट दिखाएँगे। जो चाहिए उस पर उँगली रखिए।
+  pa: ਅਸੀਂ ਤਸਵੀਰਾਂ ਅਤੇ ਲਿਖਤ ਦਿਖਾਵਾਂਗੇ। ਜੋ ਚਾਹੀਦਾ ਹੈ ਉਸ ਤੇ ਉਂਗਲ ਰੱਖੋ।
+- id: yes
+  icon: Check
+  en: Yes, of course.
+  ja: はい、承知しました。
+  hi: जी हाँ, ज़रूर।
+  pa: ਜੀ ਹਾਂ, ਜ਼ਰੂਰ।
+- id: no
+  icon: X
+  en: Sorry, that is not possible.
+  ja: 申し訳ありません、それはできません。
+  hi: माफ़ कीजिए, यह संभव नहीं है।
+  pa: ਮਾਫ਼ ਕਰਨਾ, ਇਹ ਸੰਭਵ ਨਹੀਂ ਹੈ।
+- id: welcome
+  icon: Smile
+  en: You are welcome.
+  ja: どういたしまして。
+  hi: आपका स्वागत है।
+  pa: ਤੁਹਾਡਾ ਸੁਆਗਤ ਹੈ।
+- id: ask_again
+  icon: ImagePlay
+  en: Sorry, I did not catch that. Please tap a picture.
+  ja: 申し訳ありません、聞き取れませんでした。絵をタップしてください。
+  hi: माफ़ कीजिए, समझ नहीं आया। कृपया तस्वीर दबाइए।
+  pa: ਮਾਫ਼ ਕਰਨਾ, ਸਮਝ ਨਹੀਂ ਆਇਆ। ਕਿਰਪਾ ਕਰਕੇ ਤਸਵੀਰ ਦਬਾਓ।

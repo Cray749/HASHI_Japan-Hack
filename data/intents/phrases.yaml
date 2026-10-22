@@ -1,0 +1,216 @@
+# Phrase bank for the intent matcher. Per intent:
+#   hi  = Hindi (Devanagari)      pa  = Punjabi (Gurmukhi)
+#   rom = Hinglish / roman Punjabi as people type or as a recogniser may spell it
+#   en  = English, for passengers who mix a few English words
+# The matcher folds every script into one phonetic form, so a phrase in any list can
+# match speech recognised in any script. Add real clips' transcripts here as you collect them.
+water:
+  hi: [पानी चाहिए, मुझे पानी दीजिए, पानी पिला दो, प्यास लगी है, एक गिलास पानी, पानी मिलेगा क्या]
+  pa: [ਪਾਣੀ ਚਾਹੀਦਾ ਹੈ, ਮੈਨੂੰ ਪਾਣੀ ਦਿਓ, ਪਾਣੀ ਪਿਲਾ ਦਿਓ, ਪਿਆਸ ਲੱਗੀ ਹੈ, ਇੱਕ ਗਲਾਸ ਪਾਣੀ, ਪਾਣੀ ਮਿਲੇਗਾ]
+  rom: [paani chahiye, mujhe paani do, paani dijiye, pyaas lagi hai, pani chaida hai, mainu pani chahida, pani milega, ik glass pani, pyas lagi e, thoda pani dena, water chahiye]
+  en: [water please, i need water, i am thirsty, can i have some water]
+tea_coffee:
+  hi: [चाय चाहिए, कॉफ़ी चाहिए, एक कप चाय, मुझे चाय दीजिए, चाय या कॉफ़ी मिलेगी]
+  pa: [ਚਾਹ ਚਾਹੀਦੀ ਹੈ, ਕੌਫ਼ੀ ਚਾਹੀਦੀ ਹੈ, ਇੱਕ ਕੱਪ ਚਾਹ, ਮੈਨੂੰ ਚਾਹ ਦਿਓ, ਚਾਹ ਮਿਲੇਗੀ]
+  rom: [chai chahiye, coffee chahiye, ek cup chai, mujhe chai do, chah chahidi hai, mainu chah dio, chai milegi, tea coffee do, ik cup chah]
+  en: [tea please, coffee please, can i have tea, i would like coffee]
+juice:
+  hi: [जूस चाहिए, मुझे जूस दीजिए, कोई जूस है, संतरे का जूस, ठंडा पेय चाहिए]
+  pa: [ਜੂਸ ਚਾਹੀਦਾ ਹੈ, ਮੈਨੂੰ ਜੂਸ ਦਿਓ, ਕੋਈ ਜੂਸ ਹੈ, ਸੰਤਰੇ ਦਾ ਜੂਸ, ਠੰਡਾ ਪੀਣ ਵਾਲਾ]
+  rom: [juice chahiye, mujhe juice do, juice hai kya, orange juice, juice chahida hai, mainu juice dio, koi juice hai, thanda chahiye]
+  en: [juice please, orange juice, can i have juice, a soft drink please]
+food:
+  hi: [खाना चाहिए, भूख लगी है, मुझे खाना दीजिए, कुछ खाने को दो, भोजन चाहिए]
+  pa: [ਖਾਣਾ ਚਾਹੀਦਾ ਹੈ, ਭੁੱਖ ਲੱਗੀ ਹੈ, ਮੈਨੂੰ ਖਾਣਾ ਦਿਓ, ਕੁਝ ਖਾਣ ਨੂੰ ਦਿਓ, ਰੋਟੀ ਚਾਹੀਦੀ ਹੈ]
+  rom: [khana chahiye, bhookh lagi hai, mujhe khana do, kuch khane ko do, khana chahida hai, bhukh lagi e, mainu khana dio, roti chahidi hai, kuch khaan nu dio, hungry hun]
+  en: [food please, i am hungry, i want to eat, can i have a meal]
+veg_meal:
+  hi: [शाकाहारी खाना चाहिए, मैं शाकाहारी हूँ, वेज खाना दीजिए, बिना मांस का खाना, सिर्फ़ सब्ज़ी वाला खाना]
+  pa: [ਸ਼ਾਕਾਹਾਰੀ ਖਾਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੈਂ ਸ਼ਾਕਾਹਾਰੀ ਹਾਂ, ਵੈੱਜ ਖਾਣਾ ਦਿਓ, ਮਾਸ ਤੋਂ ਬਿਨਾਂ ਖਾਣਾ, ਸਿਰਫ਼ ਸਬਜ਼ੀ ਵਾਲਾ ਖਾਣਾ]
+  rom: [shakahari khana chahiye, main vegetarian hun, veg khana do, veg meal chahiye, bina meat ka khana, main veg haan, saada veg khana, mainu veg khana chahida, pure veg, no non veg, shakahari khana dio]
+  en: [vegetarian meal please, i am vegetarian, veg food, no meat please]
+allergy:
+  hi: [मुझे एलर्जी है, खाने से एलर्जी है, मूँगफली से एलर्जी है, यह खाना मेरे लिए ठीक नहीं, एलर्जी वाला खाना नहीं]
+  pa: [ਮੈਨੂੰ ਐਲਰਜੀ ਹੈ, ਖਾਣੇ ਤੋਂ ਐਲਰਜੀ ਹੈ, ਮੂੰਗਫਲੀ ਤੋਂ ਐਲਰਜੀ ਹੈ, ਇਹ ਖਾਣਾ ਮੇਰੇ ਲਈ ਠੀਕ ਨਹੀਂ]
+  rom: [mujhe allergy hai, khane se allergy hai, peanut se allergy hai, mainu allergy hai, khane to allergy e, ye khana mere liye theek nahi, allergy wala khana nahi, nut allergy]
+  en: [i have an allergy, food allergy, i am allergic to nuts, allergic to this]
+meal_later:
+  hi: [खाना बाद में दीजिए, अभी खाना नहीं चाहिए, मैं बाद में खाऊँगा, मेरा खाना रख दीजिए, सो रहा हूँ खाना बाद में]
+  pa: [ਖਾਣਾ ਬਾਅਦ ਵਿੱਚ ਦਿਓ, ਹੁਣੇ ਖਾਣਾ ਨਹੀਂ ਚਾਹੀਦਾ, ਮੈਂ ਬਾਅਦ ਵਿੱਚ ਖਾਵਾਂਗਾ, ਮੇਰਾ ਖਾਣਾ ਰੱਖ ਦਿਓ]
+  rom: [khana baad mein do, abhi khana nahi chahiye, main baad mein khaunga, mera khana rakh dijiye, khana baad vich dio, hune khana nahi chahida, mera khana rakh lo, so raha hun khana baad mein, meal later]
+  en: [keep my meal for later, i will eat later, not now, save my food]
+meal_time:
+  hi: [खाना कब मिलेगा, खाने का समय कब है, कब खाना आएगा, नाश्ता कब मिलेगा]
+  pa: [ਖਾਣਾ ਕਦੋਂ ਮਿਲੇਗਾ, ਖਾਣੇ ਦਾ ਸਮਾਂ ਕਦੋਂ ਹੈ, ਖਾਣਾ ਕਦੋਂ ਆਵੇਗਾ, ਨਾਸ਼ਤਾ ਕਦੋਂ ਮਿਲੇਗਾ]
+  rom: [khana kab milega, khane ka time kab hai, khana kab aayega, nashta kab milega, khana kadon milega, khane da time kida, kab milega khana, meal kab hai]
+  en: [when is the meal, when do we eat, what time is food, when is breakfast]
+blanket:
+  hi: [कंबल चाहिए, मुझे कंबल दीजिए, ओढ़ने को दो, ठंड है कंबल दो, एक कंबल मिलेगा]
+  pa: [ਕੰਬਲ ਚਾਹੀਦਾ ਹੈ, ਮੈਨੂੰ ਕੰਬਲ ਦਿਓ, ਉੱਪਰ ਲੈਣ ਨੂੰ ਦਿਓ, ਠੰਡ ਹੈ ਕੰਬਲ ਦਿਓ, ਇੱਕ ਕੰਬਲ ਮਿਲੇਗਾ]
+  rom: [kambal chahiye, mujhe kambal do, odhne ko do, kambal dijiye, kambal chahida hai, mainu kambal dio, ik kambal milega, blanket chahiye, blanket do, kambal laao]
+  en: [blanket please, i need a blanket, can i have a blanket]
+pillow:
+  hi: [तकिया चाहिए, मुझे तकिया दीजिए, सिर के नीचे रखने को दो, एक तकिया मिलेगा]
+  pa: [ਸਿਰਹਾਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੈਨੂੰ ਸਿਰਹਾਣਾ ਦਿਓ, ਸਿਰ ਹੇਠ ਰੱਖਣ ਨੂੰ ਦਿਓ, ਇੱਕ ਸਿਰਹਾਣਾ ਮਿਲੇਗਾ]
+  rom: [takiya chahiye, mujhe takiya do, takia dijiye, sirhana chahida hai, mainu sirhana dio, pillow chahiye, pillow do, takya chahiye, sar ke neeche rakhne ko]
+  en: [pillow please, i need a pillow, can i have a pillow]
+too_cold:
+  hi: [ठंड लग रही है, बहुत ठंड है, मुझे सर्दी लग रही है, एसी बंद कीजिए, ठंडा बहुत है]
+  pa: [ਠੰਡ ਲੱਗ ਰਹੀ ਹੈ, ਬਹੁਤ ਠੰਡ ਹੈ, ਮੈਨੂੰ ਸਰਦੀ ਲੱਗ ਰਹੀ ਹੈ, ਏਸੀ ਬੰਦ ਕਰੋ, ਠੰਡਾ ਬਹੁਤ ਹੈ]
+  rom: [thand lag rahi hai, bahut thand hai, mujhe sardi lag rahi hai, ac band karo, thand lagdi e, bahut thand e, mainu thand lag rahi hai, thanda bahut hai, cold hai, freezing]
+  en: [i am cold, it is too cold, i feel cold, turn off the ac]
+too_hot:
+  hi: [गर्मी लग रही है, बहुत गर्मी है, मुझे गर्मी लग रही है, एसी चलाइए, पसीना आ रहा है]
+  pa: [ਗਰਮੀ ਲੱਗ ਰਹੀ ਹੈ, ਬਹੁਤ ਗਰਮੀ ਹੈ, ਮੈਨੂੰ ਗਰਮੀ ਲੱਗ ਰਹੀ ਹੈ, ਏਸੀ ਚਲਾਓ, ਪਸੀਨਾ ਆ ਰਿਹਾ ਹੈ]
+  rom: [garmi lag rahi hai, bahut garmi hai, mujhe garmi lag rahi hai, ac chalao, pasina aa raha hai, garmi lagdi e, bahut garmi e, mainu garmi lag rahi hai, hot hai, too hot]
+  en: [i am hot, it is too hot, i feel hot, turn on the ac]
+light_on:
+  hi: [लाइट जला दीजिए, पढ़ने की लाइट चालू करो, बत्ती जलाओ, मुझे पढ़ना है, लाइट नहीं जल रही]
+  pa: [ਲਾਈਟ ਜਗਾ ਦਿਓ, ਪੜ੍ਹਨ ਵਾਲੀ ਲਾਈਟ ਚਾਲੂ ਕਰੋ, ਬੱਤੀ ਜਗਾਓ, ਮੈਂ ਪੜ੍ਹਨਾ ਹੈ, ਲਾਈਟ ਨਹੀਂ ਜਗ ਰਹੀ]
+  rom: [light jala dijiye, reading light chalu karo, batti jalao, mujhe padhna hai, light nahi jal rahi, light jagao, batti chalu karo, mainu parhna hai, light on karo]
+  en: [turn on the light, reading light please, my light is not working]
+light_off:
+  hi: [लाइट बंद कीजिए, बत्ती बुझा दो, लाइट बंद कर दो, मुझे सोना है, रोशनी बंद करो]
+  pa: [ਲਾਈਟ ਬੰਦ ਕਰੋ, ਬੱਤੀ ਬੁਝਾ ਦਿਓ, ਲਾਈਟ ਬੰਦ ਕਰ ਦਿਓ, ਮੈਂ ਸੌਣਾ ਹੈ, ਰੋਸ਼ਨੀ ਬੰਦ ਕਰੋ]
+  rom: [light band kijiye, batti bujha do, light off karo, mujhe sona hai, roshni band karo, light band karo, batti band karo, mainu sauna hai, light off]
+  en: [turn off the light, light off please, i want to sleep]
+toilet:
+  hi: [शौचालय कहाँ है, टॉयलेट कहाँ है, बाथरूम जाना है, पेशाब जाना है, टॉयलेट जाना है]
+  pa: [ਪਖਾਨਾ ਕਿੱਥੇ ਹੈ, ਟਾਇਲਟ ਕਿੱਥੇ ਹੈ, ਬਾਥਰੂਮ ਜਾਣਾ ਹੈ, ਮੈਨੂੰ ਟਾਇਲਟ ਜਾਣਾ ਹੈ, ਪਖਾਨੇ ਜਾਣਾ ਹੈ]
+  rom: [toilet kahan hai, shauchalay kahan hai, bathroom jana hai, toilet jana hai, washroom kidhar hai, toilet kithe hai, bathroom kithe e, mainu toilet jana hai, pakhana kithe hai, lavatory, washroom jaana hai]
+  en: [where is the toilet, i need the toilet, bathroom please, washroom]
+toilet_help:
+  hi: [शौचालय तक ले चलिए, टॉयलेट जाने में मदद चाहिए, मैं अकेले नहीं जा सकता, चलने में तकलीफ़ है टॉयलेट जाना है]
+  pa: [ਪਖਾਨੇ ਤੱਕ ਲੈ ਚੱਲੋ, ਟਾਇਲਟ ਜਾਣ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਮੈਂ ਇਕੱਲਾ ਨਹੀਂ ਜਾ ਸਕਦਾ, ਤੁਰਨ ਵਿੱਚ ਤਕਲੀਫ਼ ਹੈ ਟਾਇਲਟ ਜਾਣਾ ਹੈ]
+  rom: [toilet tak le chaliye, toilet jane mein madad chahiye, main akele nahi ja sakta, chalne mein dikkat hai toilet jana hai, toilet takk lai chalo, toilet jaan vich madad chahidi, mainu toilet lai chalo, help to toilet]
+  en: [help me to the toilet, i cannot walk to the toilet alone, assist me to the bathroom]
+medicine:
+  hi: [दवाई चाहिए, मुझे दवा लेनी है, मेरी दवाई का समय हो गया, दवाई खानी है, गोली चाहिए]
+  pa: [ਦਵਾਈ ਚਾਹੀਦੀ ਹੈ, ਮੈਂ ਦਵਾਈ ਲੈਣੀ ਹੈ, ਮੇਰੀ ਦਵਾਈ ਦਾ ਸਮਾਂ ਹੋ ਗਿਆ, ਦਵਾਈ ਖਾਣੀ ਹੈ, ਗੋਲੀ ਚਾਹੀਦੀ ਹੈ]
+  rom: [dawai chahiye, mujhe dawa leni hai, meri dawai ka time ho gaya, dawai khani hai, goli chahiye, dawai chahidi hai, mainu dawai chahidi hai, meri dawai da time ho gaya, medicine chahiye, tablet leni hai, davai]
+  en: [i need my medicine, time for my tablets, medicine please, i need a pill]
+headphones:
+  hi: [हेडफ़ोन चाहिए, मुझे हेडफ़ोन दीजिए, इयरफ़ोन दो, गाने सुनने हैं, फ़िल्म सुनने के लिए हेडफ़ोन]
+  pa: [ਹੈੱਡਫ਼ੋਨ ਚਾਹੀਦੇ ਹਨ, ਮੈਨੂੰ ਹੈੱਡਫ਼ੋਨ ਦਿਓ, ਈਅਰਫ਼ੋਨ ਦਿਓ, ਗਾਣੇ ਸੁਣਨੇ ਹਨ, ਫ਼ਿਲਮ ਸੁਣਨ ਲਈ ਹੈੱਡਫ਼ੋਨ]
+  rom: [headphone chahiye, mujhe headphone do, earphone do, gaane sunne hain, headphones dijiye, headphone chahide ne, mainu headphone dio, earphone dio, hedphone chahiye]
+  en: [headphones please, i need earphones, can i have headphones]
+screen_help:
+  hi: [स्क्रीन नहीं चल रही, टीवी चालू नहीं हो रहा, फ़िल्म नहीं चल रही, मेरी स्क्रीन बंद है, स्क्रीन काम नहीं कर रही]
+  pa: [ਸਕਰੀਨ ਨਹੀਂ ਚੱਲ ਰਹੀ, ਟੀਵੀ ਚਾਲੂ ਨਹੀਂ ਹੋ ਰਿਹਾ, ਫ਼ਿਲਮ ਨਹੀਂ ਚੱਲ ਰਹੀ, ਮੇਰੀ ਸਕਰੀਨ ਬੰਦ ਹੈ, ਸਕਰੀਨ ਕੰਮ ਨਹੀਂ ਕਰ ਰਹੀ]
+  rom: [screen nahi chal rahi, tv chalu nahi ho raha, film nahi chal rahi, meri screen band hai, screen kaam nahi kar rahi, screen nahi chaldi, tv nahi chalda, mainu film nahi lag rahi, monitor kharab hai, screen not working]
+  en: [my screen is not working, tv is not working, the movie does not play]
+charger:
+  hi: [फ़ोन चार्ज करना है, चार्जर कहाँ लगाऊँ, मेरा फ़ोन बंद हो रहा है, चार्जिंग पॉइंट कहाँ है]
+  pa: [ਫ਼ੋਨ ਚਾਰਜ ਕਰਨਾ ਹੈ, ਚਾਰਜਰ ਕਿੱਥੇ ਲਗਾਵਾਂ, ਮੇਰਾ ਫ਼ੋਨ ਬੰਦ ਹੋ ਰਿਹਾ ਹੈ, ਚਾਰਜਿੰਗ ਪੁਆਇੰਟ ਕਿੱਥੇ ਹੈ]
+  rom: [phone charge karna hai, charger kahan lagaun, mera phone band ho raha hai, charging point kahan hai, phone charge karna e, charger kithe lagawan, mobile charge karna hai, charging kidhar hai, plug kahan hai]
+  en: [i need to charge my phone, where is the charger, charging point please]
+seat_help:
+  hi: [सीट के बारे में मदद चाहिए, सीट पीछे कैसे करें, सीट नहीं झुक रही, सीट ठीक कर दीजिए, सीट का बटन कहाँ है]
+  pa: [ਸੀਟ ਬਾਰੇ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਸੀਟ ਪਿੱਛੇ ਕਿਵੇਂ ਕਰੀਏ, ਸੀਟ ਨਹੀਂ ਝੁਕ ਰਹੀ, ਸੀਟ ਠੀਕ ਕਰ ਦਿਓ, ਸੀਟ ਦਾ ਬਟਨ ਕਿੱਥੇ ਹੈ]
+  rom: [seat ke baare mein madad chahiye, seat peeche kaise karein, seat nahi jhuk rahi, seat theek kar dijiye, seat ka button kahan hai, seat peeche kive karan, seat theek kar dio, seat adjust karo, recline kaise]
+  en: [help with my seat, how do i recline, my seat is stuck]
+change_seat:
+  hi: [सीट बदलनी है, मुझे दूसरी सीट चाहिए, खिड़की वाली सीट चाहिए, आगे वाली सीट चाहिए, यहाँ से हटना है]
+  pa: [ਸੀਟ ਬਦਲਣੀ ਹੈ, ਮੈਨੂੰ ਦੂਜੀ ਸੀਟ ਚਾਹੀਦੀ ਹੈ, ਖਿੜਕੀ ਵਾਲੀ ਸੀਟ ਚਾਹੀਦੀ ਹੈ, ਅੱਗੇ ਵਾਲੀ ਸੀਟ ਚਾਹੀਦੀ ਹੈ]
+  rom: [seat badalni hai, mujhe doosri seat chahiye, window wali seat chahiye, aage wali seat chahiye, seat badalni e, mainu hor seat chahidi hai, doosri seat dio, aisle seat chahiye, change seat]
+  en: [i want to change my seat, can i move seats, another seat please]
+family_seat:
+  hi: [परिवार के साथ बैठना है, मेरी पत्नी दूसरी सीट पर है, बच्चे के पास बैठना है, साथ वाली सीट दीजिए, हम साथ बैठना चाहते हैं]
+  pa: [ਪਰਿਵਾਰ ਨਾਲ ਬੈਠਣਾ ਹੈ, ਮੇਰੀ ਘਰ ਵਾਲੀ ਦੂਜੀ ਸੀਟ ਤੇ ਹੈ, ਬੱਚੇ ਕੋਲ ਬੈਠਣਾ ਹੈ, ਨਾਲ ਵਾਲੀ ਸੀਟ ਦਿਓ, ਅਸੀਂ ਇਕੱਠੇ ਬੈਠਣਾ ਚਾਹੁੰਦੇ ਹਾਂ]
+  rom: [parivar ke saath baithna hai, meri patni doosri seat par hai, bachche ke paas baithna hai, saath wali seat dijiye, hum saath baithna chahte hain, parivar naal baithna e, asi ikathe baithna chahunde han, family ke saath baithna, saath mein seat]
+  en: [i want to sit with my family, seat me next to my wife, sit together]
+bag_help:
+  hi: [सामान ऊपर रखना है, बैग रखने में मदद चाहिए, मेरा बैग भारी है, सामान उतारना है, बैग ऊपर रखवा दीजिए]
+  pa: [ਸਮਾਨ ਉੱਪਰ ਰੱਖਣਾ ਹੈ, ਬੈਗ ਰੱਖਣ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਮੇਰਾ ਬੈਗ ਭਾਰੀ ਹੈ, ਸਮਾਨ ਉਤਾਰਨਾ ਹੈ, ਬੈਗ ਉੱਪਰ ਰਖਵਾ ਦਿਓ]
+  rom: [saman upar rakhna hai, bag rakhne mein madad chahiye, mera bag bhaari hai, saman utarna hai, bag upar rakhwa dijiye, saman rakhan vich madad, bag bhaara e, suitcase upar rakho, luggage help]
+  en: [help with my bag, my luggage is heavy, put my bag up]
+seatbelt_help:
+  hi: [सीट बेल्ट नहीं लग रही, बेल्ट कैसे लगाएँ, बेल्ट बाँधने में मदद चाहिए, सीट बेल्ट खुल नहीं रही]
+  pa: [ਸੀਟ ਬੈਲਟ ਨਹੀਂ ਲੱਗ ਰਹੀ, ਬੈਲਟ ਕਿਵੇਂ ਲਗਾਈਏ, ਬੈਲਟ ਬੰਨ੍ਹਣ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਸੀਟ ਬੈਲਟ ਖੁੱਲ੍ਹ ਨਹੀਂ ਰਹੀ]
+  rom: [seat belt nahi lag rahi, belt kaise lagayein, belt bandhne mein madad chahiye, seat belt khul nahi rahi, belt nahi lagdi, belt kive lagawan, seatbelt kholni hai, seat belt lagao]
+  en: [help with my seat belt, how do i fasten the belt, belt is stuck]
+form_help:
+  hi: [फ़ॉर्म भरने में मदद चाहिए, कार्ड कैसे भरें, इमिग्रेशन फ़ॉर्म दीजिए, जापान का फ़ॉर्म समझ नहीं आ रहा, लैंडिंग कार्ड भरना है]
+  pa: [ਫ਼ਾਰਮ ਭਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਕਾਰਡ ਕਿਵੇਂ ਭਰੀਏ, ਇਮੀਗ੍ਰੇਸ਼ਨ ਫ਼ਾਰਮ ਦਿਓ, ਜਪਾਨ ਦਾ ਫ਼ਾਰਮ ਸਮਝ ਨਹੀਂ ਆ ਰਿਹਾ, ਲੈਂਡਿੰਗ ਕਾਰਡ ਭਰਨਾ ਹੈ]
+  rom: [form bharne mein madad chahiye, card kaise bharein, immigration form dijiye, japan ka form samajh nahi aa raha, landing card bharna hai, form bharan vich madad chahidi, form kive bharna e, arrival card help, entry form]
+  en: [help with the form, landing card, immigration form, i cannot fill this card]
+arrival_time:
+  hi: [हम कब पहुँचेंगे, कितने बजे उतरेंगे, कब लैंड होगा, कितनी देर और है, पहुँचने में कितना समय]
+  pa: [ਅਸੀਂ ਕਦੋਂ ਪਹੁੰਚਾਂਗੇ, ਕਿੰਨੇ ਵਜੇ ਉੱਤਰਾਂਗੇ, ਕਦੋਂ ਲੈਂਡ ਹੋਵੇਗਾ, ਕਿੰਨੀ ਦੇਰ ਹੋਰ ਹੈ, ਪਹੁੰਚਣ ਵਿੱਚ ਕਿੰਨਾ ਸਮਾਂ]
+  rom: [hum kab pahunchenge, kitne baje utrenge, kab land hoga, kitni der aur hai, pahunchne mein kitna time, asi kadon pahunchange, kinne vaje utrange, kinni der hor e, landing kab hai, how long more]
+  en: [when do we land, what time do we arrive, how long is left]
+connection_help:
+  hi: [अगली फ़्लाइट पकड़नी है, कनेक्टिंग फ़्लाइट के बारे में बताइए, ट्रांज़िट कहाँ से जाऊँ, टोक्यो से आगे जाना है, फ़्लाइट छूट जाएगी]
+  pa: [ਅਗਲੀ ਫ਼ਲਾਈਟ ਫੜਨੀ ਹੈ, ਕਨੈਕਟਿੰਗ ਫ਼ਲਾਈਟ ਬਾਰੇ ਦੱਸੋ, ਟ੍ਰਾਂਜ਼ਿਟ ਕਿੱਥੋਂ ਜਾਵਾਂ, ਟੋਕੀਓ ਤੋਂ ਅੱਗੇ ਜਾਣਾ ਹੈ, ਫ਼ਲਾਈਟ ਨਿਕਲ ਜਾਵੇਗੀ]
+  rom: [agli flight pakadni hai, connecting flight ke baare mein bataiye, transit kahan se jaun, tokyo se aage jana hai, flight chhut jayegi, agli flight fadni e, connecting flight bare dasso, transit kithon jawan, tokyo ton agge jana e, connection miss, toronto jana hai]
+  en: [my connecting flight, i will miss my connection, where is transit, i am going on to toronto]
+language_help:
+  hi: [कोई हिंदी बोलने वाला चाहिए, पंजाबी बोलने वाले को बुलाइए, मुझे अंग्रेज़ी नहीं आती, मुझे समझ नहीं आ रहा, हिंदी में बात करनी है]
+  pa: [ਕੋਈ ਪੰਜਾਬੀ ਬੋਲਣ ਵਾਲਾ ਚਾਹੀਦਾ ਹੈ, ਹਿੰਦੀ ਬੋਲਣ ਵਾਲੇ ਨੂੰ ਬੁਲਾਓ, ਮੈਨੂੰ ਅੰਗਰੇਜ਼ੀ ਨਹੀਂ ਆਉਂਦੀ, ਮੈਨੂੰ ਸਮਝ ਨਹੀਂ ਆ ਰਿਹਾ, ਪੰਜਾਬੀ ਵਿੱਚ ਗੱਲ ਕਰਨੀ ਹੈ]
+  rom: [koi hindi bolne wala chahiye, punjabi bolne wale ko bulaiye, mujhe english nahi aati, mujhe samajh nahi aa raha, hindi mein baat karni hai, koi punjabi bolan wala chahida, mainu angrezi nahi aundi, mainu samajh nahi aa riha, punjabi vich gal karni e, i dont understand english, no english]
+  en: [i need someone who speaks hindi, punjabi speaker please, i do not speak english, i do not understand]
+cant_hear:
+  hi: [मुझे सुनाई नहीं देता, मैं कम सुनता हूँ, ज़ोर से बोलिए, मेरी मशीन काम नहीं कर रही, कान की मशीन ख़राब है]
+  pa: [ਮੈਨੂੰ ਸੁਣਾਈ ਨਹੀਂ ਦਿੰਦਾ, ਮੈਂ ਘੱਟ ਸੁਣਦਾ ਹਾਂ, ਉੱਚੀ ਬੋਲੋ, ਮੇਰੀ ਮਸ਼ੀਨ ਕੰਮ ਨਹੀਂ ਕਰ ਰਹੀ, ਕੰਨ ਦੀ ਮਸ਼ੀਨ ਖ਼ਰਾਬ ਹੈ]
+  rom: [mujhe sunai nahi deta, main kam sunta hun, zor se boliye, meri machine kaam nahi kar rahi, kaan ki machine kharab hai, mainu sunai nahi dinda, main ghatt sunda han, uchi bolo, hearing aid kharab, i cant hear, hearing aid]
+  en: [i cannot hear well, i am hard of hearing, speak louder, my hearing aid is not working]
+wheelchair:
+  hi: [व्हीलचेयर चाहिए, मुझे चलने में मदद चाहिए, मेरे घुटनों में दर्द है चल नहीं सकता, सहारा दीजिए, चलने की दिक़्क़त है]
+  pa: [ਵ੍ਹੀਲਚੇਅਰ ਚਾਹੀਦੀ ਹੈ, ਮੈਨੂੰ ਤੁਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਮੇਰੇ ਗੋਡਿਆਂ ਵਿੱਚ ਦਰਦ ਹੈ ਤੁਰ ਨਹੀਂ ਸਕਦਾ, ਸਹਾਰਾ ਦਿਓ, ਤੁਰਨ ਦੀ ਦਿੱਕਤ ਹੈ]
+  rom: [wheelchair chahiye, mujhe chalne mein madad chahiye, mere ghutnon mein dard hai chal nahi sakta, sahara dijiye, chalne ki dikkat hai, wheelchair chahidi hai, mainu turan vich madad chahidi, sahara dio, gode dukhde ne, walking help]
+  en: [i need a wheelchair, help me walk, my knees hurt i cannot walk, walking assistance]
+baby_help:
+  hi: [बच्चे के लिए मदद चाहिए, बच्चा रो रहा है, बच्चे का दूध गर्म कर दीजिए, बच्चे को सुलाना है, बेबी के लिए पालना]
+  pa: [ਬੱਚੇ ਲਈ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਬੱਚਾ ਰੋ ਰਿਹਾ ਹੈ, ਬੱਚੇ ਦਾ ਦੁੱਧ ਗਰਮ ਕਰ ਦਿਓ, ਬੱਚੇ ਨੂੰ ਸੁਲਾਉਣਾ ਹੈ, ਬੇਬੀ ਲਈ ਪਾਲਣਾ]
+  rom: [bachche ke liye madad chahiye, bachcha ro raha hai, bachche ka doodh garam kar dijiye, bachche ko sulana hai, baby ke liye cot, bachche layi madad chahidi, bachcha ro riha e, baby doodh garam, baby help, bassinet]
+  en: [help with my baby, my baby is crying, warm the baby milk, baby cot please]
+lost_item:
+  hi: [मेरी चीज़ खो गई, मेरा फ़ोन गुम हो गया, मेरा चश्मा नहीं मिल रहा, मेरा बटुआ कहाँ गया, कुछ गिर गया है]
+  pa: [ਮੇਰੀ ਚੀਜ਼ ਗੁੰਮ ਹੋ ਗਈ, ਮੇਰਾ ਫ਼ੋਨ ਗੁੰਮ ਹੋ ਗਿਆ, ਮੇਰੀ ਐਨਕ ਨਹੀਂ ਮਿਲ ਰਹੀ, ਮੇਰਾ ਬਟੂਆ ਕਿੱਥੇ ਗਿਆ, ਕੁਝ ਡਿੱਗ ਗਿਆ ਹੈ]
+  rom: [meri cheez kho gayi, mera phone gum ho gaya, mera chashma nahi mil raha, mera batua kahan gaya, kuch gir gaya hai, meri cheez gum ho gayi, meri ainak nahi mil rahi, kuj dig gaya e, lost my glasses, something fell]
+  en: [i lost something, i cannot find my glasses, my phone is missing, i dropped something]
+cancel:
+  hi: [रहने दीजिए, ज़रूरत नहीं है, छोड़ दो, कोई बात नहीं मत लाइए, मेरी बात रद्द कर दो]
+  pa: [ਰਹਿਣ ਦਿਓ, ਲੋੜ ਨਹੀਂ ਹੈ, ਛੱਡ ਦਿਓ, ਕੋਈ ਗੱਲ ਨਹੀਂ ਨਾ ਲਿਆਓ, ਮੇਰੀ ਗੱਲ ਰੱਦ ਕਰ ਦਿਓ]
+  rom: [rehne dijiye, zaroorat nahi hai, chhod do, koi baat nahi mat laiye, meri baat cancel kar do, rehn dio, lod nahi e, chhad dio, koi gal nahi na liao, never mind, cancel]
+  en: [never mind, cancel, forget it, i do not need it now]
+thanks:
+  hi: [धन्यवाद, शुक्रिया, बहुत बहुत धन्यवाद, आपका शुक्रिया, थैंक यू]
+  pa: [ਧੰਨਵਾਦ, ਸ਼ੁਕਰੀਆ, ਬਹੁਤ ਬਹੁਤ ਧੰਨਵਾਦ, ਤੁਹਾਡਾ ਸ਼ੁਕਰੀਆ, ਥੈਂਕ ਯੂ]
+  rom: [dhanyavad, shukriya, bahut bahut dhanyavad, aapka shukriya, thank you, thanks, dhannvaad, meherbani, shukria ji, bahut shukriya]
+  en: [thank you, thanks a lot, thank you very much]
+help:
+  hi: [मदद कीजिए, मुझे मदद चाहिए, बचाओ, जल्दी आइए, कोई आओ, मदद करो]
+  pa: [ਮਦਦ ਕਰੋ, ਮੈਨੂੰ ਮਦਦ ਚਾਹੀਦੀ ਹੈ, ਬਚਾਓ, ਜਲਦੀ ਆਓ, ਕੋਈ ਆਓ, ਮਦਦ ਕਰੋ ਜੀ]
+  rom: [madad kijiye, mujhe madad chahiye, bachao, jaldi aaiye, koi aao, madad karo, help me, help, madad karo ji, mainu madad chahidi hai, jaldi aao, madat, hailp]
+  en: [help me, i need help, please come quickly, help please, emergency]
+unwell:
+  hi: [तबीयत ठीक नहीं है, मैं बीमार हूँ, मुझे अच्छा नहीं लग रहा, बहुत कमज़ोरी लग रही है, बेचैनी हो रही है, उल्टी जैसा लग रहा है]
+  pa: [ਤਬੀਅਤ ਠੀਕ ਨਹੀਂ ਹੈ, ਮੈਂ ਬਿਮਾਰ ਹਾਂ, ਮੈਨੂੰ ਚੰਗਾ ਨਹੀਂ ਲੱਗ ਰਿਹਾ, ਬਹੁਤ ਕਮਜ਼ੋਰੀ ਲੱਗ ਰਹੀ ਹੈ, ਬੇਚੈਨੀ ਹੋ ਰਹੀ ਹੈ, ਉਲਟੀ ਜਿਹੀ ਲੱਗ ਰਹੀ ਹੈ]
+  rom: [tabiyat theek nahi hai, main beemar hun, mujhe achha nahi lag raha, bahut kamzori lag rahi hai, bechaini ho rahi hai, ulti jaisa lag raha hai, tabiyat theek nahi e, main bimar han, mainu changa nahi lag riha, ulti aa rahi e, i feel sick, not feeling well, unwell]
+  en: [i feel unwell, i am sick, i do not feel good, i feel like vomiting]
+chest_pain:
+  hi: [सीने में दर्द है, छाती में दर्द हो रहा है, दिल में दर्द है, छाती भारी लग रही है, दिल घबरा रहा है]
+  pa: [ਛਾਤੀ ਵਿੱਚ ਦਰਦ ਹੈ, ਸੀਨੇ ਵਿੱਚ ਦਰਦ ਹੋ ਰਿਹਾ ਹੈ, ਦਿਲ ਵਿੱਚ ਦਰਦ ਹੈ, ਛਾਤੀ ਭਾਰੀ ਲੱਗ ਰਹੀ ਹੈ, ਦਿਲ ਘਬਰਾ ਰਿਹਾ ਹੈ]
+  rom: [seene mein dard hai, chhati mein dard ho raha hai, dil mein dard hai, chhati bhaari lag rahi hai, dil ghabra raha hai, chhati vich dard e, seene vich dard ho riha, dil ghabrawe, chest pain, heart pain, dil mein takleef]
+  en: [chest pain, my chest hurts, pain in my heart, heart attack]
+breathing:
+  hi: [साँस नहीं आ रही, साँस लेने में तकलीफ़ है, दम घुट रहा है, साँस फूल रही है, हवा नहीं मिल रही]
+  pa: [ਸਾਹ ਨਹੀਂ ਆ ਰਿਹਾ, ਸਾਹ ਲੈਣ ਵਿੱਚ ਤਕਲੀਫ਼ ਹੈ, ਦਮ ਘੁੱਟ ਰਿਹਾ ਹੈ, ਸਾਹ ਚੜ੍ਹ ਰਿਹਾ ਹੈ, ਹਵਾ ਨਹੀਂ ਮਿਲ ਰਹੀ]
+  rom: [saans nahi aa rahi, saans lene mein takleef hai, dum ghut raha hai, saans phool rahi hai, hawa nahi mil rahi, saah nahi aa riha, saah lain vich takleef e, dam ghut riha e, saah chadh riha, cant breathe, breathing problem]
+  en: [i cannot breathe, difficulty breathing, i am choking, short of breath]
+dizzy:
+  hi: [चक्कर आ रहे हैं, सिर घूम रहा है, आँखों के आगे अँधेरा छा रहा है, गिरने जैसा लग रहा है, बेहोशी जैसी लग रही है]
+  pa: [ਚੱਕਰ ਆ ਰਹੇ ਹਨ, ਸਿਰ ਘੁੰਮ ਰਿਹਾ ਹੈ, ਅੱਖਾਂ ਅੱਗੇ ਹਨੇਰਾ ਛਾ ਰਿਹਾ ਹੈ, ਡਿੱਗਣ ਵਰਗਾ ਲੱਗ ਰਿਹਾ ਹੈ, ਬੇਹੋਸ਼ੀ ਜਿਹੀ ਲੱਗ ਰਹੀ ਹੈ]
+  rom: [chakkar aa rahe hain, sir ghoom raha hai, aankhon ke aage andhera chha raha hai, girne jaisa lag raha hai, behoshi jaisi lag rahi hai, chakkar aa rahe ne, sir ghum riha e, akhan agge hanera, dizzy, faint, behosh]
+  en: [i feel dizzy, my head is spinning, i feel faint, i am going to fall]
+injury:
+  hi: [चोट लग गई है, मैं गिर गया, खून निकल रहा है, हाथ में चोट है, पैर में चोट लगी है]
+  pa: [ਸੱਟ ਲੱਗ ਗਈ ਹੈ, ਮੈਂ ਡਿੱਗ ਪਿਆ, ਖ਼ੂਨ ਨਿਕਲ ਰਿਹਾ ਹੈ, ਹੱਥ ਵਿੱਚ ਸੱਟ ਹੈ, ਪੈਰ ਵਿੱਚ ਸੱਟ ਲੱਗੀ ਹੈ]
+  rom: [chot lag gayi hai, main gir gaya, khoon nikal raha hai, haath mein chot hai, pair mein chot lagi hai, satt lag gayi e, main dig peya, khoon nikal riha e, hurt, fell down, bleeding, injured]
+  en: [i am hurt, i fell down, i am bleeding, i have an injury]
+smoke:
+  hi: [धुआँ आ रहा है, आग लगी है, जलने की बदबू आ रही है, कुछ जल रहा है, चिंगारी दिख रही है]
+  pa: [ਧੂੰਆਂ ਆ ਰਿਹਾ ਹੈ, ਅੱਗ ਲੱਗੀ ਹੈ, ਸੜਨ ਦੀ ਬੋ ਆ ਰਹੀ ਹੈ, ਕੁਝ ਸੜ ਰਿਹਾ ਹੈ, ਚੰਗਿਆੜੀ ਦਿਖ ਰਹੀ ਹੈ]
+  rom: [dhuan aa raha hai, aag lagi hai, jalne ki badbu aa rahi hai, kuch jal raha hai, chingari dikh rahi hai, dhuan aa riha e, agg lagi e, sadan di boo aa rahi, smoke, fire, aag, dhua]
+  en: [i see smoke, there is a fire, something is burning, i smell burning]

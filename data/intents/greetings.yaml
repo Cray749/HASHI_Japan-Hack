@@ -1,0 +1,68 @@
+# Greeting coach for crew. "script" is what the passenger would read; "katakana" is what
+# the crew reads aloud; "romaji" helps check the sound. The crew learns, not the passenger.
+- lang: pa
+  name: Punjabi
+  items:
+    - id: hello
+      script: ਸਤ ਸ੍ਰੀ ਅਕਾਲ
+      katakana: サット・スリ・アカール
+      romaji: Satto suri akaaru
+      meaning: Hello (Sikh greeting)
+      ja: こんにちは(シク教徒の挨拶)
+    - id: welcome
+      script: ਜੀ ਆਇਆਂ ਨੂੰ
+      katakana: ジー・アーイアーン・ヌーン
+      romaji: Jii aaiaan nuun
+      meaning: Welcome
+      ja: ようこそ
+    - id: water
+      script: ਪਾਣੀ ਲਓਗੇ?
+      katakana: パーニー・ラオゲー?
+      romaji: Paanii laoge?
+      meaning: Would you like water?
+      ja: お水はいかがですか
+    - id: ok
+      script: ਸਭ ਠੀਕ ਹੈ?
+      katakana: サブ・ティーク・ハイ?
+      romaji: Sab thiik hai?
+      meaning: Is everything alright?
+      ja: 大丈夫ですか
+    - id: thanks
+      script: ਧੰਨਵਾਦ ਜੀ
+      katakana: ダンナヴァード・ジー
+      romaji: Dhannavaad jii
+      meaning: Thank you
+      ja: ありがとうございます
+- lang: hi
+  name: Hindi
+  items:
+    - id: hello
+      script: नमस्ते
+      katakana: ナマステー
+      romaji: Namasute
+      meaning: Hello
+      ja: こんにちは
+    - id: welcome
+      script: आपका स्वागत है
+      katakana: アープカー・スワーガト・ハイ
+      romaji: Aapukaa suwaagato hai
+      meaning: Welcome
+      ja: ようこそ
+    - id: water
+      script: पानी लेंगे?
+      katakana: パーニー・レンゲー?
+      romaji: Paanii lenge?
+      meaning: Would you like water?
+      ja: お水はいかがですか
+    - id: ok
+      script: सब ठीक है?
+      katakana: サブ・ティーク・ハイ?
+      romaji: Sab thiik hai?
+      meaning: Is everything alright?
+      ja: 大丈夫ですか
+    - id: thanks
+      script: धन्यवाद
+      katakana: ダンニャワード
+      romaji: Dhanyavaado
+      meaning: Thank you
+      ja: ありがとうございます

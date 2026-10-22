@@ -1,0 +1,389 @@
+# Closed list of cabin requests. Passenger labels are short (tile text); ja is the
+# sentence the crew card shows; en is the subtitle.
+# urgency: 1 routine, 2 needs attention, 3 urgent (red, always on top)
+# tile: true means it sits on the passenger home grid, the rest are under "More".
+# replies: one-tap reply ids (see replies.yaml) offered to crew for this request.
+- id: water
+  cat: drink
+  urgency: 1
+  icon: GlassWater
+  tile: true
+  en: Water, please
+  ja: お水をお願いします
+  hi: पानी चाहिए
+  pa: ਪਾਣੀ ਚਾਹੀਦਾ ਹੈ
+  replies: [bringing, wait, unavailable]
+- id: tea_coffee
+  cat: drink
+  urgency: 1
+  icon: Coffee
+  en: Tea or coffee, please
+  ja: お茶かコーヒーをお願いします
+  hi: चाय या कॉफ़ी चाहिए
+  pa: ਚਾਹ ਜਾਂ ਕੌਫ਼ੀ ਚਾਹੀਦੀ ਹੈ
+  replies: [bringing, wait, unavailable]
+- id: juice
+  cat: drink
+  urgency: 1
+  icon: CupSoda
+  en: Juice, please
+  ja: ジュースをお願いします
+  hi: जूस चाहिए
+  pa: ਜੂਸ ਚਾਹੀਦਾ ਹੈ
+  replies: [bringing, wait, unavailable]
+- id: food
+  cat: food
+  urgency: 1
+  icon: Utensils
+  tile: true
+  en: I am hungry, food please
+  ja: お食事をお願いします
+  hi: खाना चाहिए
+  pa: ਖਾਣਾ ਚਾਹੀਦਾ ਹੈ
+  replies: [bringing, meal_soon, wait]
+- id: veg_meal
+  cat: food
+  urgency: 1
+  icon: Salad
+  en: Vegetarian meal, please
+  ja: ベジタリアンのお食事をお願いします
+  hi: शाकाहारी खाना चाहिए
+  pa: ਸ਼ਾਕਾਹਾਰੀ ਖਾਣਾ ਚਾਹੀਦਾ ਹੈ
+  replies: [checking, bringing, unavailable]
+- id: allergy
+  cat: food
+  urgency: 2
+  icon: ShieldAlert
+  en: I have a food allergy
+  ja: 食物アレルギーがあります
+  hi: मुझे खाने से एलर्जी है
+  pa: ਮੈਨੂੰ ਖਾਣੇ ਤੋਂ ਐਲਰਜੀ ਹੈ
+  replies: [crew_will_check, checking]
+- id: meal_later
+  cat: food
+  urgency: 1
+  icon: Clock
+  en: Please keep my meal for later
+  ja: お食事を後でいただけますか
+  hi: मेरा खाना बाद में दीजिए
+  pa: ਮੇਰਾ ਖਾਣਾ ਬਾਅਦ ਵਿੱਚ ਦੇਣਾ
+  replies: [yes, checking]
+- id: meal_time
+  cat: food
+  urgency: 1
+  icon: Timer
+  en: When is the meal?
+  ja: お食事はいつですか
+  hi: खाना कब मिलेगा
+  pa: ਖਾਣਾ ਕਦੋਂ ਮਿਲੇਗਾ
+  replies: [meal_soon, wait]
+- id: blanket
+  cat: comfort
+  urgency: 1
+  icon: BedDouble
+  tile: true
+  en: Blanket, please
+  ja: 毛布をお願いします
+  hi: कंबल चाहिए
+  pa: ਕੰਬਲ ਚਾਹੀਦਾ ਹੈ
+  replies: [bringing, wait, unavailable]
+- id: pillow
+  cat: comfort
+  urgency: 1
+  icon: BedSingle
+  en: Pillow, please
+  ja: 枕をお願いします
+  hi: तकिया चाहिए
+  pa: ਸਿਰਹਾਣਾ ਚਾਹੀਦਾ ਹੈ
+  replies: [bringing, wait, unavailable]
+- id: too_cold
+  cat: comfort
+  urgency: 1
+  icon: Snowflake
+  en: I am cold
+  ja: 寒いです
+  hi: मुझे ठंड लग रही है
+  pa: ਮੈਨੂੰ ਠੰਡ ਲੱਗ ਰਹੀ ਹੈ
+  replies: [bringing, checking]
+- id: too_hot
+  cat: comfort
+  urgency: 1
+  icon: Sun
+  en: I am hot
+  ja: 暑いです
+  hi: मुझे गर्मी लग रही है
+  pa: ਮੈਨੂੰ ਗਰਮੀ ਲੱਗ ਰਹੀ ਹੈ
+  replies: [checking, bringing]
+- id: light_on
+  cat: comfort
+  urgency: 1
+  icon: Lightbulb
+  en: Please help with the reading light
+  ja: 読書灯をつけてください
+  hi: पढ़ने की लाइट जला दीजिए
+  pa: ਪੜ੍ਹਨ ਵਾਲੀ ਲਾਈਟ ਜਗਾ ਦਿਓ
+  replies: [coming, wait]
+- id: light_off
+  cat: comfort
+  urgency: 1
+  icon: LightbulbOff
+  en: Please turn the light off
+  ja: ライトを消してください
+  hi: लाइट बंद कर दीजिए
+  pa: ਲਾਈਟ ਬੰਦ ਕਰ ਦਿਓ
+  replies: [coming, wait]
+- id: toilet
+  cat: assist
+  urgency: 1
+  icon: Toilet
+  tile: true
+  en: Where is the toilet?
+  ja: お手洗いはどこですか
+  hi: शौचालय कहाँ है
+  pa: ਪਖਾਨਾ ਕਿੱਥੇ ਹੈ
+  replies: [coming, toilet_free, wait]
+- id: toilet_help
+  cat: assist
+  urgency: 2
+  icon: HandHelping
+  en: I need help to reach the toilet
+  ja: お手洗いまでお手伝いをお願いします
+  hi: शौचालय तक जाने में मदद चाहिए
+  pa: ਪਖਾਨੇ ਤੱਕ ਜਾਣ ਲਈ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, wait]
+- id: medicine
+  cat: assist
+  urgency: 2
+  icon: Pill
+  tile: true
+  en: I need my medicine
+  ja: 薬を飲みたいので、お手伝いをお願いします
+  hi: मुझे दवाई चाहिए
+  pa: ਮੈਨੂੰ ਦਵਾਈ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, crew_will_check]
+- id: headphones
+  cat: seat
+  urgency: 1
+  icon: Headphones
+  en: Headphones, please
+  ja: ヘッドホンをお願いします
+  hi: हेडफ़ोन चाहिए
+  pa: ਹੈੱਡਫ਼ੋਨ ਚਾਹੀਦੇ ਹਨ
+  replies: [bringing, wait, unavailable]
+- id: screen_help
+  cat: seat
+  urgency: 1
+  icon: MonitorPlay
+  en: My screen is not working
+  ja: モニターが動きません
+  hi: मेरी स्क्रीन नहीं चल रही
+  pa: ਮੇਰੀ ਸਕਰੀਨ ਨਹੀਂ ਚੱਲ ਰਹੀ
+  replies: [coming, checking]
+- id: charger
+  cat: seat
+  urgency: 1
+  icon: BatteryCharging
+  en: Help me charge my phone
+  ja: 携帯の充電を手伝ってください
+  hi: फ़ोन चार्ज करने में मदद चाहिए
+  pa: ਫ਼ੋਨ ਚਾਰਜ ਕਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, wait]
+- id: seat_help
+  cat: seat
+  urgency: 1
+  icon: Armchair
+  en: Help with my seat
+  ja: 座席の使い方を教えてください
+  hi: सीट के बारे में मदद चाहिए
+  pa: ਸੀਟ ਬਾਰੇ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, wait]
+- id: change_seat
+  cat: seat
+  urgency: 1
+  icon: ArrowLeftRight
+  en: I would like to change seats
+  ja: 席を替わりたいです
+  hi: मुझे सीट बदलनी है
+  pa: ਮੈਨੂੰ ਸੀਟ ਬਦਲਣੀ ਹੈ
+  replies: [checking, unavailable, coming]
+- id: family_seat
+  cat: seat
+  urgency: 1
+  icon: UsersRound
+  en: I want to sit with my family
+  ja: 家族と隣の席にしてください
+  hi: मुझे अपने परिवार के साथ बैठना है
+  pa: ਮੈਨੂੰ ਆਪਣੇ ਪਰਿਵਾਰ ਨਾਲ ਬੈਠਣਾ ਹੈ
+  replies: [checking, unavailable, coming]
+- id: bag_help
+  cat: seat
+  urgency: 1
+  icon: Luggage
+  en: Help with my bag
+  ja: 荷物の収納をお手伝いください
+  hi: सामान रखने में मदद चाहिए
+  pa: ਸਮਾਨ ਰੱਖਣ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, wait]
+- id: seatbelt_help
+  cat: seat
+  urgency: 1
+  icon: Link2
+  en: Help with my seat belt
+  ja: シートベルトのお手伝いをお願いします
+  hi: सीट बेल्ट लगाने में मदद चाहिए
+  pa: ਸੀਟ ਬੈਲਟ ਲਗਾਉਣ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, wait]
+- id: form_help
+  cat: info
+  urgency: 1
+  icon: FileText
+  en: Help with the landing card form
+  ja: 入国カードの記入をお手伝いください
+  hi: फ़ॉर्म भरने में मदद चाहिए
+  pa: ਫ਼ਾਰਮ ਭਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, language_speaker, wait]
+- id: arrival_time
+  cat: info
+  urgency: 1
+  icon: PlaneLanding
+  en: When do we land?
+  ja: 到着は何時ですか
+  hi: हम कब पहुँचेंगे
+  pa: ਅਸੀਂ ਕਦੋਂ ਪਹੁੰਚਾਂਗੇ
+  replies: [arrival_info, checking]
+- id: connection_help
+  cat: info
+  urgency: 2
+  icon: Route
+  en: Help with my connecting flight
+  ja: 乗り継ぎについて教えてください
+  hi: अगली उड़ान के बारे में मदद चाहिए
+  pa: ਅਗਲੀ ਉਡਾਣ ਬਾਰੇ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, language_speaker, wait]
+- id: language_help
+  cat: info
+  urgency: 2
+  icon: Languages
+  en: I need someone who speaks my language
+  ja: 私の言語を話せる方をお願いします
+  hi: हिंदी या पंजाबी बोलने वाला चाहिए
+  pa: ਪੰਜਾਬੀ ਜਾਂ ਹਿੰਦੀ ਬੋਲਣ ਵਾਲਾ ਚਾਹੀਦਾ ਹੈ
+  replies: [language_speaker, coming]
+- id: cant_hear
+  cat: assist
+  urgency: 2
+  icon: EarOff
+  en: I cannot hear well
+  ja: 耳が聞こえにくいです
+  hi: मुझे ठीक से सुनाई नहीं देता
+  pa: ਮੈਨੂੰ ਠੀਕ ਤਰ੍ਹਾਂ ਸੁਣਾਈ ਨਹੀਂ ਦਿੰਦਾ
+  replies: [coming, show_cards]
+- id: wheelchair
+  cat: assist
+  urgency: 2
+  icon: Accessibility
+  en: I need a wheelchair or walking help
+  ja: 車いすか歩行のお手伝いをお願いします
+  hi: व्हीलचेयर या चलने में मदद चाहिए
+  pa: ਵ੍ਹੀਲਚੇਅਰ ਜਾਂ ਤੁਰਨ ਵਿੱਚ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, checking]
+- id: baby_help
+  cat: assist
+  urgency: 2
+  icon: Baby
+  en: Help with my baby
+  ja: 赤ちゃんのことでお願いがあります
+  hi: बच्चे के लिए मदद चाहिए
+  pa: ਬੱਚੇ ਲਈ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming, bringing]
+- id: lost_item
+  cat: info
+  urgency: 1
+  icon: Search
+  en: I lost something
+  ja: 物をなくしました
+  hi: मेरी कोई चीज़ खो गई है
+  pa: ਮੇਰੀ ਕੋਈ ਚੀਜ਼ ਗੁੰਮ ਹੋ ਗਈ ਹੈ
+  replies: [coming, checking]
+- id: cancel
+  cat: info
+  urgency: 1
+  icon: Undo2
+  en: Never mind, cancel my request
+  ja: 先ほどの依頼を取り消します
+  hi: रहने दीजिए, ज़रूरत नहीं है
+  pa: ਰਹਿਣ ਦਿਓ, ਲੋੜ ਨਹੀਂ ਹੈ
+  replies: [yes]
+- id: thanks
+  cat: info
+  urgency: 1
+  icon: Smile
+  en: Thank you
+  ja: ありがとうございます
+  hi: धन्यवाद
+  pa: ਧੰਨਵਾਦ
+  replies: [welcome]
+- id: help
+  cat: urgent
+  urgency: 3
+  icon: HandHelping
+  tile: true
+  en: I need help now
+  ja: 至急来てください
+  hi: मुझे अभी मदद चाहिए
+  pa: ਮੈਨੂੰ ਹੁਣੇ ਮਦਦ ਚਾਹੀਦੀ ਹੈ
+  replies: [coming_now, stay_seated]
+- id: unwell
+  cat: urgent
+  urgency: 3
+  icon: TriangleAlert
+  en: I feel unwell
+  ja: 体調が悪いです
+  hi: मेरी तबीयत ठीक नहीं है
+  pa: ਮੇਰੀ ਤਬੀਅਤ ਠੀਕ ਨਹੀਂ ਹੈ
+  replies: [coming_now, stay_seated]
+- id: chest_pain
+  cat: urgent
+  urgency: 3
+  icon: HeartPulse
+  en: Chest pain
+  ja: 胸が痛いです
+  hi: सीने में दर्द है
+  pa: ਛਾਤੀ ਵਿੱਚ ਦਰਦ ਹੈ
+  replies: [coming_now, stay_seated]
+- id: breathing
+  cat: urgent
+  urgency: 3
+  icon: Wind
+  en: I cannot breathe well
+  ja: 息が苦しいです
+  hi: साँस लेने में तकलीफ़ है
+  pa: ਸਾਹ ਲੈਣ ਵਿੱਚ ਤਕਲੀਫ਼ ਹੈ
+  replies: [coming_now, stay_seated]
+- id: dizzy
+  cat: urgent
+  urgency: 3
+  icon: Orbit
+  en: I feel dizzy
+  ja: めまいがします
+  hi: चक्कर आ रहे हैं
+  pa: ਚੱਕਰ ਆ ਰਹੇ ਹਨ
+  replies: [coming_now, stay_seated]
+- id: injury
+  cat: urgent
+  urgency: 3
+  icon: Bandage
+  en: I am hurt
+  ja: けがをしました
+  hi: मुझे चोट लगी है
+  pa: ਮੈਨੂੰ ਸੱਟ ਲੱਗੀ ਹੈ
+  replies: [coming_now, stay_seated]
+- id: smoke
+  cat: urgent
+  urgency: 3
+  icon: Flame
+  en: I see smoke or fire
+  ja: 煙か火が見えます
+  hi: धुआँ या आग दिख रही है
+  pa: ਧੂੰਆਂ ਜਾਂ ਅੱਗ ਦਿਖ ਰਹੀ ਹੈ
+  replies: [coming_now, stay_seated]

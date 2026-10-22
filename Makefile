@@ -20,7 +20,7 @@ test:
 	$(PY) -m pytest server/tests -q
 
 lint:
-	$(PY) -m ruff check server bench scripts
+	$(PY) -m ruff check server bench scripts run.py
 
 bench:
 	$(PY) -m bench.run
