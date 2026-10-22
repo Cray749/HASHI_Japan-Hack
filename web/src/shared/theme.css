@@ -1,0 +1,156 @@
+/* HASHI visual tokens, shared by the passenger and crew apps. */
+:root {
+  --navy: #0e1a3a;
+  --navy-2: #1b2b5b;
+  --soft: #f2f4fa;
+  --line: #dce1ee;
+  --muted: #4d5778; /* darker than the brand grey so it passes AA on white and soft */
+  --saffron: #f59e1b;
+  --saffron-ink: #7a4a00;
+  --vermilion: #d9333f;
+  --vermilion-ink: #a3202b;
+  --green: #1fa67a;
+  --green-ink: #0b6b4c;
+  --sky: #3b6fe0;
+  --sky-ink: #2754b8;
+  --t-saffron: #fdf0d5;
+  --t-vermilion: #fbe3e5;
+  --t-green: #ddf3ea;
+  --t-sky: #e3ebfd;
+  --t-grey: #e8ebf4;
+  --white: #ffffff;
+  --radius: 14px;
+  --fs: 16px;
+  --font-body: 'Noto Sans', 'Noto Sans Devanagari', 'Noto Sans Gurmukhi', 'Noto Sans JP', system-ui, sans-serif;
+  --font-head: 'Noto Serif', 'Noto Sans JP', Georgia, serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs);
+  line-height: 1.5;
+  color: var(--navy);
+  background: var(--soft);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+  margin: 0;
+  line-height: 1.25;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  min-height: 48px;
+  min-width: 48px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 2px solid var(--navy);
+  background: var(--white);
+  color: var(--navy);
+}
+
+.btn.primary {
+  background: var(--saffron);
+  border-color: var(--saffron);
+  color: var(--navy);
+}
+
+.btn.danger {
+  background: var(--vermilion);
+  border-color: var(--vermilion);
+  color: var(--white);
+}
+
+.btn.good {
+  background: var(--green-ink);
+  border-color: var(--green-ink);
+  color: var(--white);
+}
+
+.btn.dark {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  background: var(--t-grey);
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.chip.saffron { background: var(--t-saffron); color: var(--saffron-ink); }
+.chip.vermilion { background: var(--t-vermilion); color: var(--vermilion-ink); }
+.chip.green { background: var(--t-green); color: var(--green-ink); }
+.chip.sky { background: var(--t-sky); color: var(--sky-ink); }
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-weight: 700;
+}
+
+.banner.warn { background: var(--t-saffron); color: var(--saffron-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
