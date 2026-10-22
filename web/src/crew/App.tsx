@@ -118,9 +118,8 @@ export default function App() {
     return <main className="boot"><Bridge size={140} color="#fff" /><p>HASHI Crew · 読み込み中 Loading…</p></main>;
   }
 
-  const requestsPane = (
-    <section className="requests-pane" aria-label="Requests">
-      {urgent.length > 0 && (
+  const urgentBanner = (
+    urgent.length > 0 && (
         <div className="urgent-banner" role="alert">
           {urgent.map((r) => {
             const i = cat.intents.find((x) => x.id === r.intent);
@@ -138,7 +137,11 @@ export default function App() {
             );
           })}
         </div>
-      )}
+      )
+  );
+
+  const requestsPane = (
+    <section className="requests-pane" aria-label="Requests">
       <div className="pane-head">
         <h2>依頼 <small>Requests</small></h2>
         <div className="seg">
@@ -207,6 +210,8 @@ export default function App() {
           }
         }}><Icon name="PlaneLanding" size={18} /> 着陸 Landed</button>
       </header>
+
+      {urgentBanner}
 
       <nav className="tabs" aria-label="Sections">
         {tabs.filter(([id]) => !(wide && id === 'requests')).map(([id, icon, ja, en]) => (

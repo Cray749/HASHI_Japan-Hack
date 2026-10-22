@@ -628,3 +628,7 @@ small {
 .urgent-row .ja {
   color: #fff;
 }
+
+.crew > .urgent-banner {
+  margin: 8px 16px 0;
+}
