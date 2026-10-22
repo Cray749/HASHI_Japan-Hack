@@ -13,7 +13,9 @@ export default function ExitRowPanel({ pax, checks, send }: {
   pax: Record<string, Passenger>; checks: ExitCheck[]; send: (m: object) => void;
 }) {
   const rowsWithPax = [...new Set(Object.keys(pax).map((s) => parseInt(s, 10)))].sort((a, b) => a - b);
-  const [row, setRow] = useState<number>(rowsWithPax[0] ?? 24);
+  const [picked, setRow] = useState<number>(24);
+  // default to row 24 (the demo's exit row) when it has passengers, else the first row
+  const row = rowsWithPax.includes(picked) ? picked : rowsWithPax[0] ?? picked;
   const latest = (r: number) => [...checks].reverse().find((c) => c.row === r && c.open);
   const active = checks.filter((c) => c.open).sort((a, b) => b.created - a.created);
 

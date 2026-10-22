@@ -96,3 +96,31 @@ def test_voice_without_engine_falls_back_to_tiles(client):
     out = client.post("/api/voice", files={"audio": ("a.wav", b"RIFF....", "audio/wav")},
                       data={"lang": "pa"}).json()
     assert out["ok"] is False and out["mode"] == "tiles"
+
+
+def test_exit_check_flow(client):
+    with client.websocket_connect("/ws/crew") as crew:
+        crew.receive_json()
+        with client.websocket_connect("/ws/passenger?seat=24A") as pax:
+            pax.send_json({"t": "hello", "lang": "hi"})
+            pax.receive_json()
+            crew.receive_json()
+            crew.send_json({"t": "exit_start", "row": 24})
+            chk = crew.receive_json()["exit"]
+            assert pax.receive_json()["t"] == "exit_check"
+            pax.send_json({"t": "exit_answer", "check_id": chk["id"], "willing": True,
+                           "answer": "right_away"})
+            assert pax.receive_json()["state"] == "retry"
+            assert crew.receive_json()["exit"]["seats"]["24A"]["state"] == "retry"
+            crew.send_json({"t": "exit_resolve", "check_id": chk["id"], "seat": "24A", "ok": True})
+            assert crew.receive_json()["exit"]["seats"]["24A"]["state"] == "passed"
+
+
+def test_urgent_request_is_flagged_new_to_crew(client):
+    with client.websocket_connect("/ws/crew") as crew:
+        crew.receive_json()
+        with client.websocket_connect("/ws/passenger?seat=12F") as pax:
+            pax.send_json({"t": "request", "intent": "unwell", "via": "tap"})
+            pax.receive_json()
+            msg = crew.receive_json()
+            assert msg["new"] is True and msg["request"]["urgency"] == 3

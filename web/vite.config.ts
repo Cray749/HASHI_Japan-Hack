@@ -79,7 +79,7 @@ async function cacheFirst(req, name) {
 async function networkFirst(req, name, fallbackUrl) {
   const cache = await caches.open(name);
   try {
-    const res = await fetch(req);
+    const res = await fetch(req, { cache: 'no-store' });
     if (res.ok) cache.put(req, res.clone());
     return res;
   } catch (err) {

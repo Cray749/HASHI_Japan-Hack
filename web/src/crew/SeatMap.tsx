@@ -13,8 +13,9 @@ export default function SeatMap({ pax, reqs, anns, cat, selected, onSelect }: {
 }) {
   const rows = useMemo(() => {
     const nums = Object.keys(pax).map((s) => parseInt(s, 10));
-    const lo = Math.min(10, ...nums, 99);
-    const hi = Math.max(30, ...nums, 0);
+    // show from just above the first occupied row; an empty cabin shows a default block
+    const lo = nums.length ? Math.max(1, Math.min(...nums) - 1) : 10;
+    const hi = Math.max(lo + 12, ...nums.map((n) => n + 1));
     return Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
   }, [pax]);
 

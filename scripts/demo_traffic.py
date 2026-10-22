@@ -4,6 +4,7 @@
     python scripts/demo_traffic.py help 12F       # seat 12F presses the big help button
     python scripts/demo_traffic.py sequence       # a short scripted run of requests
     python scripts/demo_traffic.py ack            # every seeded seat confirms the newest announcement
+    python scripts/demo_traffic.py ack 24C 18E    # only these seats confirm (leaves the rest waiting)
 Needs the server to be running with `make demo`.
 """
 import asyncio
@@ -27,7 +28,7 @@ async def request(seat: str, intent: str) -> None:
         print(f"{seat} -> {intent}")
 
 
-async def ack_all() -> None:
+async def ack_all(only: list[str]) -> None:
     snap = json.load(urllib.request.urlopen(f"http://{HOST}/api/health"))
     print("server ok:", snap["ok"])
     async with websockets.connect(f"ws://{HOST}/ws/crew") as crew:
@@ -37,7 +38,7 @@ async def ack_all() -> None:
         print("no announcements yet")
         return
     ann = anns[-1]
-    for seat in list(ann["acks"]):
+    for seat in [s for s in ann["acks"] if not only or s in only]:
         async with websockets.connect(f"ws://{HOST}/ws/passenger?seat={seat}") as ws:
             await ws.send(json.dumps({"t": "ack", "ann_id": ann["id"]}))
             await asyncio.sleep(0.15)
@@ -51,7 +52,7 @@ async def main() -> None:
             await request(seat, intent)
             time.sleep(1.5)
     elif args[0] == "ack":
-        await ack_all()
+        await ack_all([x.upper() for x in args[1:]])
     else:
         await request(args[1] if len(args) > 1 else "24C", args[0])
 
