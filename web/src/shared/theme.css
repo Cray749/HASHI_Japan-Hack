@@ -30,6 +30,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  /* rem sizes scale with this, so senior mode (20px) enlarges everything */
+  font-size: var(--fs);
+}
+
 html,
 body,
 #root {
@@ -39,7 +44,7 @@ body,
 
 body {
   font-family: var(--font-body);
-  font-size: var(--fs);
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--navy);
   background: var(--soft);

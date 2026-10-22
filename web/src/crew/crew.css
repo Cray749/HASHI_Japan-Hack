@@ -475,7 +475,7 @@ small {
 .rows-input input,
 .target select {
   width: 70px;
-  min-height: 44px;
+  min-height: 48px;
   font-size: 1.1rem;
   padding: 4px 8px;
   border: 2px solid var(--navy);
@@ -620,7 +620,7 @@ small {
 }
 
 .hbtn.sm {
-  min-height: 40px;
+  min-height: 48px;
   padding: 2px 10px;
 }
 

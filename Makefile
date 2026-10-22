@@ -4,7 +4,7 @@ PY ?= python
 .PHONY: setup dev test lint bench build demo audio
 
 setup:
-	$(PY) -m pip install -r server/requirements.txt
+	$(PY) -m pip install -r server/requirements.txt -r server/requirements-voice.txt
 	cd web && npm install
 
 build:

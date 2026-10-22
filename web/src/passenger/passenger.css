@@ -48,7 +48,7 @@ body {
   border: 2px solid #fff;
   border-radius: 999px;
   padding: 2px 12px;
-  min-height: 44px;
+  min-height: 48px;
 }
 
 .home,
@@ -209,7 +209,7 @@ body {
 }
 
 .link {
-  min-height: 44px;
+  min-height: 48px;
   text-decoration: underline;
   color: var(--sky-ink);
   font-weight: 700;
