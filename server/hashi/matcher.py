@@ -62,18 +62,18 @@ class Match:
 class IntentMatcher:
     def __init__(self) -> None:
         cat = catalog()
-        self.rows: list[tuple[str, str, str, str]] = []   # intent, raw, key, skeleton
+        self.rows: list[tuple[str, str, str, str, str]] = []   # intent, raw, key, skeleton, bank
         for intent_id, banks in cat.phrases.items():
-            for phrases in banks.values():
+            for bank, phrases in banks.items():
                 for raw in phrases:
                     key = phonetic_key(raw)
-                    self.rows.append((intent_id, raw, key, skeleton(key)))
+                    self.rows.append((intent_id, raw, key, skeleton(key), bank))
         n = len(self.rows)
         df_full: Counter = Counter()
         df_skel: Counter = Counter()
         df_word: Counter = Counter()
         self.g_full, self.g_skel, self.words = [], [], []
-        for _, _, key, skel in self.rows:
+        for _, _, key, skel, _ in self.rows:
             gf, gs, ws = _grams(key), _grams(skel, 2, 3), set(key.split())
             self.g_full.append(gf)
             self.g_skel.append(gs)
@@ -116,7 +116,8 @@ class IntentMatcher:
                 hit_p += idf.get(p, 2.0) * (best / 100)
         return 0.6 * hit_q / q_total + 0.4 * hit_p / p_total
 
-    def match(self, text: str, top_k: int = 3) -> Match:
+    def match(self, text: str, top_k: int = 3, banks: tuple[str, ...] | None = None) -> Match:
+        """banks limits the phrase banks used (e.g. ('en',)); the benchmark baseline uses it."""
         key = phonetic_key(text)
         if not key:
             return Match([], 0.0, 0.0, "tiles")
@@ -125,7 +126,9 @@ class IntentMatcher:
         qs = self._tfidf(_grams(skel, 2, 3), self.idf_skel) if len(skel) >= 2 else {}
         qwords = key.split()
         best: dict[str, Candidate] = {}
-        for i, (intent_id, raw, _, _) in enumerate(self.rows):
+        for i, (intent_id, raw, _, _, bank) in enumerate(self.rows):
+            if banks and bank not in banks:
+                continue
             s = (0.35 * self._cos(qf, self.v_full[i])
                  + 0.15 * (self._cos(qs, self.v_skel[i]) if qs else 0.0)
                  + 0.50 * self._word_score(qwords, self.words[i]))

@@ -1,0 +1,45 @@
+# Held-out test requests for the noise benchmark. One natural sentence per intent per
+# language, written separately from data/intents/phrases.yaml so the matcher is not
+# graded on sentences it was built from. Gold = the request the crew card should show.
+hi:
+  - {gold: water, text: "भाई साहब, ज़रा एक गिलास पानी मिल जाएगा?"}
+  - {gold: blanket, text: "एक कंबल ला दीजिए।"}
+  - {gold: food, text: "बहुत भूख लगी है, कुछ खाने को मिलेगा?"}
+  - {gold: toilet, text: "टॉयलेट किस तरफ़ है?"}
+  - {gold: medicine, text: "मेरी दवाई खाने का समय हो गया है।"}
+  - {gold: help, text: "कोई मदद कीजिए, जल्दी आइए!"}
+  - {gold: chest_pain, text: "मेरी छाती में बहुत दर्द हो रहा है।"}
+  - {gold: dizzy, text: "मुझे चक्कर आ रहे हैं।"}
+  - {gold: tea_coffee, text: "एक कप चाय मिल सकती है क्या?"}
+  - {gold: veg_meal, text: "मैं सिर्फ़ शाकाहारी खाना खाता हूँ।"}
+  - {gold: pillow, text: "एक तकिया दे दीजिए।"}
+  - {gold: too_hot, text: "यहाँ बहुत गर्मी लग रही है।"}
+  - {gold: arrival_time, text: "हम टोक्यो कितने बजे पहुँचेंगे?"}
+  - {gold: headphones, text: "फ़िल्म देखनी है, हेडफ़ोन दे दीजिए।"}
+  - {gold: breathing, text: "साँस लेने में बहुत तकलीफ़ हो रही है।"}
+  - {gold: language_help, text: "मुझे अंग्रेज़ी नहीं आती, कोई हिंदी वाला बुलाइए।"}
+  - {gold: form_help, text: "यह जापान वाला फ़ॉर्म भरने में मदद कीजिए।"}
+  - {gold: wheelchair, text: "मुझे चलने में दिक़्क़त है, व्हीलचेयर चाहिए।"}
+  - {gold: juice, text: "संतरे का जूस मिलेगा?"}
+  - {gold: charger, text: "मेरा फ़ोन चार्ज करना है।"}
+pa:
+  - {gold: water, text: "ਜੀ, ਇੱਕ ਗਲਾਸ ਪਾਣੀ ਮਿਲ ਜਾਵੇਗਾ?"}
+  - {gold: blanket, text: "ਇੱਕ ਕੰਬਲ ਲਿਆ ਦਿਓ ਜੀ।"}
+  - {gold: food, text: "ਬਹੁਤ ਭੁੱਖ ਲੱਗੀ ਹੈ, ਕੁਝ ਖਾਣ ਨੂੰ ਮਿਲੇਗਾ?"}
+  - {gold: toilet, text: "ਟਾਇਲਟ ਕਿਸ ਪਾਸੇ ਹੈ ਜੀ?"}
+  - {gold: medicine, text: "ਮੇਰੀ ਦਵਾਈ ਖਾਣ ਦਾ ਵੇਲਾ ਹੋ ਗਿਆ ਹੈ।"}
+  - {gold: help, text: "ਕੋਈ ਮਦਦ ਕਰੋ, ਜਲਦੀ ਆਓ!"}
+  - {gold: chest_pain, text: "ਮੇਰੀ ਛਾਤੀ ਵਿੱਚ ਬਹੁਤ ਦਰਦ ਹੋ ਰਿਹਾ ਹੈ।"}
+  - {gold: dizzy, text: "ਮੈਨੂੰ ਚੱਕਰ ਆ ਰਹੇ ਨੇ।"}
+  - {gold: tea_coffee, text: "ਇੱਕ ਕੱਪ ਚਾਹ ਮਿਲ ਸਕਦੀ ਹੈ?"}
+  - {gold: veg_meal, text: "ਮੈਂ ਸਿਰਫ਼ ਸ਼ਾਕਾਹਾਰੀ ਖਾਣਾ ਖਾਂਦਾ ਹਾਂ।"}
+  - {gold: pillow, text: "ਇੱਕ ਸਿਰਹਾਣਾ ਦੇ ਦਿਓ ਜੀ।"}
+  - {gold: too_hot, text: "ਇੱਥੇ ਬਹੁਤ ਗਰਮੀ ਲੱਗ ਰਹੀ ਹੈ।"}
+  - {gold: arrival_time, text: "ਅਸੀਂ ਟੋਕੀਓ ਕਿੰਨੇ ਵਜੇ ਪਹੁੰਚਾਂਗੇ?"}
+  - {gold: headphones, text: "ਫ਼ਿਲਮ ਦੇਖਣੀ ਹੈ, ਹੈੱਡਫ਼ੋਨ ਦੇ ਦਿਓ।"}
+  - {gold: breathing, text: "ਸਾਹ ਲੈਣ ਵਿੱਚ ਬਹੁਤ ਤਕਲੀਫ਼ ਹੋ ਰਹੀ ਹੈ।"}
+  - {gold: language_help, text: "ਮੈਨੂੰ ਅੰਗਰੇਜ਼ੀ ਨਹੀਂ ਆਉਂਦੀ, ਕੋਈ ਪੰਜਾਬੀ ਵਾਲਾ ਬੁਲਾਓ।"}
+  - {gold: form_help, text: "ਇਹ ਜਪਾਨ ਵਾਲਾ ਫ਼ਾਰਮ ਭਰਨ ਵਿੱਚ ਮਦਦ ਕਰੋ।"}
+  - {gold: wheelchair, text: "ਮੈਨੂੰ ਤੁਰਨ ਵਿੱਚ ਦਿੱਕਤ ਹੈ, ਵ੍ਹੀਲਚੇਅਰ ਚਾਹੀਦੀ ਹੈ।"}
+  - {gold: juice, text: "ਸੰਤਰੇ ਦਾ ਜੂਸ ਮਿਲੇਗਾ?"}
+  - {gold: charger, text: "ਮੇਰਾ ਫ਼ੋਨ ਚਾਰਜ ਕਰਨਾ ਹੈ।"}

@@ -58,5 +58,4 @@ def clean(pcm: np.ndarray, sr: int = 16000, strength: float = 1.6) -> np.ndarray
     hz = np.fft.rfftfreq(N_FFT, 1 / sr)
     mask[:, hz < 80] = 0.0                      # drop rumble below 80 Hz
     out = _istft(spec * mask, len(pcm))
-    peak = float(np.max(np.abs(out))) or 1.0
-    return (out / peak * min(1.0, float(np.max(np.abs(pcm))) / peak)).astype(np.float32)
+    return np.clip(out, -1.0, 1.0).astype(np.float32)

@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from . import asr, voice
+from .demo import seed as seed_demo
 from .hub import Hub
 from .intents import DATA_DIR, LANGS, announcements, catalog, greetings
 from .matcher import get_matcher
@@ -41,6 +42,8 @@ def lan_ip() -> str:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     get_matcher()  # build the index once at start
+    if os.environ.get("HASHI_DEMO") == "1":
+        seed_demo(hub.flight)
     if os.environ.get("HASHI_ASR_PRELOAD", "1") == "1":
         asr.preload()
     yield
@@ -92,14 +95,16 @@ def voice_request(audio: UploadFile = File(...), lang: str = Form("hi"),
 @app.get("/api/join")
 def join_info(request_host: str | None = None):
     port = int(os.environ.get("HASHI_PORT", "8000"))
-    url = f"http://{lan_ip()}:{port}/p/"
-    return {"url": url, "crew_url": f"http://{lan_ip()}:{port}/crew/"}
+    scheme = os.environ.get("HASHI_SCHEME", "http")
+    url = f"{scheme}://{lan_ip()}:{port}/p/"
+    return {"url": url, "crew_url": f"{scheme}://{lan_ip()}:{port}/crew/"}
 
 
 @app.get("/api/qr.svg")
 def qr(seat: str = ""):
     port = int(os.environ.get("HASHI_PORT", "8000"))
-    url = f"http://{lan_ip()}:{port}/p/" + (f"?seat={seat}" if seat else "")
+    scheme = os.environ.get("HASHI_SCHEME", "http")
+    url = f"{scheme}://{lan_ip()}:{port}/p/" + (f"?seat={seat}" if seat else "")
     svg = segno.make(url, error="m").svg_inline(scale=6, border=2, dark="#0E1A3A")
     return Response(svg, media_type="image/svg+xml")
 

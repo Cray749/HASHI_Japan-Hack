@@ -15,3 +15,4 @@ data/audio/*.wav
 bench/clips/
 bench/.cache/
 *.log
+certs/

@@ -1,0 +1,5 @@
+# Optional: speech recognition and audio generation. The app runs without these
+# (voice then falls back to picture tiles).
+faster-whisper>=1.0
+edge-tts>=6.1
+gTTS>=2.5
