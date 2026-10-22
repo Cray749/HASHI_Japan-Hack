@@ -3,6 +3,7 @@ once the model has been downloaded by scripts/get_models.py."""
 from __future__ import annotations
 
 import os
+import threading
 import time
 from pathlib import Path
 
@@ -28,12 +29,17 @@ class WhisperBackend(ASRBackend):
         self.size = size or os.environ.get("HASHI_ASR_MODEL", "small")
         local = MODELS_DIR / f"whisper-{self.size}"
         source = str(local) if local.exists() else self.size
+        self._lock = threading.Lock()  # one clip at a time; others wait their turn
         threads = int(os.environ.get("HASHI_ASR_THREADS", min(8, max(4, (os.cpu_count() or 8) // 2))))
         self.model = WhisperModel(source, device="cpu", compute_type="int8", cpu_threads=threads,
                                   download_root=str(MODELS_DIR) if not local.exists() else None,
                                   local_files_only=os.environ.get("HASHI_OFFLINE", "") == "1")
 
     def transcribe(self, pcm: np.ndarray, lang: str, task: str = "transcribe") -> ASRResult:
+        with self._lock:
+            return self._run(pcm, lang, task)
+
+    def _run(self, pcm: np.ndarray, lang: str, task: str) -> ASRResult:
         t0 = time.time()
         segments, info = self.model.transcribe(
             pcm.astype(np.float32), language=lang if lang in ("hi", "pa", "en", "ja") else None,

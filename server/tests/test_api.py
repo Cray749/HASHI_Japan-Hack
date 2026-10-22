@@ -124,3 +124,14 @@ def test_urgent_request_is_flagged_new_to_crew(client):
             pax.receive_json()
             msg = crew.receive_json()
             assert msg["new"] is True and msg["request"]["urgency"] == 3
+
+
+def test_tap_reaches_crew_well_inside_two_seconds(client):
+    import time
+    with client.websocket_connect("/ws/crew") as crew:
+        crew.receive_json()
+        with client.websocket_connect("/ws/passenger?seat=8A") as pax:
+            started = time.perf_counter()
+            pax.send_json({"t": "request", "intent": "water", "via": "tap"})
+            crew.receive_json()
+            assert time.perf_counter() - started < 0.5
