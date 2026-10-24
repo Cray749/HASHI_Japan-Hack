@@ -31,7 +31,9 @@ async def main() -> None:
     pcm = decode(path)
     buf = io.BytesIO()
     with wave.open(buf, "wb") as w:
-        w.setnchannels(1); w.setsampwidth(2); w.setframerate(16000)
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(16000)
         w.writeframes((np.clip(pcm, -1, 1) * 32767).astype("<i2").tobytes())
     r = requests.post("http://127.0.0.1:8000/api/live", files={"audio": ("v.wav", buf.getvalue(), "audio/wav")},
                       data={"src": lang, "tgt": tgt}).json()
