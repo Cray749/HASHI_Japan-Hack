@@ -49,6 +49,8 @@ async def lifespan(app: FastAPI):
         seed_demo(hub.flight)
     if os.environ.get("HASHI_ASR_PRELOAD", "1") == "1":
         asr.preload()
+        if translate.available():
+            threading.Thread(target=translate.get_translator, daemon=True).start()  # load the translation model now
     yield
 
 
