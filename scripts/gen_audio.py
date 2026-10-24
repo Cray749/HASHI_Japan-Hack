@@ -56,9 +56,11 @@ async def pick_voices() -> None:
             EDGE_VOICE[lang] = pool[0]["ShortName"]
 
 
-async def edge_one(path: Path, lang: str, text: str) -> None:
+async def edge_one(path: Path, lang: str, text: str, slow: bool = True) -> None:
     import edge_tts
-    await edge_tts.Communicate(text, EDGE_VOICE[lang], rate="-12%").save(str(path))
+    # slightly slower speech for seniors; some voices reject the rate setting, so retries drop it
+    kwargs = {"rate": "-12%"} if slow else {}
+    await edge_tts.Communicate(text, EDGE_VOICE[lang], **kwargs).save(str(path))
 
 
 def gtts_one(path: Path, lang: str, text: str) -> None:
@@ -76,7 +78,7 @@ async def make_one(sem: asyncio.Semaphore, name: str, lang: str, text: str, forc
                 if lang == "pa" or lang not in EDGE_VOICE:
                     await asyncio.to_thread(gtts_one, path, lang, text)
                 else:
-                    await edge_one(path, lang, text)
+                    await edge_one(path, lang, text, slow=attempt < 2)
                 return "made"
             except Exception as exc:
                 last = exc
