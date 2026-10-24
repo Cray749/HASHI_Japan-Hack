@@ -618,3 +618,14 @@ body {
   0%, 100% { box-shadow: 0 -4px 0 rgba(217, 51, 63, 0.0); }
   50% { box-shadow: 0 -6px 18px rgba(217, 51, 63, 0.45); }
 }
+
+.langs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.langs .btn.big {
+  min-height: 64px;
+  font-size: 1.35rem;
+}
