@@ -70,7 +70,8 @@ def catalog() -> Catalog:
 def _merge_packs(cat: Catalog) -> None:
     """Extra languages live in data/intents/translations/<code>.yaml, one file each."""
     folder = DATA_DIR / "intents" / "translations"
-    anns = {a["id"]: a for a in _load("announcements.yaml")}
+    anns = {a["id"]: {"id": a["id"], "icon": a["icon"], "kind": a.get("kind", "info"),
+                      "text": {k: a[k] for k in CORE_LANGS}} for a in _load("announcements.yaml")}
     for path in sorted(folder.glob("*.yaml")) if folder.exists() else []:
         with open(path, encoding="utf-8") as f:
             pack = yaml.safe_load(f)
@@ -86,7 +87,7 @@ def _merge_packs(cat: Catalog) -> None:
                 cat.replies[rid]["text"][code] = text
         for aid, text in pack.get("announcements", {}).items():
             if aid in anns:
-                anns[aid][code] = text
+                anns[aid]["text"][code] = text
     # announcements() reads the same file; keep the merged copy for it
     cat_announcements.clear()
     cat_announcements.update(anns)
@@ -99,8 +100,7 @@ cat_announcements: dict[str, dict] = {}
 def announcements() -> list[dict]:
     catalog()  # makes sure the packs were merged
     rows = cat_announcements.values()
-    return [{"id": r["id"], "icon": r["icon"], "kind": r.get("kind", "info"),
-             "text": {k: v for k, v in r.items() if k not in ("id", "icon", "kind")}} for r in rows]
+    return [dict(r) for r in rows]
 
 
 @lru_cache(maxsize=1)
