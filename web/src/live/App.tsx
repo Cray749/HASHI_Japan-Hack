@@ -10,6 +10,7 @@ interface LiveResult {
   heard?: string;
   translation?: string | null;
   translator?: string | null;
+  translation_lang?: string;
   match?: { intent: string; ja: string; en: string; confidence: number; mode: string } | null;
   steps?: {
     received?: { seconds: number };
@@ -77,7 +78,7 @@ export default function App() {
       form.append('tgt', tgt);
       const out = (await (await fetch('/api/live', { method: 'POST', body: form })).json()) as LiveResult;
       setRes(out);
-      if (autoSpeak && out.translation) speak(out.translation, SPEECH_LANG[tgt]);
+      if (autoSpeak && out.translation) speak(out.translation, SPEECH_LANG[out.translation_lang ?? tgt]);
     } catch {
       setRes({ ok: false, error: 'too short or failed' });
     }
@@ -217,10 +218,10 @@ export default function App() {
           {res.translation && (
             <li className="done big-trans">
               <b>＋ 翻訳 Translation</b>
-              <span>{res.translator}, {st.translate?.ms} ms · machine translation, unverified ({name(tgt)})</span>
-              <em lang={tgt}>{res.translation}</em>
-              <button className="btn" onClick={() => speak(res.translation ?? '', SPEECH_LANG[tgt])}>
-                <Icon name="Volume2" /> 聞く · Hear it in {name(tgt)}
+              <span>{res.translator}, {st.translate?.ms} ms · machine translation, unverified ({name(res.translation_lang ?? tgt)})</span>
+              <em lang={res.translation_lang ?? tgt}>{res.translation}</em>
+              <button className="btn" onClick={() => speak(res.translation ?? '', SPEECH_LANG[res.translation_lang ?? tgt])}>
+                <Icon name="Volume2" /> 聞く · Hear it in {name(res.translation_lang ?? tgt)}
               </button>
             </li>
           )}
@@ -249,8 +250,8 @@ export default function App() {
         </ol>
       )}
 
-      {res?.ok && !res.translation && !canTranslate && tgt !== 'en' && (
-        <p className="note">Free translation to {name(tgt)} needs the NLLB model (python scripts/get_nllb.py). To English, Whisper translates without it.</p>
+      {res?.ok && !canTranslate && res.translation_lang === 'en' && tgt !== 'en' && (
+        <p className="note">Translating to {name(tgt)} needs the NLLB model, which is still downloading (python scripts/get_nllb.py resumes it). Without it you get English from Whisper, offline.</p>
       )}
     </main>
   );

@@ -147,14 +147,14 @@ def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = 
         heard = res.text
         steps["asr"] = {"engine": backend.name, "ms": int((time.time() - t) * 1000)}
         english = None
-        if tgt == "en" and src != "en" and heard.strip():
+        if src != "en" and heard.strip() and (tgt == "en" or not translate.available()):
             english = backend.transcribe(pcm, src, task="translate").text  # Whisper's own translate task
     except Exception as exc:
         log.warning("live failed: %s", exc)
         return {"ok": False, "error": "failed"}
     del pcm, data  # the recording is dropped here; nothing was written to disk
     out = {"ok": True, "heard": heard, "tgt": tgt, "translation": None, "translator": None, "match": None,
-           "steps": steps}
+           "translation_lang": tgt, "steps": steps}
     if heard.strip():
         t = time.time()
         words = phonetic_key(heard)
@@ -176,7 +176,9 @@ def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = 
         if tr:
             out["translation"], out["translator"] = tr, "NLLB-200 600M"
         elif english:
+            # no free-text model for this target here: fall back to the English that Whisper can write offline
             out["translation"], out["translator"] = english, "Whisper translate (to English)"
+            out["translation_lang"] = "en"
         steps["translate"] = {"ms": int((time.time() - t) * 1000), "model": out["translator"]}
     steps["discarded"] = True
     steps["total_ms"] = int((time.time() - t_all) * 1000)
