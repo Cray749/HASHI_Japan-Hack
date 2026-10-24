@@ -14,7 +14,7 @@ export function Tile({ intent, lang, senior, onPick }: {
 }) {
   return (
     <button className={`tile tint-${TINT[intent.cat] ?? 'grey'} ${senior ? 'senior' : ''}`} onClick={() => onPick(intent)}>
-      <Icon name={intent.icon} size={senior ? 60 : 44} />
+      <span className="tile-ico"><Icon name={intent.icon} size={senior ? 56 : 42} /></span>
       <span className="tile-native" lang={lang}>{intent.labels[lang] ?? intent.labels.en}</span>
       {lang !== 'en' && <span className="tile-en">{intent.labels.en}</span>}
     </button>
@@ -53,7 +53,7 @@ export function RequestCard({ req, cat, p, onUnderstood, onCancel }: {
             <Icon name="Volume2" /> {t(p.lang, 'play')}
           </button>
           {req.understood_at ? (
-            <p className="done-line"><Icon name="BadgeCheck" /> {t(p.lang, 'understoodDone')}</p>
+            <p className="done-line"><span className="hanko" aria-hidden="true">済</span> <Icon name="BadgeCheck" /> {t(p.lang, 'understoodDone')}</p>
           ) : (
             <button className="btn good wide" onClick={() => onUnderstood(req.id)}>
               <Icon name="BadgeCheck" /> {t(p.lang, 'understood')}

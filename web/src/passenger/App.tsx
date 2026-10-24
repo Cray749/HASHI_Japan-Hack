@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Announcement, Catalog, Checkin, ExitCheck, Intent, MatchResult, Request } from '../shared/types';
 import { LiveSocket, loadCatalog, type SocketStatus } from '../shared/net';
 import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
+import { Sakura } from '../shared/japan';
 import Onboarding from './Onboarding';
 import { MoreScreen, RequestCard, Tile, VoiceButton } from './Home';
 import { AnnouncementOverlay, CheckinOverlay, ConfirmOverlay, ExitOverlay, HelpSentOverlay, LandedScreen } from './Overlays';
@@ -164,6 +165,7 @@ export default function App() {
 
   return (
     <div className={`app ${p.senior ? 'senior' : ''}`}>
+      <Sakura count={6} />
       <header className="top">
         <span className="logo"><Bridge size={34} color="#fff" /> HASHI</span>
         <span className="seat-chip">{p.seat}</span>

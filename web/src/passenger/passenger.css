@@ -501,3 +501,120 @@ body {
   border-radius: 8px;
   padding: 10px 14px;
 }
+
+/* ---- passenger look: washi paper, wave band, soft cards, hanko stamp ---- */
+body {
+  background-color: #f7f5ef; /* warm washi paper */
+}
+
+.top {
+  background-color: var(--navy);
+  background-image: var(--seigaiha);
+  box-shadow: 0 4px 14px rgba(14, 26, 58, 0.25);
+}
+
+.top::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 4px;
+  background: var(--vermilion);
+}
+
+.tile {
+  box-shadow: 0 3px 0 rgba(14, 26, 58, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(14, 26, 58, 0.14);
+}
+
+.tile-ico {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.tile.senior .tile-ico {
+  width: 92px;
+  height: 92px;
+}
+
+.onb.splash {
+  position: relative;
+  overflow: hidden;
+  background: #f7f5ef;
+}
+
+.onb.splash .brand {
+  animation: rise 0.8s ease both;
+}
+
+.onb .waves {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 60px;
+  pointer-events: none;
+}
+
+.onb {
+  position: relative;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+.home,
+.more,
+.app > .banner,
+.reqs {
+  position: relative;
+  z-index: 2;
+}
+
+.req {
+  box-shadow: 0 6px 16px rgba(14, 26, 58, 0.1);
+  animation: rise 0.4s ease both;
+}
+
+.hanko {
+  display: inline-grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 3px solid var(--vermilion);
+  border-radius: 10px;
+  color: var(--vermilion);
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 700;
+  transform: rotate(-8deg);
+  animation: stamp 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+@keyframes stamp {
+  from { opacity: 0; transform: rotate(-8deg) scale(2.4); }
+  to { opacity: 1; transform: rotate(-8deg) scale(1); }
+}
+
+.help-bar {
+  animation: beat 2.8s ease-in-out infinite;
+}
+
+@keyframes beat {
+  0%, 100% { box-shadow: 0 -4px 0 rgba(217, 51, 63, 0.0); }
+  50% { box-shadow: 0 -6px 18px rgba(217, 51, 63, 0.45); }
+}

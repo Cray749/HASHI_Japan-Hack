@@ -678,3 +678,8 @@ small {
   font-family: var(--font-head);
   font-size: 1.6rem;
 }
+
+.bar {
+  background-image: var(--seigaiha);
+  border-bottom: 4px solid var(--vermilion);
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { LanguageInfo } from '../shared/types';
-import { Bridge, Icon } from '../shared/ui';
+import { FujiScene, Sakura, Waves } from '../shared/japan';
+import { Icon } from '../shared/ui';
 import { PROFILE_HELP, t } from './i18n';
 import type { Profile } from './profile';
 
@@ -21,7 +22,8 @@ export default function Onboarding({ initial, languages, onDone }: {
   if (step === 0) {
     return (
       <main className="onb splash">
-        <div className="bridge-hero"><Bridge size={190} color="var(--navy)" /></div>
+        <Sakura count={14} />
+        <FujiScene />
         <h1 className="brand">HASHI <span className="three">橋 पुल ਪੁਲ</span></h1>
         <p className="tag">Don&apos;t translate. Understand.</p>
         <h2 className="pick">ਆਪਣੀ ਬੋਲੀ ਚੁਣੋ · अपनी भाषा चुनिए · Choose your language</h2>
@@ -33,6 +35,7 @@ export default function Onboarding({ initial, languages, onDone }: {
           ))}
         </div>
         <a className="link" href="/live/">Live translator (speak and see the translation)</a>
+        <Waves />
       </main>
     );
   }
