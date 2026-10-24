@@ -49,11 +49,13 @@ Without the optional voice packages everything still works; voice then falls bac
 
 | Area | What it does |
 | --- | --- |
-| Passenger PWA (`/p`) | QR landing, language pick (Punjabi, Hindi, English), consent screen, Comfort Profile, picture tiles, senior mode (larger text and tiles), voice button, request status (sent, crew coming, replied, understood), one big help button |
+| Passenger PWA (`/p`) | QR landing, language pick (17 languages), consent screen, Comfort Profile, picture tiles, senior mode (larger text and tiles), voice button, request status (sent, crew coming, replied, understood), one big help button |
 | Crew dashboard (`/crew`) | Live request cards in Japanese and English, urgency sort with a pinned red banner for urgent requests, seat map, one-tap replies, announcement composer with an "understood" board, exit-row check panel, katakana greeting coach, language flags so Punjabi- and Hindi-speaking crew spot their passengers |
 | Voice | Browser records 16 kHz audio, server cleans noise, local speech engine, intent matcher with top-3 and confidence, confirm-if-unsure, tiles on any error |
 | Offline | Single laptop server, local fonts, service workers, auto-reconnect with queued requests |
 | Privacy | Consent first, voice processed in memory only, no names, per-flight data in memory and wiped at landing |
+
+**17 passenger languages:** Hindi, Punjabi, Tamil, Telugu, Bengali, Gujarati, Marathi, Kannada, Malayalam, Thai, Vietnamese, Indonesian, Filipino, Malay, Khmer, Burmese and English, with Japanese on the crew side. Voice requests are tested for Hindi, Punjabi and English; the other languages work by tapping pictures, with audio and large text. All translations are drafts that still need native-speaker review. The crew can also reach out first: a "Quiet seats" list with visible reasons and a one-tap check-in card ("Is everything OK?") in the passenger's language.
 
 About 40 requests are covered, from water and blankets to chest pain and smoke. Urgent ones go to the
 crew at a lower confidence bar. See `data/intents/intents.yaml`.
@@ -106,6 +108,8 @@ real seniors in a real cabin to score lower. Full tables, failures and limits ar
 ## Limitations (honest list)
 
 * **Not yet tested on real devices.** Developed and checked in desktop browsers (including a phone-sized window). The microphone, hotspot reconnects and `--https` certificate flow still need a test on real phones.
+* **Voice only for Hindi, Punjabi and English.** Recognition for the other languages has not been tested, so voice is switched off for them.
+* **No airport app yet.** The planned Flutter airport companion is not built.
 * **Language content is unreviewed.** Hindi, Punjabi and Japanese strings, including the katakana greetings, have not been checked by native speakers. The checklist is `data/intents/REVIEW.md`.
 * **Benchmark uses synthetic voices and noise.** Real accents, seniors and real cabin noise will score lower.
 * **Speech engine.** Whisper-family (small, CPU) is used because it installs reliably; Punjabi quality is the weakest link, which is why the closed list and the confirm step exist. IndicConformer is the planned upgrade behind the same interface.
