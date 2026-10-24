@@ -10,6 +10,7 @@ export interface Profile {
   needs: string[];
   voiceOk: boolean;
   onboarded: boolean;
+  preset?: boolean; // filled in from the phone app, so the language step is skipped
 }
 
 const KEY = 'hashi.pax.v1';
@@ -25,6 +26,15 @@ export function loadProfile(): Profile {
   if (fromUrl && /^\d{1,2}[A-Ka-k]$/.test(fromUrl)) {
     if (p.seat !== fromUrl.toUpperCase()) p.onboarded = false;
     p.seat = fromUrl.toUpperCase();
+  }
+  // The phone app passes the profile in the URL fragment (it never reaches a server log).
+  const frag = new URLSearchParams(location.hash.replace(/^#/, ''));
+  if (frag.get('lang')) {
+    p.lang = frag.get('lang') as Profile['lang'];
+    p.senior = frag.get('senior') === '1';
+    p.needs = (frag.get('needs') ?? '').split(',').filter(Boolean);
+    p.onboarded = false;
+    p.preset = true;
   }
   return p;
 }

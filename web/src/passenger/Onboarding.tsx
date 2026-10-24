@@ -8,8 +8,8 @@ import type { Profile } from './profile';
 export default function Onboarding({ initial, languages, onDone }: {
   initial: Profile; languages: LanguageInfo[]; onDone: (p: Profile) => void;
 }) {
-  const [step, setStep] = useState(0);
   const hasSeat = /^\d{1,2}[A-Ka-k]$/.test(initial.seat);
+  const [step, setStep] = useState(initial.preset ? (hasSeat ? 2 : 1) : 0);
   const [p, setP] = useState<Profile>(initial);
   const lang = p.lang;
   const voiceLang = languages.find((l) => l.code === lang)?.voice ?? false;
