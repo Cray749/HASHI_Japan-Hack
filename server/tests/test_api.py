@@ -151,3 +151,18 @@ def test_crew_pin_protects_crew_socket_and_landing(client, monkeypatch):
         assert ws.receive_json()["t"] == "snapshot"
     assert client.post("/api/landing").status_code == 401
     assert client.post("/api/landing", headers={"X-Crew-Pin": "4321"}).status_code == 200
+
+
+def test_crew_checkin_round_trip(client):
+    with client.websocket_connect("/ws/crew") as crew:
+        crew.receive_json()
+        with client.websocket_connect("/ws/passenger?seat=24C") as pax:
+            pax.send_json({"t": "hello", "lang": "ta"})
+            pax.receive_json()
+            crew.receive_json()
+            crew.send_json({"t": "checkin", "seat": "24C"})
+            assert crew.receive_json()["checkin"]["answer"] is None
+            assert pax.receive_json()["t"] == "checkin"
+            pax.send_json({"t": "checkin_answer", "answer": "fine"})
+            assert pax.receive_json()["t"] == "checkin_done"
+            assert crew.receive_json()["checkin"]["answer"] == "fine"

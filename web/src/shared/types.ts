@@ -65,6 +65,14 @@ export interface Passenger {
   pictures_first: boolean;
   needs: string[];
   online: boolean;
+  joined: number;
+}
+
+export interface Checkin {
+  seat: string;
+  at: number;
+  answer: 'fine' | 'call' | null;
+  answered_at: number | null;
 }
 
 export type RequestStatus = 'new' | 'seen' | 'replied' | 'done' | 'cancelled';

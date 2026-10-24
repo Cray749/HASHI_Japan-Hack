@@ -63,7 +63,8 @@ class Hub:
                 "requests": [r for r in f.requests.values() if r["seat"] == seat
                              and r["status"] in ("new", "seen", "replied")],
                 "announcements": f.pending_announcements(seat),
-                "exit_check": f.pending_exit_check(seat)}
+                "exit_check": f.pending_exit_check(seat),
+                "checkin": f.pending_checkin(seat)}
 
     async def handle_passenger(self, seat: str, msg: dict) -> None:
         f = self.flight
@@ -98,6 +99,10 @@ class Hub:
                                       bool(msg.get("willing")), str(msg.get("answer", "")))
             await self.to_seat(seat, {"t": "exit_done", "state": chk["seats"][seat]["state"]})
             await self.to_crew({"t": "exit", "exit": chk})
+        elif kind == "checkin_answer":
+            c = f.answer_checkin(seat, str(msg.get("answer", "")))
+            await self.to_seat(seat, {"t": "checkin_done", "checkin": c})
+            await self.to_crew({"t": "checkin", "checkin": c})
         elif kind == "ping":
             await self.to_seat(seat, {"t": "pong"})
 
@@ -136,6 +141,10 @@ class Hub:
             chk = f.resolve_exit_seat(msg.get("check_id", ""), msg.get("seat", ""),
                                       bool(msg.get("ok")))
             await self.to_crew({"t": "exit", "exit": chk})
+        elif kind == "checkin":
+            c = f.start_checkin(msg.get("seat", ""))
+            await self.to_crew({"t": "checkin", "checkin": c})
+            await self.to_seat(c["seat"], {"t": "checkin", "checkin": c})
         elif kind == "landing":
             await self.land()
 

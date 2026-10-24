@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Announcement, Catalog, ExitCheck, Intent, MatchResult, PaxLang } from '../shared/types';
 import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
-import { t } from './i18n';
+import { CHECKIN, t } from './i18n';
 import type { Profile } from './profile';
 
 export function AnnouncementOverlay({ ann, cat, p, onAck }: {
@@ -116,5 +116,21 @@ export function LandedScreen({ lang }: { lang: PaxLang }) {
       <p className="ann-text">{t(lang, 'landed')}</p>
       <p className="tag">橋 · पुल · ਪੁਲ</p>
     </main>
+  );
+}
+
+/** Crew reached out first: a calm "Is everything OK?" card for people who never press a button. */
+export function CheckinOverlay({ p, onAnswer }: { p: Profile; onAnswer: (a: 'fine' | 'call') => void }) {
+  const [q, fine, call] = CHECKIN[p.lang] ?? CHECKIN.en;
+  useEffect(() => {
+    if ('vibrate' in navigator) navigator.vibrate?.(120);
+  }, []);
+  return (
+    <div className="overlay" role="alertdialog" lang={p.lang}>
+      <Icon name="Smile" size={p.senior ? 110 : 84} />
+      <p className="ann-text">{q}</p>
+      <button className="btn good wide" onClick={() => onAnswer('fine')}><Icon name="Check" /> {fine}</button>
+      <button className="btn primary wide" onClick={() => onAnswer('call')}><Icon name="Hand" /> {call}</button>
+    </div>
   );
 }

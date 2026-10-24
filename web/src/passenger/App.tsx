@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Announcement, Catalog, ExitCheck, Intent, MatchResult, Request } from '../shared/types';
+import type { Announcement, Catalog, Checkin, ExitCheck, Intent, MatchResult, Request } from '../shared/types';
 import { LiveSocket, loadCatalog, type SocketStatus } from '../shared/net';
 import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
 import Onboarding from './Onboarding';
 import { MoreScreen, RequestCard, Tile, VoiceButton } from './Home';
-import { AnnouncementOverlay, ConfirmOverlay, ExitOverlay, HelpSentOverlay, LandedScreen } from './Overlays';
+import { AnnouncementOverlay, CheckinOverlay, ConfirmOverlay, ExitOverlay, HelpSentOverlay, LandedScreen } from './Overlays';
 import { setLanguages, setPackUi, t } from './i18n';
 import { loadProfile, saveProfile, wipeProfile, type Profile } from './profile';
 
@@ -16,6 +16,7 @@ export default function App() {
   const [reqs, setReqs] = useState<Record<string, Request>>({});
   const [anns, setAnns] = useState<Announcement[]>([]);
   const [exit, setExit] = useState<ExitCheck | null>(null);
+  const [checkin, setCheckin] = useState<Checkin | null>(null);
   const [screen, setScreen] = useState<'home' | 'more'>('home');
   const [voiceResult, setVoiceResult] = useState<MatchResult | null>(null);
   const [notice, setNotice] = useState('');
@@ -57,6 +58,13 @@ export default function App() {
             setReqs(Object.fromEntries((m.requests as Request[]).map((r) => [r.id, r])));
             setAnns(m.announcements);
             setExit(m.exit_check);
+            setCheckin(m.checkin ?? null);
+            break;
+          case 'checkin':
+            setCheckin(m.checkin);
+            break;
+          case 'checkin_done':
+            setCheckin(null);
             break;
           case 'request':
             setReqs((old) => ({ ...old, [m.request.id]: m.request }));
@@ -225,6 +233,12 @@ export default function App() {
       {exit && !firstAnn && (
         <ExitOverlay check={exit} p={p} onAnswer={(id, willing, answer) =>
           sock.current?.send({ t: 'exit_answer', check_id: id, willing, answer })} />
+      )}
+      {checkin && !checkin.answer && !firstAnn && (
+        <CheckinOverlay p={p} onAnswer={(a) => {
+          sock.current?.send({ t: 'checkin_answer', answer: a });
+          setCheckin(null);
+        }} />
       )}
       {firstAnn && (
         <AnnouncementOverlay key={firstAnn.id} ann={firstAnn} cat={cat} p={p}

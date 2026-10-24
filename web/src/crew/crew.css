@@ -656,3 +656,25 @@ small {
   color: #ffd2d6;
   font-weight: 700;
 }
+
+.radar-row {
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.radar-row header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.seat-big {
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+}

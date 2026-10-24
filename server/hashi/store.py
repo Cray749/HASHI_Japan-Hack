@@ -52,7 +52,7 @@ class Passenger:
     def public(self) -> dict:
         return {"seat": self.seat, "lang": self.lang, "senior": self.senior,
                 "first_time": self.first_time, "pictures_first": self.pictures_first,
-                "needs": self.needs, "online": self.online}
+                "needs": self.needs, "online": self.online, "joined": self.joined}
 
 
 class Flight:
@@ -64,6 +64,7 @@ class Flight:
         self.requests: dict[str, dict] = {}
         self.announcements: dict[str, dict] = {}
         self.exit_checks: dict[str, dict] = {}
+        self.checkins: dict[str, dict] = {}   # seat -> latest crew check-in
         self.landed_at: float | None = None
 
     # ---- passengers ----------------------------------------------------------------
@@ -240,9 +241,31 @@ class Flight:
                 return chk
         return None
 
+    # ---- crew check-ins (crew reach out first) ---------------------------------------
+    def start_checkin(self, seat: str) -> dict:
+        seat = clean_seat(seat)
+        if seat not in self.passengers:
+            raise ValueError("no passenger in that seat")
+        self.checkins[seat] = {"seat": seat, "at": now(), "answer": None, "answered_at": None}
+        return self.checkins[seat]
+
+    def answer_checkin(self, seat: str, answer: str) -> dict:
+        c = self.checkins.get(clean_seat(seat))
+        if c is None:
+            raise KeyError("no check-in")
+        if answer not in ("fine", "call"):
+            raise ValueError("bad answer")
+        c["answer"], c["answered_at"] = answer, now()
+        return c
+
+    def pending_checkin(self, seat: str) -> dict | None:
+        c = self.checkins.get(seat)
+        return c if c and c["answer"] is None else None
+
     # ---- snapshots ------------------------------------------------------------------
     def snapshot(self) -> dict:
         return {"passengers": [p.public() for p in self.passengers.values()],
                 "requests": sorted(self.requests.values(), key=lambda r: r["created"]),
                 "announcements": sorted(self.announcements.values(), key=lambda a: a["created"]),
-                "exit_checks": sorted(self.exit_checks.values(), key=lambda c: c["created"])}
+                "exit_checks": sorted(self.exit_checks.values(), key=lambda c: c["created"]),
+                "checkins": list(self.checkins.values())}

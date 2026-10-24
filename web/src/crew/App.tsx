@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Announcement, Catalog, ExitCheck, Passenger, PaxLang, Request } from '../shared/types';
+import type { Announcement, Catalog, Checkin, ExitCheck, Passenger, PaxLang, Request } from '../shared/types';
 import { LiveSocket, loadCatalog, type SocketStatus } from '../shared/net';
 import { Bridge, Icon, save, store } from '../shared/ui';
 import AnnouncePanel from './Announce';
 import ExitRowPanel from './ExitRow';
 import GreetingPanel from './Greeting';
 import RequestCard from './RequestCard';
+import RadarPanel from './Radar';
 import SeatMap from './SeatMap';
 import { LANG_LABEL, URGENCY } from './labels';
 
-type Tab = 'requests' | 'seats' | 'announce' | 'exit' | 'greet';
+type Tab = 'requests' | 'seats' | 'quiet' | 'announce' | 'exit' | 'greet';
 
 function useWide(): boolean {
   const q = '(min-width: 1000px)';
@@ -47,6 +48,7 @@ export default function App() {
   const [reqs, setReqs] = useState<Record<string, Request>>({});
   const [anns, setAnns] = useState<Record<string, Announcement>>({});
   const [exits, setExits] = useState<Record<string, ExitCheck>>({});
+  const [checks, setChecks] = useState<Record<string, Checkin>>({});
   const [tab, setTab] = useState<Tab>('seats');
   const [selected, setSelected] = useState('');
   const [sound, setSound] = useState(false);
@@ -94,6 +96,7 @@ export default function App() {
           setReqs(Object.fromEntries((m.requests as Request[]).map((r) => [r.id, r])));
           setAnns(Object.fromEntries((m.announcements as Announcement[]).map((a) => [a.id, a])));
           setExits(Object.fromEntries((m.exit_checks as ExitCheck[]).map((c) => [c.id, c])));
+          setChecks(Object.fromEntries(((m.checkins ?? []) as Checkin[]).map((c) => [c.seat, c])));
           break;
         case 'passenger':
           setPax((o) => ({ ...o, [m.passenger.seat]: m.passenger }));
@@ -107,6 +110,9 @@ export default function App() {
           break;
         case 'exit':
           setExits((o) => ({ ...o, [m.exit.id]: m.exit }));
+          break;
+        case 'checkin':
+          setChecks((o) => ({ ...o, [m.checkin.seat]: m.checkin }));
           break;
       }
     }, setConn, undefined, () => {
@@ -189,6 +195,7 @@ export default function App() {
   const sidePane = (
     <section className="side-pane">
       {tab === 'seats' && <SeatMap pax={pax} reqs={all} anns={Object.values(anns)} cat={cat} selected={selected} onSelect={setSelected} />}
+      {tab === 'quiet' && <RadarPanel pax={pax} reqs={all} anns={Object.values(anns)} checks={Object.values(checks)} cat={cat} send={send} />}
       {tab === 'announce' && <AnnouncePanel cat={cat} anns={Object.values(anns).sort((a, b) => a.created - b.created)} send={send} />}
       {tab === 'exit' && <ExitRowPanel pax={pax} checks={Object.values(exits).sort((a, b) => a.created - b.created)} send={send} />}
       {tab === 'greet' && <GreetingPanel cat={cat} />}
@@ -198,6 +205,7 @@ export default function App() {
   const tabs: [Tab, string, string, string][] = [
     ['requests', 'ListChecks', '依頼', 'Requests'],
     ['seats', 'UsersRound', '座席', 'Seats'],
+    ['quiet', 'Smile', '静かな席', 'Quiet seats'],
     ['announce', 'Megaphone', 'アナウンス', 'Announce'],
     ['exit', 'DoorOpen', '非常口', 'Exit row'],
     ['greet', 'Languages', '挨拶', 'Greet'],

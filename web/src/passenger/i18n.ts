@@ -103,3 +103,24 @@ export const LANG_NAMES: Record<string, string> = { pa: 'ਪੰਜਾਬੀ', hi
 export function setLanguages(list: { code: string; name: string }[]): void {
   for (const l of list) LANG_NAMES[l.code] = l.name;
 }
+
+/** The crew check-in card: "Is everything OK?", "I'm fine", "Please come to me". */
+export const CHECKIN: Record<string, [string, string, string]> = {
+  en: ["Is everything OK?", "I'm fine", "Please come to me"],
+  hi: ["सब ठीक है?", "मैं ठीक हूँ", "कृपया मेरे पास आइए"],
+  pa: ["ਸਭ ਠੀਕ ਹੈ?", "ਮੈਂ ਠੀਕ ਹਾਂ", "ਕਿਰਪਾ ਕਰਕੇ ਮੇਰੇ ਕੋਲ ਆਓ"],
+  ta: ["எல்லாம் சரியா?", "நான் நலம்", "தயவுசெய்து என்னிடம் வாருங்கள்"],
+  te: ["అంతా బాగుందా?", "నేను బాగున్నాను", "దయచేసి నా దగ్గరకు రండి"],
+  bn: ["সব ঠিক আছে?", "আমি ঠিক আছি", "অনুগ্রহ করে আমার কাছে আসুন"],
+  gu: ["બધું બરાબર છે?", "હું ઠીક છું", "કૃપા કરીને મારી પાસે આવો"],
+  mr: ["सर्व ठीक आहे ना?", "मी ठीक आहे", "कृपया माझ्याकडे या"],
+  kn: ["ಎಲ್ಲವೂ ಸರಿಯಾಗಿದೆಯೇ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ", "ದಯವಿಟ್ಟು ನನ್ನ ಬಳಿ ಬನ್ನಿ"],
+  ml: ["എല്ലാം ശരിയാണോ?", "എനിക്ക് കുഴപ്പമില്ല", "ദയവായി എന്റെ അടുത്ത് വരൂ"],
+  th: ["ทุกอย่างเรียบร้อยดีไหม?", "ฉันสบายดี", "กรุณามาหาฉัน"],
+  vi: ["Mọi thứ ổn chứ?", "Tôi ổn", "Xin hãy đến chỗ tôi"],
+  id: ["Apakah semuanya baik-baik saja?", "Saya baik-baik saja", "Tolong datang ke tempat saya"],
+  fil: ["Maayos ba ang lahat?", "Ayos lang ako", "Pakilapitan po ako"],
+  ms: ["Adakah semuanya baik-baik sahaja?", "Saya baik-baik sahaja", "Sila datang kepada saya"],
+  km: ["តើអ្វីៗទាំងអស់ល្អទេ?", "ខ្ញុំសុខសប្បាយ", "សូមមកជួបខ្ញុំ"],
+  my: ["အားလုံး အဆင်ပြေပါသလား?", "ကျွန်ုပ် အဆင်ပြေပါသည်", "ကျေးဇူးပြု၍ ကျွန်ုပ်ဆီ လာပါ"],
+};
