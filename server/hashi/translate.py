@@ -47,12 +47,23 @@ _translator: Translator | None = None
 _failed = False
 
 
+class _FakeTranslator:
+    """Test stand-in (HASHI_FAKE_MT=1): shows the plumbing without the model. Never used in the real demo."""
+
+    def translate(self, text: str, src: str, tgt: str) -> str:
+        if src == "ja":
+            return text[3:] if text.startswith("JA:") else f"[{tgt}] {text}"
+        return f"JA:{text}"
+
+
 def available() -> bool:
-    return (MODEL_DIR / "model.bin").exists() and not _failed
+    return os.environ.get("HASHI_FAKE_MT") == "1" or ((MODEL_DIR / "model.bin").exists() and not _failed)
 
 
 def get_translator() -> Translator | None:
     global _translator, _failed
+    if os.environ.get("HASHI_FAKE_MT") == "1":
+        return _FakeTranslator()  # type: ignore[return-value]
     if _translator is None and available():
         try:
             _translator = Translator()

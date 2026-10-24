@@ -13,7 +13,7 @@ EXTRA = ["Mic", "MicOff", "BadgeCheck", "Wifi", "WifiOff", "Languages", "Smile",
          "ChevronRight", "Plus", "Send", "Volume2", "QrCode", "Settings", "Eye", "Circle",
          "Check", "X", "TriangleAlert", "Megaphone", "Armchair", "Clock", "Timer", "UsersRound",
          "ShieldCheck", "LogOut", "Bell", "BellOff", "RefreshCw", "Type", "Loader", "Info",
-         "DoorOpen", "Hand", "PlaneTakeoff", "Plane", "Keyboard", "CircleHelp", "Image", "ListChecks"]
+         "DoorOpen", "Hand", "PlaneTakeoff", "Plane", "Keyboard", "CircleHelp", "Image", "ListChecks", "MessageCircle"]
 
 
 def names() -> list[str]:

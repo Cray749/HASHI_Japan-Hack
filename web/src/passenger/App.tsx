@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Announcement, Catalog, Checkin, ExitCheck, Intent, MatchResult, Request } from '../shared/types';
 import { LiveSocket, loadCatalog, type SocketStatus } from '../shared/net';
-import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
+import { Bridge, Icon, SPEECH_LANG, playAudio, speak } from '../shared/ui';
 import { Sakura } from '../shared/japan';
 import Onboarding from './Onboarding';
+import Talk, { type Msg } from './Talk';
+import { TALK } from './talkUi';
 import { MoreScreen, RequestCard, Tile, VoiceButton } from './Home';
 import { AnnouncementOverlay, CheckinOverlay, ConfirmOverlay, ExitOverlay, HelpSentOverlay, LandedScreen } from './Overlays';
 import { setLanguages, setPackUi, t } from './i18n';
@@ -18,7 +20,10 @@ export default function App() {
   const [anns, setAnns] = useState<Announcement[]>([]);
   const [exit, setExit] = useState<ExitCheck | null>(null);
   const [checkin, setCheckin] = useState<Checkin | null>(null);
-  const [screen, setScreen] = useState<'home' | 'more'>('home');
+  const [screen, setScreen] = useState<'home' | 'more' | 'talk'>('home');
+  const [thread, setThread] = useState<Msg[]>([]);
+  const [talkBusy, setTalkBusy] = useState(false);
+  const [talkError, setTalkError] = useState('');
   const [voiceResult, setVoiceResult] = useState<MatchResult | null>(null);
   const [notice, setNotice] = useState('');
   const [helpReq, setHelpReq] = useState<string | null>(null);
@@ -60,6 +65,24 @@ export default function App() {
             setAnns(m.announcements);
             setExit(m.exit_check);
             setCheckin(m.checkin ?? null);
+            setThread((m.thread ?? []) as Msg[]);
+            break;
+          case 'say_check':
+            setThread((o) => [...o.filter((x) => x.id !== m.msg.id), m.msg]);
+            setTalkBusy(false);
+            setTalkError('');
+            break;
+          case 'say_sent':
+            setThread((o) => o.map((x) => (x.id === m.msg.id ? m.msg : x)));
+            break;
+          case 'crew_say':
+            setThread((o) => [...o, m.msg]);
+            speak(m.msg.translated, SPEECH_LANG[m.msg.lang]);
+            if ('vibrate' in navigator) navigator.vibrate?.([120, 60, 120]);
+            break;
+          case 'say_error':
+            setTalkBusy(false);
+            setTalkError('The translation model is still installing on the cabin server. Please use the pictures for now.');
             break;
           case 'checkin':
             setCheckin(m.checkin);
@@ -188,7 +211,14 @@ export default function App() {
         </div>
       )}
 
-      {screen === 'more' ? (
+      {screen === 'talk' ? (
+        <Talk p={p} thread={thread} busy={talkBusy} error={talkError}
+          pending={thread.find((m) => m.from === 'passenger' && m.status === 'pending') ?? null}
+          onSay={(text) => { setTalkBusy(true); setTalkError(''); sock.current?.send({ t: 'say', text }); }}
+          onConfirm={(id) => sock.current?.send({ t: 'say_confirm', id })}
+          onCancel={(id) => sock.current?.send({ t: 'say_cancel', id })}
+          onBack={() => setScreen('home')} />
+      ) : screen === 'more' ? (
         <MoreScreen cat={cat} p={p} onPick={(i) => sendIntent(i)} onBack={() => setScreen('home')} />
       ) : (
         <main className="home" lang={lang}>
@@ -201,6 +231,10 @@ export default function App() {
               ))}
             </div>
           )}
+          <button className="talk-btn" onClick={() => setScreen('talk')} lang={lang}>
+            <Icon name="MessageCircle" size={34} />
+            <span>{(TALK[lang] ?? TALK.en)[0]}</span>
+          </button>
           <h1 className="ask">{t(lang, 'askWhat')}</h1>
           {!p.picturesFirst && voiceBtn}
           <div className="grid">

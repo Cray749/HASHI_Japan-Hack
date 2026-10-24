@@ -97,6 +97,7 @@ export interface Announcement {
   id: string;
   phrase: string | null;
   custom: string | null;
+  texts?: Record<string, string> | null;
   kind: 'safety' | 'info';
   icon: string;
   target: { all: boolean; rows: number[]; seats: string[] };

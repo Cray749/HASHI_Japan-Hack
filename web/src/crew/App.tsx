@@ -7,10 +7,12 @@ import ExitRowPanel from './ExitRow';
 import GreetingPanel from './Greeting';
 import RequestCard from './RequestCard';
 import RadarPanel from './Radar';
+import TalkPanel from './Talk';
+import type { Msg } from '../passenger/Talk';
 import SeatMap from './SeatMap';
 import { LANG_LABEL, URGENCY } from './labels';
 
-type Tab = 'requests' | 'seats' | 'quiet' | 'announce' | 'exit' | 'greet';
+type Tab = 'requests' | 'seats' | 'talk' | 'quiet' | 'announce' | 'exit' | 'greet';
 
 function useWide(): boolean {
   const q = '(min-width: 1000px)';
@@ -49,6 +51,10 @@ export default function App() {
   const [anns, setAnns] = useState<Record<string, Announcement>>({});
   const [exits, setExits] = useState<Record<string, ExitCheck>>({});
   const [checks, setChecks] = useState<Record<string, Checkin>>({});
+  const [threads, setThreads] = useState<Record<string, Msg[]>>({});
+  const [talkSeat, setTalkSeat] = useState('');
+  const [talkNotice, setTalkNotice] = useState('');
+  const [unread, setUnread] = useState(0);
   const [tab, setTab] = useState<Tab>('seats');
   const [selected, setSelected] = useState('');
   const [sound, setSound] = useState(false);
@@ -97,6 +103,7 @@ export default function App() {
           setAnns(Object.fromEntries((m.announcements as Announcement[]).map((a) => [a.id, a])));
           setExits(Object.fromEntries((m.exit_checks as ExitCheck[]).map((c) => [c.id, c])));
           setChecks(Object.fromEntries(((m.checkins ?? []) as Checkin[]).map((c) => [c.seat, c])));
+          setThreads((m.threads ?? {}) as Record<string, Msg[]>);
           break;
         case 'passenger':
           setPax((o) => ({ ...o, [m.passenger.seat]: m.passenger }));
@@ -113,6 +120,17 @@ export default function App() {
           break;
         case 'checkin':
           setChecks((o) => ({ ...o, [m.checkin.seat]: m.checkin }));
+          break;
+        case 'say':
+          setThreads((o) => {
+            const list = (o[m.msg.seat] ?? []).filter((x) => x.id !== m.msg.id);
+            return { ...o, [m.msg.seat]: [...list, m.msg] };
+          });
+          if (m.msg.from === 'passenger') { setUnread((n) => n + 1); setTalkSeat(m.msg.seat); }
+          setTalkNotice('');
+          break;
+        case 'say_error':
+          setTalkNotice('The translation model is still installing on this server. Cards and the vetted replies still work.');
           break;
       }
     }, setConn, undefined, () => {
@@ -195,6 +213,7 @@ export default function App() {
   const sidePane = (
     <section className="side-pane">
       {tab === 'seats' && <SeatMap pax={pax} reqs={all} anns={Object.values(anns)} cat={cat} selected={selected} onSelect={setSelected} />}
+      {tab === 'talk' && <TalkPanel pax={pax} threads={threads} selected={talkSeat} onSelect={setTalkSeat} send={send} notice={talkNotice} />}
       {tab === 'quiet' && <RadarPanel pax={pax} reqs={all} anns={Object.values(anns)} checks={Object.values(checks)} cat={cat} send={send} />}
       {tab === 'announce' && <AnnouncePanel cat={cat} anns={Object.values(anns).sort((a, b) => a.created - b.created)} send={send} />}
       {tab === 'exit' && <ExitRowPanel pax={pax} checks={Object.values(exits).sort((a, b) => a.created - b.created)} send={send} />}
@@ -205,6 +224,7 @@ export default function App() {
   const tabs: [Tab, string, string, string][] = [
     ['requests', 'ListChecks', '依頼', 'Requests'],
     ['seats', 'UsersRound', '座席', 'Seats'],
+    ['talk', 'MessageCircle', '会話', 'Talk'],
     ['quiet', 'Smile', '静かな席', 'Quiet seats'],
     ['announce', 'Megaphone', 'アナウンス', 'Announce'],
     ['exit', 'DoorOpen', '非常口', 'Exit row'],
@@ -249,9 +269,10 @@ export default function App() {
 
       <nav className="tabs" aria-label="Sections">
         {tabs.filter(([id]) => !(wide && id === 'requests')).map(([id, icon, ja, en]) => (
-          <button key={id} className={tab === id ? 'on' : ''} onClick={() => setTab(id)} aria-pressed={tab === id}>
+          <button key={id} className={tab === id ? 'on' : ''} onClick={() => { setTab(id); if (id === 'talk') setUnread(0); }} aria-pressed={tab === id}>
             <Icon name={icon} size={20} /> <span lang="ja">{ja}</span> <small>{en}</small>
             {id === 'requests' && urgent.length > 0 && <span className="dot" aria-label="urgent" />}
+            {id === 'talk' && unread > 0 && <span className="dot" aria-label="new messages" />}
           </button>
         ))}
       </nav>

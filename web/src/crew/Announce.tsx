@@ -9,11 +9,20 @@ export default function AnnouncePanel({ cat, anns, send }: {
   const [scope, setScope] = useState<'all' | 'rows'>('all');
   const [from, setFrom] = useState('20');
   const [to, setTo] = useState('30');
+  const [free, setFree] = useState('');
 
   const rows = () => {
     const a = parseInt(from, 10), b = parseInt(to, 10);
     if (!a || !b) return [];
     return Array.from({ length: Math.abs(b - a) + 1 }, (_, i) => Math.min(a, b) + i);
+  };
+
+  const target = () => (scope === 'all' ? { all: true } : { rows: rows() });
+
+  const sendFree = () => {
+    if (!free.trim()) return;
+    send({ t: 'announce_text', text: free.trim(), target: target() });
+    setFree('');
   };
 
   const sendIt = () =>
@@ -45,6 +54,12 @@ export default function AnnouncePanel({ cat, anns, send }: {
           </span>
         )}
         <button className="btn primary" onClick={sendIt}><Icon name="Send" /> 送信 · Send</button>
+      </div>
+
+      <h3>自由アナウンス <small>Free announcement (machine translated, once per language on board)</small></h3>
+      <div className="type">
+        <input value={free} onChange={(e) => setFree(e.target.value)} lang="ja" placeholder="日本語で入力 · Type in Japanese" aria-label="Free announcement" />
+        <button className="btn primary" onClick={sendFree} disabled={!free.trim()}><Icon name="Send" /> 送信 · Send</button>
       </div>
 
       <h3>確認ボード <small>Understood board</small></h3>

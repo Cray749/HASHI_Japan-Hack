@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Announcement, Catalog, ExitCheck, Intent, MatchResult, PaxLang } from '../shared/types';
-import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
+import { Bridge, Icon, SPEECH_LANG, playAudio, speak } from '../shared/ui';
 import { CHECKIN, t } from './i18n';
 import type { Profile } from './profile';
 
@@ -8,10 +8,11 @@ export function AnnouncementOverlay({ ann, cat, p, onAck }: {
   ann: Announcement; cat: Catalog; p: Profile; onAck: (id: string) => void;
 }) {
   const phrase = cat.announcements.find((a) => a.id === ann.phrase);
-  const text = phrase ? phrase.text[p.lang] ?? phrase.text.en : ann.custom ?? '';
+  const text = phrase ? phrase.text[p.lang] ?? phrase.text.en : ann.texts?.[p.lang] ?? ann.custom ?? '';
   const audio = phrase ? `/audio/ann_${phrase.id}_${p.lang}.mp3` : '';
   useEffect(() => {
     if (audio) playAudio(audio, text, SPEECH_LANG[p.lang]);
+    else if (text) speak(text, SPEECH_LANG[p.lang]);
     if ('vibrate' in navigator) navigator.vibrate?.([200, 100, 200]);
   }, [ann.id]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
@@ -19,6 +20,7 @@ export function AnnouncementOverlay({ ann, cat, p, onAck }: {
       <p className="overlay-label"><Icon name="Megaphone" /> {t(p.lang, 'announcement')}</p>
       <Icon name={ann.icon} size={p.senior ? 110 : 84} />
       <p className="ann-text">{text}</p>
+      {!phrase && ann.texts && <span className="chip saffron">machine translation</span>}
       {audio && (
         <button className="btn" onClick={() => playAudio(audio, text, SPEECH_LANG[p.lang])}>
           <Icon name="Volume2" /> {t(p.lang, 'play')}
