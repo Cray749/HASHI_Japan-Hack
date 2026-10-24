@@ -76,13 +76,20 @@ const S = {
 
 export type Key = keyof typeof S;
 
+/** Interface strings of the extra language packs, filled in when the catalogue loads. */
+let PACK_UI: Record<string, Record<string, string>> = {};
+
+export function setPackUi(ui: Record<string, Record<string, string>>): void {
+  PACK_UI = ui ?? {};
+}
+
 export function t(lang: PaxLang, key: Key): string {
   const entry = S[key] as Record<string, string>;
-  return entry[lang] ?? entry.en;
+  return entry[lang] ?? PACK_UI[lang]?.[key] ?? entry.en;
 }
 
 /** Categories on the "More" screen. */
-export const CATEGORIES: { id: string; icon: string; label: Record<PaxLang, string> }[] = [
+export const CATEGORIES: { id: string; icon: string; label: Record<string, string> }[] = [
   { id: 'drink', icon: 'GlassWater', label: { en: 'Drinks', hi: 'पेय', pa: 'ਪੀਣ ਵਾਲਾ' } },
   { id: 'food', icon: 'Utensils', label: { en: 'Food', hi: 'खाना', pa: 'ਖਾਣਾ' } },
   { id: 'comfort', icon: 'BedDouble', label: { en: 'Comfort', hi: 'आराम', pa: 'ਆਰਾਮ' } },
@@ -91,4 +98,8 @@ export const CATEGORIES: { id: string; icon: string; label: Record<PaxLang, stri
   { id: 'info', icon: 'Info', label: { en: 'Information', hi: 'जानकारी', pa: 'ਜਾਣਕਾਰੀ' } },
 ];
 
-export const LANG_NAMES: Record<PaxLang, string> = { pa: 'ਪੰਜਾਬੀ', hi: 'हिन्दी', en: 'English' };
+export const LANG_NAMES: Record<string, string> = { pa: 'ਪੰਜਾਬੀ', hi: 'हिन्दी', en: 'English' };
+
+export function setLanguages(list: { code: string; name: string }[]): void {
+  for (const l of list) LANG_NAMES[l.code] = l.name;
+}

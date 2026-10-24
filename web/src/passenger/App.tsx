@@ -5,7 +5,7 @@ import { Bridge, Icon, SPEECH_LANG, playAudio } from '../shared/ui';
 import Onboarding from './Onboarding';
 import { MoreScreen, RequestCard, Tile, VoiceButton } from './Home';
 import { AnnouncementOverlay, ConfirmOverlay, ExitOverlay, HelpSentOverlay, LandedScreen } from './Overlays';
-import { LANG_NAMES, t } from './i18n';
+import { setLanguages, setPackUi, t } from './i18n';
 import { loadProfile, saveProfile, wipeProfile, type Profile } from './profile';
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     let alive = true;
     const attempt = () =>
-      loadCatalog().then((c) => alive && setCat(c)).catch(() => {
+      loadCatalog().then((c) => { if (!alive) return; setPackUi(c.ui); setLanguages(c.languages ?? []); setCat(c); }).catch(() => {
         if (!alive) return;
         setLoadErr(true);
         window.setTimeout(attempt, 2000);
@@ -107,7 +107,7 @@ export default function App() {
       if (key === lastAudioReq.current) continue;
       lastAudioReq.current = key;
       const reply = cat.replies.find((x) => x.id === last.reply);
-      if (reply) playAudio(`/audio/reply_${reply.id}_${lang}.mp3`, reply.text[lang], SPEECH_LANG[lang]);
+      if (reply) playAudio(`/audio/reply_${reply.id}_${lang}.mp3`, reply.text[lang] ?? reply.text.en, SPEECH_LANG[lang]);
     }
   }, [reqs, cat, lang]);
 
@@ -145,23 +145,26 @@ export default function App() {
     );
   }
   if (!ready) {
-    return <Onboarding initial={p} onDone={(np) => setP({ ...np, onboarded: true })} />;
+    return <Onboarding initial={p} languages={cat.languages} onDone={(np) => setP({ ...np, onboarded: true })} />;
   }
 
   const tiles = cat.intents.filter((i) => i.tile && i.id !== 'help');
   const help = cat.intents.find((i) => i.id === 'help')!;
   const firstAnn = anns[0];
-  const voiceBtn = <VoiceButton p={p} disabled={conn !== 'online'} onResult={onVoice} onProblem={setNotice} />;
+  const voiceAllowed = cat.languages?.find((l) => l.code === lang)?.voice ?? false;
+  const voiceBtn = <VoiceButton p={p} disabled={conn !== 'online'} voiceAllowed={voiceAllowed} onResult={onVoice} onProblem={setNotice} />;
 
   return (
     <div className={`app ${p.senior ? 'senior' : ''}`}>
       <header className="top">
         <span className="logo"><Bridge size={34} color="#fff" /> HASHI</span>
         <span className="seat-chip">{p.seat}</span>
-        <button className="lang-btn" aria-label="Language"
-          onClick={() => setP({ ...p, lang: lang === 'pa' ? 'hi' : lang === 'hi' ? 'en' : 'pa' })}>
-          <Icon name="Languages" size={20} /> {LANG_NAMES[lang]}
-        </button>
+        <label className="lang-btn">
+          <Icon name="Languages" size={20} />
+          <select aria-label="Language" value={lang} onChange={(e) => setP({ ...p, lang: e.target.value })}>
+            {cat.languages.map((l) => <option key={l.code} value={l.code}>{l.name}</option>)}
+          </select>
+        </label>
       </header>
 
       {conn !== 'online' && (

@@ -15,7 +15,7 @@ export function Tile({ intent, lang, senior, onPick }: {
   return (
     <button className={`tile tint-${TINT[intent.cat] ?? 'grey'} ${senior ? 'senior' : ''}`} onClick={() => onPick(intent)}>
       <Icon name={intent.icon} size={senior ? 60 : 44} />
-      <span className="tile-native" lang={lang}>{intent.labels[lang]}</span>
+      <span className="tile-native" lang={lang}>{intent.labels[lang] ?? intent.labels.en}</span>
       {lang !== 'en' && <span className="tile-en">{intent.labels.en}</span>}
     </button>
   );
@@ -35,7 +35,7 @@ export function RequestCard({ req, cat, p, onUnderstood, onCancel }: {
     <section className={`req step-${step} ${req.urgency === 3 ? 'urgent' : ''}`} aria-live="polite">
       <header>
         <Icon name={intent.icon} size={28} />
-        <strong lang={p.lang}>{intent.labels[p.lang]}</strong>
+        <strong lang={p.lang}>{intent.labels[p.lang] ?? intent.labels.en}</strong>
         {req.status === 'new' || req.status === 'seen' ? (
           <button className="link" onClick={() => onCancel(req.id)}>{t(p.lang, 'cancel')}</button>
         ) : null}
@@ -48,8 +48,8 @@ export function RequestCard({ req, cat, p, onUnderstood, onCancel }: {
       {reply && (
         <div className="reply" lang={p.lang}>
           <Icon name={reply.icon} size={p.senior ? 72 : 56} />
-          <p className="reply-text">{reply.text[p.lang]}</p>
-          <button className="btn" onClick={() => playAudio(`/audio/reply_${reply.id}_${p.lang}.mp3`, reply.text[p.lang], SPEECH_LANG[p.lang])}>
+          <p className="reply-text">{reply.text[p.lang] ?? reply.text.en}</p>
+          <button className="btn" onClick={() => playAudio(`/audio/reply_${reply.id}_${p.lang}.mp3`, reply.text[p.lang] ?? reply.text.en, SPEECH_LANG[p.lang])}>
             <Icon name="Volume2" /> {t(p.lang, 'play')}
           </button>
           {req.understood_at ? (
@@ -66,15 +66,15 @@ export function RequestCard({ req, cat, p, onUnderstood, onCancel }: {
 }
 
 /** Hold to speak (or tap once to start and once to finish, for people who find holding hard). */
-export function VoiceButton({ p, disabled, onResult, onProblem }: {
-  p: Profile; disabled: boolean;
+export function VoiceButton({ p, disabled, voiceAllowed, onResult, onProblem }: {
+  p: Profile; disabled: boolean; voiceAllowed: boolean;
   onResult: (r: MatchResult) => void; onProblem: (msg: string) => void;
 }) {
   const rec = useRef<Recorder | null>(null);
   const downAt = useRef(0);
   const timer = useRef<number | undefined>(undefined);
   const [state, setState] = useState<'idle' | 'rec' | 'sticky' | 'busy'>('idle');
-  const usable = p.voiceOk && micAvailable();
+  const usable = p.voiceOk && voiceAllowed && micAvailable();
 
   const stop = async () => {
     window.clearTimeout(timer.current);
@@ -119,7 +119,7 @@ export function VoiceButton({ p, disabled, onResult, onProblem }: {
   };
 
   if (!usable) {
-    return <p className="mic-off" lang={p.lang}><Icon name="MicOff" /> {p.voiceOk ? t(p.lang, 'micBlocked') : t(p.lang, 'tapPicture')}</p>;
+    return <p className="mic-off" lang={p.lang}><Icon name="MicOff" /> {p.voiceOk && voiceAllowed ? t(p.lang, 'micBlocked') : t(p.lang, 'tapPicture')}</p>;
   }
   return (
     <button
@@ -149,7 +149,7 @@ export function MoreScreen({ cat, p, onPick, onBack }: {
         if (!items.length) return null;
         return (
           <section key={c.id}>
-            <h3 lang={p.lang}><Icon name={c.icon} size={22} /> {c.label[p.lang]}</h3>
+            <h3 lang={p.lang}><Icon name={c.icon} size={22} /> {c.label[p.lang] ?? c.label.en}</h3>
             <div className="grid">
               {items.map((i) => <Tile key={i.id} intent={i} lang={p.lang} senior={p.senior} onPick={onPick} />)}
             </div>

@@ -40,6 +40,20 @@ body {
   padding: 2px 12px;
 }
 
+.lang-btn select {
+  appearance: none;
+  background: transparent;
+  color: #fff;
+  border: 0;
+  font: inherit;
+  min-height: 44px;
+  max-width: 9rem;
+}
+
+.lang-btn select option {
+  color: var(--navy);
+}
+
 .lang-btn {
   display: inline-flex;
   align-items: center;

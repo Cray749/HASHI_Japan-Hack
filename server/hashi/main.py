@@ -24,7 +24,7 @@ from pydantic import BaseModel
 from . import asr, voice
 from .demo import seed as seed_demo
 from .hub import Hub
-from .intents import DATA_DIR, LANGS, announcements, catalog, greetings
+from .intents import DATA_DIR, announcements, catalog, greetings
 from .matcher import get_matcher
 from .netinfo import candidate_ips, lan_ip
 
@@ -63,7 +63,7 @@ def health():
 @app.get("/api/catalog")
 def get_catalog():
     cat = catalog()
-    return {"langs": list(LANGS), "intents": [i.public() for i in cat.intents.values()],
+    return {"langs": cat.langs, "languages": cat.languages, "ui": cat.ui, "intents": [i.public() for i in cat.intents.values()],
             "replies": list(cat.replies.values()), "announcements": announcements(),
             "greetings": greetings()}
 

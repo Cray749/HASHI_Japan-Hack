@@ -1,4 +1,4 @@
-import type { ExitState, PaxLang } from '../shared/types';
+import type { ExitState } from '../shared/types';
 
 /** Crew-facing words: Japanese first, English subtitle. */
 export const URGENCY = {
@@ -7,11 +7,30 @@ export const URGENCY = {
   1: { ja: '通常', en: 'Routine', icon: 'Clock', cls: 'sky' },
 } as const;
 
-export const LANG_LABEL: Record<PaxLang, { ja: string; en: string }> = {
+const LABELS: Record<string, { ja: string; en: string }> = {
   pa: { ja: 'パンジャブ語', en: 'Punjabi' },
   hi: { ja: 'ヒンディー語', en: 'Hindi' },
   en: { ja: '英語', en: 'English' },
+  ta: { ja: 'タミル語', en: 'Tamil' },
+  te: { ja: 'テルグ語', en: 'Telugu' },
+  bn: { ja: 'ベンガル語', en: 'Bengali' },
+  gu: { ja: 'グジャラート語', en: 'Gujarati' },
+  mr: { ja: 'マラーティー語', en: 'Marathi' },
+  kn: { ja: 'カンナダ語', en: 'Kannada' },
+  ml: { ja: 'マラヤーラム語', en: 'Malayalam' },
+  th: { ja: 'タイ語', en: 'Thai' },
+  vi: { ja: 'ベトナム語', en: 'Vietnamese' },
+  id: { ja: 'インドネシア語', en: 'Indonesian' },
+  fil: { ja: 'フィリピン語', en: 'Filipino' },
+  ms: { ja: 'マレー語', en: 'Malay' },
+  km: { ja: 'クメール語', en: 'Khmer' },
+  my: { ja: 'ミャンマー語', en: 'Burmese' },
 };
+
+/** Japanese and English names of a passenger language (falls back to the code). */
+export const LANG_LABEL = new Proxy(LABELS, {
+  get: (t, k: string) => t[k] ?? { ja: k, en: k },
+});
 
 export const NEED_LABEL: Record<string, { ja: string; en: string; icon: string }> = {
   veg: { ja: 'ベジタリアン', en: 'Vegetarian', icon: 'Salad' },

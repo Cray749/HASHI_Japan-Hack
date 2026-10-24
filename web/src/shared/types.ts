@@ -1,5 +1,5 @@
-export type Lang = 'en' | 'ja' | 'hi' | 'pa';
-export type PaxLang = 'hi' | 'pa' | 'en';
+export type Lang = string; // 'en', 'ja', 'hi', 'pa' and any language pack code
+export type PaxLang = string;
 export type Texts = Record<Lang, string>;
 
 export interface Intent {
@@ -40,8 +40,17 @@ export interface GreetingSet {
   items: GreetingItem[];
 }
 
+export interface LanguageInfo {
+  code: string;
+  name: string; // written in its own script
+  voice: boolean; // speech requests offered (needs a tested phrase bank)
+  status: string; // 'draft' until a native speaker signs it off
+}
+
 export interface Catalog {
   langs: Lang[];
+  languages: LanguageInfo[];
+  ui: Record<string, Record<string, string>>;
   intents: Intent[];
   replies: Reply[];
   announcements: AnnouncementPhrase[];

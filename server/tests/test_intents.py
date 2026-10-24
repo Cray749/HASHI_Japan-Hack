@@ -1,7 +1,9 @@
 """Data checks: every request has all four labels, urgent ones are routed, banks are filled."""
 import pytest
 
-from hashi.intents import LANGS, announcements, catalog, greetings
+from hashi.intents import announcements, catalog, greetings
+
+LANGS = tuple(catalog().langs) + ("ja",)  # every passenger language plus the crew language
 
 
 def test_about_forty_intents():

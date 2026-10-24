@@ -70,7 +70,7 @@ class Flight:
     def register(self, seat: str, **profile) -> Passenger:
         seat = clean_seat(seat)
         p = self.passengers.get(seat) or Passenger(seat=seat)
-        if profile.get("lang") in ("hi", "pa", "en", "ja"):
+        if profile.get("lang") in catalog().langs:
             p.lang = profile["lang"]
         for key in ("senior", "first_time", "pictures_first"):
             if key in profile:

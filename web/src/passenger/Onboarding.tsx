@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import type { PaxLang } from '../shared/types';
+import type { LanguageInfo } from '../shared/types';
 import { Bridge, Icon } from '../shared/ui';
-import { LANG_NAMES, t } from './i18n';
+import { t } from './i18n';
 import type { Profile } from './profile';
 
-const LANGS: PaxLang[] = ['pa', 'hi', 'en'];
-
-export default function Onboarding({ initial, onDone }: { initial: Profile; onDone: (p: Profile) => void }) {
+export default function Onboarding({ initial, languages, onDone }: {
+  initial: Profile; languages: LanguageInfo[]; onDone: (p: Profile) => void;
+}) {
   const [step, setStep] = useState(0);
   const hasSeat = /^\d{1,2}[A-Ka-k]$/.test(initial.seat);
   const [p, setP] = useState<Profile>(initial);
   const lang = p.lang;
+  const voiceLang = languages.find((l) => l.code === lang)?.voice ?? false;
   const upd = (patch: Partial<Profile>) => setP((old) => ({ ...old, ...patch }));
   const seatOk = /^\d{1,2}[A-Ka-k]$/.test(p.seat.trim());
 
@@ -25,9 +26,9 @@ export default function Onboarding({ initial, onDone }: { initial: Profile; onDo
         <p className="tag">Don&apos;t translate. Understand.</p>
         <h2 className="pick">ਆਪਣੀ ਬੋਲੀ ਚੁਣੋ · अपनी भाषा चुनिए · Choose your language</h2>
         <div className="langs">
-          {LANGS.map((l) => (
-            <button key={l} className="btn big" onClick={() => { upd({ lang: l }); setStep(hasSeat ? 2 : 1); }} lang={l}>
-              {LANG_NAMES[l]}
+          {languages.map((l) => (
+            <button key={l.code} className="btn big" onClick={() => { upd({ lang: l.code }); setStep(hasSeat ? 2 : 1); }} lang={l.code}>
+              {l.name}
             </button>
           ))}
         </div>
@@ -64,14 +65,22 @@ export default function Onboarding({ initial, onDone }: { initial: Profile; onDo
         <ul className="consent">
           <li><Icon name="Eye" /> {t(lang, 'consent1')}</li>
           <li><Icon name="Clock" /> {t(lang, 'consent2')}</li>
-          <li><Icon name="Mic" /> {t(lang, 'consent3')}</li>
+          {voiceLang && <li><Icon name="Mic" /> {t(lang, 'consent3')}</li>}
         </ul>
-        <button className="btn primary wide" onClick={() => { upd({ voiceOk: true }); setStep(3); }}>
-          <Icon name="Mic" /> {t(lang, 'agreeVoice')}
-        </button>
-        <button className="btn wide" onClick={() => { upd({ voiceOk: false }); setStep(3); }}>
-          {t(lang, 'agreeTap')}
-        </button>
+        {voiceLang ? (
+          <>
+            <button className="btn primary wide" onClick={() => { upd({ voiceOk: true }); setStep(3); }}>
+              <Icon name="Mic" /> {t(lang, 'agreeVoice')}
+            </button>
+            <button className="btn wide" onClick={() => { upd({ voiceOk: false }); setStep(3); }}>
+              {t(lang, 'agreeTap')}
+            </button>
+          </>
+        ) : (
+          <button className="btn primary wide" onClick={() => { upd({ voiceOk: false }); setStep(3); }}>
+            {t(lang, 'start')}
+          </button>
+        )}
       </main>
     );
   }

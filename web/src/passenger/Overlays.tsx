@@ -8,7 +8,7 @@ export function AnnouncementOverlay({ ann, cat, p, onAck }: {
   ann: Announcement; cat: Catalog; p: Profile; onAck: (id: string) => void;
 }) {
   const phrase = cat.announcements.find((a) => a.id === ann.phrase);
-  const text = phrase ? phrase.text[p.lang] : ann.custom ?? '';
+  const text = phrase ? phrase.text[p.lang] ?? phrase.text.en : ann.custom ?? '';
   const audio = phrase ? `/audio/ann_${phrase.id}_${p.lang}.mp3` : '';
   useEffect(() => {
     if (audio) playAudio(audio, text, SPEECH_LANG[p.lang]);
@@ -87,7 +87,7 @@ export function ConfirmOverlay({ result, cat, lang, senior, onPick, onClose }: {
         {items.map(({ c, i }, n) => (
           <button key={i.id} className={`tile big ${n === 0 ? 'first' : ''} ${senior ? 'senior' : ''}`} onClick={() => onPick(i, c.score)}>
             <Icon name={i.icon} size={senior ? 64 : 48} />
-            <span className="tile-native">{i.labels[lang]}</span>
+            <span className="tile-native">{i.labels[lang] ?? i.labels.en}</span>
             {lang !== 'en' && <span className="tile-en">{i.labels.en}</span>}
           </button>
         ))}
