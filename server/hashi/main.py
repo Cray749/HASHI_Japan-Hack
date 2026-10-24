@@ -183,7 +183,7 @@ def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = 
                                           "en": catalog().intents[c["intent"]].labels["en"]}
                                          for c in m["candidates"]]}
         top = m["candidates"][0] if m["candidates"] else None
-        if top and m["mode"] != "tiles":
+        if top and m["mode"] != "tiles" and m["confidence"] >= 0.45:  # below this it is chat, not a cabin request
             intent = catalog().intents[top["intent"]]
             mode = m["mode"] if src in voice.VALIDATED_VOICE or m["mode"] == "tiles" else "confirm"
             out["match"] = {"intent": intent.id, "ja": intent.labels["ja"], "en": intent.labels["en"],
