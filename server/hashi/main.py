@@ -4,6 +4,7 @@ from __future__ import annotations
 import io
 import logging
 import os
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -22,12 +23,14 @@ from fastapi.responses import JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import asr, translate, voice
+from . import asr, noise, translate, voice
 from .demo import seed as seed_demo
 from .hub import Hub
 from .intents import DATA_DIR, announcements, catalog, greetings
 from .matcher import get_matcher
 from .netinfo import candidate_ips, lan_ip
+from .phonetic import phonetic_key
+from .store import clean_seat
 
 log = logging.getLogger("hashi")
 ROOT = Path(__file__).resolve().parents[2]
@@ -119,28 +122,77 @@ def translate_text(body: TranslateIn):
 
 
 @app.post("/api/live")
-def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = Form("ja")):
-    """Speak, see what was heard and a translation. Audio is processed in memory only."""
+def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = Form("ja"),
+               cleanup: str = Form("0")):
+    """Speak, see every step of what the system did. Audio is processed in memory only."""
+    t_all = time.time()
     data = audio.file.read(4_000_000)
+    steps: dict = {}
     try:
         pcm = voice.decode_wav(data)
         backend = asr.get_backend()
         if not backend.ready or len(pcm) < 4800:
             return {"ok": False, "error": "no_speech"}
-        heard = backend.transcribe(pcm, src).text
+        steps["received"] = {"seconds": round(len(pcm) / voice.TARGET_SR, 1)}
+        use_cleanup = cleanup == "1"
+        t = time.time()
+        if use_cleanup:
+            pcm = noise.clean(pcm)
+        steps["noise"] = {"applied": use_cleanup, "ms": int((time.time() - t) * 1000)}
+        t = time.time()
+        res = backend.transcribe(pcm, src)
+        heard = res.text
+        steps["asr"] = {"engine": backend.name, "ms": int((time.time() - t) * 1000)}
+        english = None
+        if tgt == "en" and src != "en" and heard.strip():
+            english = backend.transcribe(pcm, src, task="translate").text  # Whisper's own translate task
     except Exception as exc:
         log.warning("live failed: %s", exc)
         return {"ok": False, "error": "failed"}
-    out = {"ok": True, "heard": heard, "tgt": tgt, "translation": None, "match": None}
+    del pcm, data  # the recording is dropped here; nothing was written to disk
+    out = {"ok": True, "heard": heard, "tgt": tgt, "translation": None, "translator": None, "match": None,
+           "steps": steps}
     if heard.strip():
-        out["translation"] = _translate(heard, src, tgt)
+        t = time.time()
+        words = phonetic_key(heard)
+        steps["fold"] = {"sound_form": words}
         m = voice.understand(heard)
+        steps["match"] = {"ms": int((time.time() - t) * 1000), "mode": m["mode"], "suspect": m.get("suspect", False),
+                          "candidates": [{"intent": c["intent"], "score": c["score"],
+                                          "ja": catalog().intents[c["intent"]].labels["ja"],
+                                          "en": catalog().intents[c["intent"]].labels["en"]}
+                                         for c in m["candidates"]]}
         top = m["candidates"][0] if m["candidates"] else None
         if top and m["mode"] != "tiles":
             intent = catalog().intents[top["intent"]]
+            mode = m["mode"] if src in voice.VALIDATED_VOICE or m["mode"] == "tiles" else "confirm"
             out["match"] = {"intent": intent.id, "ja": intent.labels["ja"], "en": intent.labels["en"],
-                            "confidence": m["confidence"], "mode": m["mode"]}
+                            "confidence": m["confidence"], "mode": mode}
+        t = time.time()
+        tr = _translate(heard, src, tgt)
+        if tr:
+            out["translation"], out["translator"] = tr, "NLLB-200 600M"
+        elif english:
+            out["translation"], out["translator"] = english, "Whisper translate (to English)"
+        steps["translate"] = {"ms": int((time.time() - t) * 1000), "model": out["translator"]}
+    steps["discarded"] = True
+    steps["total_ms"] = int((time.time() - t_all) * 1000)
     return out
+
+
+class SendIn(BaseModel):
+    seat: str
+    intent: str
+
+
+@app.post("/api/live/send")
+async def live_send(body: SendIn):
+    """Send a recognised request to the crew tablet as if the passenger had confirmed it."""
+    try:
+        await hub.handle_passenger(clean_seat(body.seat), {"t": "request", "intent": body.intent, "via": "voice"})
+    except (ValueError, KeyError) as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return {"ok": True}
 
 
 @app.get("/api/join")
