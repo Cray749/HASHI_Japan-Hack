@@ -116,6 +116,21 @@ def live_info():
     return {"translate": translate.available(), "languages": list(translate.NLLB_CODE)}
 
 
+@app.post("/api/stt")
+def speech_to_text(audio: UploadFile = File(...), lang: str = Form("hi")):
+    """Speech to text only (Whisper, local, in memory). Used by the live conversation on both sides."""
+    data = audio.file.read(4_000_000)
+    try:
+        pcm = voice.decode_wav(data)
+        backend = asr.get_backend()
+        if not backend.ready or len(pcm) < 4800:
+            return {"ok": False, "error": "no_speech"}
+        return {"ok": True, "text": backend.transcribe(pcm, lang).text}
+    except Exception as exc:
+        log.warning("stt failed: %s", exc)
+        return {"ok": False, "error": "failed"}
+
+
 @app.post("/api/translate")
 def translate_text(body: TranslateIn):
     out = _translate(body.text, body.src, body.tgt)

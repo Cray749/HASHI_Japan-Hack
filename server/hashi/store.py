@@ -65,6 +65,7 @@ class Flight:
         self.announcements: dict[str, dict] = {}
         self.exit_checks: dict[str, dict] = {}
         self.checkins: dict[str, dict] = {}   # seat -> latest crew check-in
+        self.threads: dict[str, list[dict]] = {}   # seat -> conversation messages
         self.landed_at: float | None = None
 
     # ---- passengers ----------------------------------------------------------------
@@ -167,12 +168,13 @@ class Flight:
         return seat in target.get("seats", [])
 
     def create_announcement(self, phrase_id: str | None, target: dict,
-                            custom: str | None = None) -> dict:
+                            custom: str | None = None, texts: dict | None = None) -> dict:
         phrase = next((a for a in announcements() if a["id"] == phrase_id), None)
         if phrase is None and not (custom and custom.strip()):
             raise ValueError("unknown announcement")
         ann = {"id": new_id("a"), "phrase": phrase_id if phrase else None,
                "custom": custom.strip()[:300] if (custom and not phrase) else None,
+               "texts": texts,  # machine-translated text per language, for free announcements
                "kind": phrase["kind"] if phrase else "info",
                "icon": phrase["icon"] if phrase else "Megaphone",
                "target": {"all": bool(target.get("all")),
@@ -262,10 +264,24 @@ class Flight:
         c = self.checkins.get(seat)
         return c if c and c["answer"] is None else None
 
+    # ---- live conversation ------------------------------------------------------------
+    def add_message(self, seat: str, sender: str, **fields) -> dict:
+        seat = clean_seat(seat)
+        msg = {"id": new_id("m"), "seat": seat, "from": sender, "at": now(), "status": "sent", **fields}
+        self.threads.setdefault(seat, []).append(msg)
+        del self.threads[seat][:-60]
+        return msg
+
+    def get_message(self, seat: str, msg_id: str) -> dict:
+        for m in self.threads.get(clean_seat(seat), []):
+            if m["id"] == msg_id:
+                return m
+        raise KeyError("no such message")
+
     # ---- snapshots ------------------------------------------------------------------
     def snapshot(self) -> dict:
         return {"passengers": [p.public() for p in self.passengers.values()],
                 "requests": sorted(self.requests.values(), key=lambda r: r["created"]),
                 "announcements": sorted(self.announcements.values(), key=lambda a: a["created"]),
                 "exit_checks": sorted(self.exit_checks.values(), key=lambda c: c["created"]),
-                "checkins": list(self.checkins.values())}
+                "checkins": list(self.checkins.values()), "threads": self.threads}

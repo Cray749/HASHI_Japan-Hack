@@ -59,3 +59,39 @@ def get_translator() -> Translator | None:
         except Exception:
             _failed = True
     return _translator
+
+
+class NotReady(RuntimeError):
+    """The translation model is not installed or not loaded yet."""
+
+
+_cache: dict[tuple[str, str, str], str] = {}
+
+
+def translate_text(text: str, src: str, tgt: str) -> str:
+    """Translate with NLLB. Raises NotReady if the model is missing. Repeats are cached."""
+    if src == tgt or not text.strip():
+        return text
+    key = (text, src, tgt)
+    if key in _cache:
+        return _cache[key]
+    tr = get_translator()
+    if tr is None:
+        raise NotReady("translation model is not installed yet")
+    out = tr.translate(text, src, tgt)
+    if len(_cache) > 500:
+        _cache.clear()
+    _cache[key] = out
+    return out
+
+
+def round_trip_score(original: str, back: str) -> int:
+    """0 to 100: how close the back-translation is to what the speaker said (sound-form comparison)."""
+    from rapidfuzz import fuzz
+
+    from .phonetic import phonetic_key
+
+    a, b = phonetic_key(original), phonetic_key(back)
+    if not a or not b:
+        return int(fuzz.ratio(original.lower(), back.lower()))
+    return int(max(fuzz.token_set_ratio(a, b), fuzz.ratio(a, b)))

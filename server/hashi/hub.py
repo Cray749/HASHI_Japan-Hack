@@ -6,11 +6,14 @@ within a fraction of a second on the local network.
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 
 from fastapi import WebSocket
 
+from . import translate
+from .intents import catalog
 from .store import Flight, clean_seat
 
 log = logging.getLogger("hashi.hub")
@@ -64,7 +67,8 @@ class Hub:
                              and r["status"] in ("new", "seen", "replied")],
                 "announcements": f.pending_announcements(seat),
                 "exit_check": f.pending_exit_check(seat),
-                "checkin": f.pending_checkin(seat)}
+                "checkin": f.pending_checkin(seat),
+                "thread": f.threads.get(seat, [])[-30:]}
 
     async def handle_passenger(self, seat: str, msg: dict) -> None:
         f = self.flight
@@ -99,6 +103,19 @@ class Hub:
                                       bool(msg.get("willing")), str(msg.get("answer", "")))
             await self.to_seat(seat, {"t": "exit_done", "state": chk["seats"][seat]["state"]})
             await self.to_crew({"t": "exit", "exit": chk})
+        elif kind == "say":
+            await self._passenger_say(seat, str(msg.get("text", "")))
+        elif kind == "say_confirm":
+            m = f.get_message(seat, msg.get("id", ""))
+            if m["status"] == "pending":
+                m["status"] = "sent"
+                await self.to_seat(seat, {"t": "say_sent", "msg": m})
+                await self.to_crew({"t": "say", "msg": m})
+        elif kind == "say_cancel":
+            m = f.get_message(seat, msg.get("id", ""))
+            if m["status"] == "pending":
+                m["status"] = "cancelled"
+                await self.to_seat(seat, {"t": "say_sent", "msg": m})
         elif kind == "checkin_answer":
             c = f.answer_checkin(seat, str(msg.get("answer", "")))
             await self.to_seat(seat, {"t": "checkin_done", "checkin": c})
@@ -141,6 +158,10 @@ class Hub:
             chk = f.resolve_exit_seat(msg.get("check_id", ""), msg.get("seat", ""),
                                       bool(msg.get("ok")))
             await self.to_crew({"t": "exit", "exit": chk})
+        elif kind == "crew_say":
+            await self._crew_say(msg.get("seat", ""), str(msg.get("text", "")), str(msg.get("src", "ja")))
+        elif kind == "announce_text":
+            await self._announce_text(str(msg.get("text", "")), msg.get("target") or {"all": True})
         elif kind == "checkin":
             c = f.start_checkin(msg.get("seat", ""))
             await self.to_crew({"t": "checkin", "checkin": c})
@@ -158,3 +179,66 @@ class Hub:
         await self.to_crew({"t": "snapshot", **self.flight.snapshot(), "landed": True})
         for seat in list(self.passengers):
             await self.to_seat(seat, {"t": "landed"})
+
+
+    # ---- live two-way conversation (machine translation lane) -------------------------
+    async def _passenger_say(self, seat: str, text: str) -> None:
+        """Passenger text (typed or recognised) -> Japanese for the crew, checked by translating it back."""
+        text = text.strip()[:300]
+        if not text:
+            raise ValueError("empty message")
+        lang = self.flight.passengers[seat].lang if seat in self.flight.passengers else "en"
+        try:
+            ja = await asyncio.to_thread(translate.translate_text, text, lang, "ja")
+            back = await asyncio.to_thread(translate.translate_text, ja, "ja", lang)
+        except translate.NotReady:
+            await self.to_seat(seat, {"t": "say_error", "error": "model_not_ready"})
+            return
+        score = translate.round_trip_score(text, back)
+        m = self.flight.add_message(seat, "passenger", original=text, lang=lang, ja=ja, back=back,
+                                    score=score, warn=score < 55, lane="machine", status="pending")
+        await self.to_seat(seat, {"t": "say_check", "msg": m})
+
+    async def _crew_say(self, seat: str, text: str, src: str) -> None:
+        """Crew text (Japanese by default) -> the passenger's language. Pre-approved wording is used when it matches."""
+        seat = clean_seat(seat)
+        text = text.strip()[:300]
+        if not text or seat not in self.flight.passengers:
+            raise ValueError("nothing to send")
+        lang = self.flight.passengers[seat].lang
+        wanted = text.rstrip("\u3002.")
+        vetted = next((r for r in catalog().replies.values() if r["text"]["ja"].rstrip("\u3002.") == wanted), None)
+        if vetted is not None and lang in vetted["text"]:
+            translated, back, lane = vetted["text"][lang], "", "vetted"
+        else:
+            try:
+                translated = await asyncio.to_thread(translate.translate_text, text, src, lang)
+                back = await asyncio.to_thread(translate.translate_text, translated, lang, src)
+            except translate.NotReady:
+                await self.to_crew({"t": "say_error", "error": "model_not_ready"})
+                return
+            lane = "machine"
+        m = self.flight.add_message(seat, "crew", original=text, lang=lang, translated=translated, back=back, lane=lane)
+        await self.to_seat(seat, {"t": "crew_say", "msg": m})
+        await self.to_crew({"t": "say", "msg": m})
+
+    async def _announce_text(self, text: str, target: dict) -> None:
+        """A free announcement: translated once per language that is on board, then sent to each seat."""
+        text = text.strip()[:300]
+        if not text:
+            raise ValueError("empty announcement")
+        f = self.flight
+        spec = {"all": bool(target.get("all")), "rows": [int(r) for r in target.get("rows", [])],
+                "seats": target.get("seats", [])}
+        langs = {p.lang for p in f.passengers.values() if f._targets(spec, p.seat)}
+        texts = {"ja": text}
+        try:
+            for lang in langs:
+                texts[lang] = await asyncio.to_thread(translate.translate_text, text, "ja", lang)
+        except translate.NotReady:
+            await self.to_crew({"t": "say_error", "error": "model_not_ready"})
+            return
+        ann = f.create_announcement(None, target, custom=text, texts=texts)
+        await self.to_crew({"t": "announcement", "announcement": ann})
+        for seat in ann["acks"]:
+            await self.to_seat(seat, {"t": "announce", "announcement": ann})
