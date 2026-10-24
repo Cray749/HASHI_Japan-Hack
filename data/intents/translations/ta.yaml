@@ -1,6 +1,6 @@
 code: ta
 name: "தமிழ்"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "உங்கள் இருக்கை எண்"

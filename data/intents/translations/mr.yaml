@@ -1,6 +1,6 @@
 code: mr
 name: "मराठी"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "तुमचा सीट क्रमांक"

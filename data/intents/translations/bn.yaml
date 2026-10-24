@@ -1,6 +1,6 @@
 code: bn
 name: "বাংলা"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "আপনার সিট নম্বর"

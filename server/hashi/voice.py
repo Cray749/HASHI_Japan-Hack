@@ -16,6 +16,7 @@ from .asr import get_backend
 from .matcher import get_matcher
 
 TARGET_SR = 16000
+VALIDATED_VOICE = ("hi", "pa", "en")  # tested with the benchmark; every other language is voice beta
 MAX_SECONDS = 15
 
 
@@ -54,7 +55,9 @@ def process_audio(data: bytes, lang: str, cleanup: bool = False) -> dict:
     if cleanup:
         pcm = noise.clean(pcm)
     result = backend.transcribe(pcm, lang)
-    out = {"ok": True, "heard": result.text, "engine": backend.name}
+    out = {"ok": True, "heard": result.text, "engine": backend.name, "lang": lang}
     out.update(understand(result.text))
+    if lang not in VALIDATED_VOICE and out.get("mode") == "send":
+        out["mode"] = "confirm"  # beta languages: the passenger always confirms with pictures
     out["ms"] = int((time.time() - t0) * 1000)
     return out

@@ -1,6 +1,6 @@
 code: km
 name: "ខ្មែរ"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "លេខកៅអីរបស់អ្នក"

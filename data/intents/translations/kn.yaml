@@ -1,6 +1,6 @@
 code: kn
 name: "ಕನ್ನಡ"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "ನಿಮ್ಮ ಸೀಟ್ ಸಂಖ್ಯೆ"

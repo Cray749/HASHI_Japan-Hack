@@ -1,6 +1,6 @@
 code: gu
 name: "ગુજરાતી"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "તમારો સીટ નંબર"

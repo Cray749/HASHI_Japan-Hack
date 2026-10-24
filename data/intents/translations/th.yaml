@@ -1,6 +1,6 @@
 code: th
 name: "ไทย"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "หมายเลขที่นั่งของคุณ"

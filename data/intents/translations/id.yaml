@@ -1,6 +1,6 @@
 code: id
 name: "Bahasa Indonesia"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "Nomor kursi Anda"

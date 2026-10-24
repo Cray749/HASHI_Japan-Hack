@@ -1,4 +1,5 @@
 import type { PaxLang } from '../shared/types';
+import { VOICE_UI } from './voiceUi';
 
 /** Every word the passenger app shows outside the request catalogue. Short and warm. */
 const S = {
@@ -85,7 +86,7 @@ export function setPackUi(ui: Record<string, Record<string, string>>): void {
 
 export function t(lang: PaxLang, key: Key): string {
   const entry = S[key] as Record<string, string>;
-  return entry[lang] ?? PACK_UI[lang]?.[key] ?? entry.en;
+  return entry[lang] ?? PACK_UI[lang]?.[key] ?? VOICE_UI[lang]?.[key] ?? entry.en;
 }
 
 /** Categories on the "More" screen. */

@@ -1,6 +1,6 @@
 code: ms
 name: "Bahasa Melayu"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "Nombor tempat duduk anda"

@@ -1,6 +1,7 @@
 """HASHI cabin server: one process serves the API, the WebSockets and both web apps."""
 from __future__ import annotations
 
+import io
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -83,8 +84,7 @@ def voice_request(audio: UploadFile = File(...), lang: str = Form("hi"),
                   cleanup: str = Form("0")):
     data = audio.file.read(4_000_000)
     try:
-        return voice.process_audio(data, lang if lang in ("hi", "pa", "en") else "hi",
-                                   cleanup == "1")
+        return voice.process_audio(data, lang if lang in catalog().langs else "hi", cleanup == "1")
     except Exception as exc:  # any failure: the passenger app shows the picture tiles
         log.warning("voice failed: %s", exc)
         return JSONResponse({"ok": False, "error": "failed", "mode": "tiles",
@@ -157,8 +157,10 @@ def qr(seat: str = ""):
     port = int(os.environ.get("HASHI_PORT", "8000"))
     scheme = os.environ.get("HASHI_SCHEME", "http")
     url = f"{scheme}://{lan_ip()}:{port}/p/" + (f"?seat={seat}" if seat else "")
-    svg = segno.make(url, error="m").svg_inline(scale=6, border=2, dark="#0E1A3A")
-    return Response(svg, media_type="image/svg+xml")
+    buf = io.BytesIO()
+    # svgns=True writes the xmlns attribute; without it the browser will not draw the file in an <img>
+    segno.make(url, error="m").save(buf, kind="svg", scale=6, border=2, dark="#0E1A3A", xmldecl=False, svgns=True)
+    return Response(buf.getvalue(), media_type="image/svg+xml")
 
 
 @app.post("/api/landing")

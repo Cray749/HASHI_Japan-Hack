@@ -1,6 +1,6 @@
 code: ml
 name: "മലയാളം"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "നിങ്ങളുടെ സീറ്റ് നമ്പർ"

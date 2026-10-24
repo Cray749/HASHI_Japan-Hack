@@ -1,6 +1,6 @@
 code: my
 name: "မြန်မာ"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "သင့်ထိုင်ခုံနံပါတ်"

@@ -70,6 +70,12 @@ class IntentMatcher:
                 for raw in phrases:
                     key = phonetic_key(raw)
                     self.rows.append((intent_id, raw, key, skeleton(key), bank))
+        # the tile label of every other language is its starting phrase (voice beta languages)
+        for intent in cat.intents.values():
+            for code, label in intent.labels.items():
+                if code not in ("en", "ja", "hi", "pa"):
+                    key = phonetic_key(label)
+                    self.rows.append((intent.id, label, key, skeleton(key), code))
         n = len(self.rows)
         df_full: Counter = Counter()
         df_skel: Counter = Counter()

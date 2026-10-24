@@ -33,7 +33,9 @@ def _indic_to_latin(text: str) -> str:
     pending_schwa = False
     for ch in text:
         cp = ord(ch)
-        base = 0x0900 if 0x0900 <= cp < 0x0980 else 0x0A00 if 0x0A00 <= cp < 0x0A80 else None
+        # Devanagari, Bengali, Gurmukhi, Gujarati, Odia, Tamil, Telugu, Kannada, Malayalam: 128-wide blocks
+        # that share one layout, so the same table works for all of them
+        base = (cp & ~0x7F) if 0x0900 <= cp < 0x0D80 else None
         if base is None:
             if pending_schwa:
                 out.append("a")
@@ -79,6 +81,9 @@ _ROMAN_RULES = [
 _ROMAN_MAP = str.maketrans({"z": "j", "f": "p", "w": "v", "q": "k", "c": "k", "x": "k"})
 
 
+_RAW_SCRIPTS = re.compile("[฀-๿ក-៿က-႟]")
+
+
 def _fold_roman(word: str) -> str:
     # "C" stands for the "ch" sound; indic text is converted straight to it
     for pat, rep in _ROMAN_RULES:
@@ -94,6 +99,13 @@ def phonetic_words(text: str) -> list[str]:
     for raw in re.split(r"[\s,.;:!?\"'()\-।|/]+", text):
         if not raw:
             continue
+        if _RAW_SCRIPTS.search(raw):
+            words.append(raw.lower())  # Thai, Khmer, Burmese: compared as written (character n-grams)
+            continue
+        if not raw.isascii():
+            stripped = "".join(c for c in unicodedata.normalize("NFD", raw) if not unicodedata.combining(c))
+            if stripped.isascii():  # Vietnamese and other Latin text with accents
+                raw = stripped.replace("đ", "d").replace("Đ", "D")
         if raw.isascii():
             raw = raw.lower()
         converted = _indic_to_latin(raw)

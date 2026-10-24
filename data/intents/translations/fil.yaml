@@ -1,6 +1,6 @@
 code: fil
 name: "Filipino"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "Numero ng upuan mo"

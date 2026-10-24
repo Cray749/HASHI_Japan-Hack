@@ -1,6 +1,6 @@
 code: te
 name: "తెలుగు"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "మీ సీటు నంబర్"

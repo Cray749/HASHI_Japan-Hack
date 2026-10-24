@@ -1,6 +1,6 @@
 code: vi
 name: "Tiếng Việt"
-voice: false
+voice: true
 status: draft
 ui:
   seatAsk: "Số ghế của bạn"
