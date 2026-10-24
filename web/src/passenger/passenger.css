@@ -491,3 +491,13 @@ body {
   align-items: center;
   margin: 8px 0;
 }
+
+.help-line {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--muted);
+  background: #fff;
+  border-left: 6px solid var(--saffron);
+  border-radius: 8px;
+  padding: 10px 14px;
+}

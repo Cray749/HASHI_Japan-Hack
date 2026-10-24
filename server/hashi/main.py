@@ -21,7 +21,7 @@ from fastapi.responses import JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import asr, voice
+from . import asr, translate, voice
 from .demo import seed as seed_demo
 from .hub import Hub
 from .intents import DATA_DIR, announcements, catalog, greetings
@@ -89,6 +89,58 @@ def voice_request(audio: UploadFile = File(...), lang: str = Form("hi"),
         log.warning("voice failed: %s", exc)
         return JSONResponse({"ok": False, "error": "failed", "mode": "tiles",
                              "candidates": []})
+
+
+class TranslateIn(BaseModel):
+    text: str
+    src: str
+    tgt: str
+
+
+def _translate(text: str, src: str, tgt: str) -> str | None:
+    if src not in translate.NLLB_CODE or tgt not in translate.NLLB_CODE:
+        return None
+    tr = translate.get_translator()
+    return tr.translate(text[:400], src, tgt) if tr else None
+
+
+@app.get("/api/live/info")
+def live_info():
+    """What the live translator page can do on this machine."""
+    return {"translate": translate.available(), "languages": list(translate.NLLB_CODE)}
+
+
+@app.post("/api/translate")
+def translate_text(body: TranslateIn):
+    out = _translate(body.text, body.src, body.tgt)
+    if out is None:
+        raise HTTPException(503, "translation model not installed (python scripts/get_nllb.py)")
+    return {"text": out, "note": "machine translation, unverified"}
+
+
+@app.post("/api/live")
+def live_audio(audio: UploadFile = File(...), src: str = Form("hi"), tgt: str = Form("ja")):
+    """Speak, see what was heard and a translation. Audio is processed in memory only."""
+    data = audio.file.read(4_000_000)
+    try:
+        pcm = voice.decode_wav(data)
+        backend = asr.get_backend()
+        if not backend.ready or len(pcm) < 4800:
+            return {"ok": False, "error": "no_speech"}
+        heard = backend.transcribe(pcm, src).text
+    except Exception as exc:
+        log.warning("live failed: %s", exc)
+        return {"ok": False, "error": "failed"}
+    out = {"ok": True, "heard": heard, "tgt": tgt, "translation": None, "match": None}
+    if heard.strip():
+        out["translation"] = _translate(heard, src, tgt)
+        m = voice.understand(heard)
+        top = m["candidates"][0] if m["candidates"] else None
+        if top and m["mode"] != "tiles":
+            intent = catalog().intents[top["intent"]]
+            out["match"] = {"intent": intent.id, "ja": intent.labels["ja"], "en": intent.labels["en"],
+                            "confidence": m["confidence"], "mode": m["mode"]}
+    return out
 
 
 @app.get("/api/join")

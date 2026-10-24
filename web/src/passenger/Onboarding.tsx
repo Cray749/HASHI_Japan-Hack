@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { LanguageInfo } from '../shared/types';
 import { Bridge, Icon } from '../shared/ui';
-import { t } from './i18n';
+import { PROFILE_HELP, t } from './i18n';
 import type { Profile } from './profile';
 
 export default function Onboarding({ initial, languages, onDone }: {
@@ -32,6 +32,7 @@ export default function Onboarding({ initial, languages, onDone }: {
             </button>
           ))}
         </div>
+        <a className="link" href="/live/">Live translator (speak and see the translation)</a>
       </main>
     );
   }
@@ -81,6 +82,7 @@ export default function Onboarding({ initial, languages, onDone }: {
             {t(lang, 'start')}
           </button>
         )}
+        <button className="btn wide" onClick={() => setStep(hasSeat ? 0 : 1)}><Icon name="ChevronLeft" /> {t(lang, 'back')}</button>
       </main>
     );
   }
@@ -88,6 +90,7 @@ export default function Onboarding({ initial, languages, onDone }: {
   return (
     <main className="onb" lang={lang}>
       <h2>{t(lang, 'profileTitle')}</h2>
+      <p className="help-line">{PROFILE_HELP[lang] ?? PROFILE_HELP.en}</p>
       <div className="checks">
         {([
           ['senior', p.senior, () => upd({ senior: !p.senior })],
@@ -105,9 +108,12 @@ export default function Onboarding({ initial, languages, onDone }: {
           </button>
         ))}
       </div>
-      <button className="btn primary wide" onClick={() => onDone({ ...p, seat: p.seat.trim().toUpperCase() })}>
-        {t(lang, 'start')}
-      </button>
+      <div className="row">
+        <button className="btn" onClick={() => setStep(2)}><Icon name="ChevronLeft" /> {t(lang, 'back')}</button>
+        <button className="btn primary" onClick={() => onDone({ ...p, seat: p.seat.trim().toUpperCase() })}>
+          {t(lang, 'start')}
+        </button>
+      </div>
     </main>
   );
 }

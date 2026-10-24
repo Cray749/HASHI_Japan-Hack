@@ -124,3 +124,24 @@ export const CHECKIN: Record<string, [string, string, string]> = {
   km: ["តើអ្វីៗទាំងអស់ល្អទេ?", "ខ្ញុំសុខសប្បាយ", "សូមមកជួបខ្ញុំ"],
   my: ["အားလုံး အဆင်ပြေပါသလား?", "ကျွန်ုပ် အဆင်ပြေပါသည်", "ကျေးဇူးပြု၍ ကျွန်ုပ်ဆီ လာပါ"],
 };
+
+/** One calm sentence under the profile heading: what this screen is, that it is optional, who sees it. */
+export const PROFILE_HELP: Record<string, string> = {
+  en: "Tick anything that helps you. It is optional: you can press Start without ticking anything. Only the crew can see this.",
+  hi: "जो बातें आपके काम आएँ उन पर निशान लगाइए। यह ज़रूरी नहीं है, बिना कुछ चुने भी शुरू दबा सकते हैं। इसे सिर्फ़ क्रू देख सकता है।",
+  pa: "ਜੋ ਗੱਲਾਂ ਤੁਹਾਡੇ ਕੰਮ ਆਉਣ ਉਹਨਾਂ ਤੇ ਨਿਸ਼ਾਨ ਲਾਓ। ਇਹ ਜ਼ਰੂਰੀ ਨਹੀਂ, ਬਿਨਾਂ ਕੁਝ ਚੁਣੇ ਵੀ ਸ਼ੁਰੂ ਦਬਾ ਸਕਦੇ ਹੋ। ਇਸਨੂੰ ਸਿਰਫ਼ ਕਰੂ ਦੇਖ ਸਕਦਾ ਹੈ।",
+  ta: "உங்களுக்கு உதவும் எதையும் தேர்ந்தெடுங்கள். இது கட்டாயமில்லை; எதுவும் தேர்ந்தெடுக்காமலும் தொடங்கு அழுத்தலாம். இதை குழுவினர் மட்டுமே பார்ப்பார்கள்.",
+  te: "మీకు ఉపయోగపడేవి ఏవైనా ఎంచుకోండి. ఇది తప్పనిసరి కాదు; ఏమీ ఎంచుకోకుండానే ప్రారంభించు నొక్కవచ్చు. దీన్ని సిబ్బంది మాత్రమే చూస్తారు.",
+  bn: "যা আপনার কাজে লাগে তা বেছে নিন। এটি বাধ্যতামূলক নয়; কিছু না বেছেও শুরু করুন চাপতে পারেন। শুধু ক্রু এটি দেখতে পায়।",
+  gu: "જે તમને કામ લાગે તે પસંદ કરો. આ ફરજિયાત નથી; કંઈ પસંદ કર્યા વિના પણ શરૂ કરો દબાવી શકો છો. આ ફક્ત ક્રૂ જોઈ શકે છે.",
+  mr: "तुम्हाला उपयोगी वाटतील ते निवडा. हे ऐच्छिक आहे; काही न निवडताही सुरू करा दाबू शकता. हे फक्त क्रू पाहू शकतो.",
+  kn: "ನಿಮಗೆ ಉಪಯೋಗವಾಗುವುದನ್ನು ಆಯ್ಕೆಮಾಡಿ. ಇದು ಕಡ್ಡಾಯವಲ್ಲ; ಏನನ್ನೂ ಆಯ್ಕೆಮಾಡದೆ ಪ್ರಾರಂಭಿಸಿ ಒತ್ತಬಹುದು. ಇದನ್ನು ಸಿಬ್ಬಂದಿ ಮಾತ್ರ ನೋಡುತ್ತಾರೆ.",
+  ml: "നിങ്ങൾക്ക് സഹായകമായതെല്ലാം തിരഞ്ഞെടുക്കൂ. ഇത് നിർബന്ധമല്ല; ഒന്നും തിരഞ്ഞെടുക്കാതെയും തുടങ്ങുക അമർത്താം. ജീവനക്കാർക്ക് മാത്രമേ ഇത് കാണാനാകൂ.",
+  th: "เลือกสิ่งที่ช่วยคุณได้ ไม่บังคับ คุณกดเริ่มได้เลยโดยไม่ต้องเลือกอะไร เฉพาะลูกเรือเท่านั้นที่เห็นข้อมูลนี้",
+  vi: "Hãy chọn những gì giúp ích cho bạn. Việc này không bắt buộc: bạn có thể bấm Bắt đầu mà không chọn gì. Chỉ phi hành đoàn thấy thông tin này.",
+  id: "Centang yang membantu Anda. Ini opsional: Anda bisa menekan Mulai tanpa mencentang apa pun. Hanya awak kabin yang dapat melihatnya.",
+  fil: "Lagyan ng tsek ang makakatulong sa iyo. Opsyonal ito: puwede mong pindutin ang Simulan nang walang pinipili. Ang crew lang ang makakakita nito.",
+  ms: "Tandakan apa yang membantu anda. Ini pilihan: anda boleh tekan Mula tanpa menanda apa-apa. Hanya anak kapal yang dapat melihatnya.",
+  km: "សូមជ្រើសរើសអ្វីដែលជួយអ្នក។ វាមិនចាំបាច់ទេ៖ អ្នកអាចចុចចាប់ផ្តើមដោយមិនជ្រើសអ្វីក៏បាន។ មានតែអ្នកបម្រើទេដែលមើលឃើញ។",
+  my: "သင့်ကို အကူအညီဖြစ်မည့်အရာများကို ရွေးပါ။ မဖြစ်မနေမလိုပါ၊ ဘာမှမရွေးဘဲ စတင်ပါကို နှိပ်နိုင်သည်။ အမှုထမ်းများသာ မြင်ရမည်။",
+};

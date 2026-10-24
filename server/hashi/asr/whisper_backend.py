@@ -18,6 +18,10 @@ MODELS_DIR = Path(os.environ.get("HASHI_MODELS", Path(__file__).resolve().parent
 # "I feel unwell". A Gurmukhi prompt made Punjabi loop outright. The benchmark caught both.
 
 
+# our codes that differ from Whisper's; any other supported code is passed straight through
+_WHISPER_LANG = {"fil": "tl"}
+
+
 class WhisperBackend(ASRBackend):
     name = "faster-whisper"
 
@@ -40,7 +44,7 @@ class WhisperBackend(ASRBackend):
     def _run(self, pcm: np.ndarray, lang: str, task: str) -> ASRResult:
         t0 = time.time()
         segments, info = self.model.transcribe(
-            pcm.astype(np.float32), language=lang if lang in ("hi", "pa", "en", "ja") else None,
+            pcm.astype(np.float32), language=_WHISPER_LANG.get(lang, lang),
             task=task, beam_size=3, vad_filter=False, condition_on_previous_text=False,
             # requests are one short sentence: no retry loop on noisy audio, and a hard cap
             # on length so a hallucinated run-on cannot stall the passenger's phone

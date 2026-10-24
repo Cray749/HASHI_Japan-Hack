@@ -102,6 +102,7 @@ export default defineConfig({
       input: {
         p: resolve(__dirname, 'p/index.html'),
         crew: resolve(__dirname, 'crew/index.html'),
+        live: resolve(__dirname, 'live/index.html'),
       },
     },
     chunkSizeWarningLimit: 900,

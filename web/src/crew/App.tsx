@@ -236,6 +236,7 @@ export default function App() {
           setSound(!sound);
           if (!sound) beep(audio.current);
         }}><Icon name={sound ? 'Bell' : 'BellOff'} size={18} /> {sound ? '音 On' : '音 Off'}</button>
+        <a className="hbtn" href="/live/" target="_blank" rel="noreferrer"><Icon name="Languages" size={18} /> ライブ翻訳 Live</a>
         <button className="hbtn" onClick={() => setShowQr(true)}><Icon name="QrCode" size={18} /> QR</button>
         <button className="hbtn" onClick={() => {
           if (window.confirm('着陸しました。全データを削除します。\nLanded: delete all flight data?')) {
