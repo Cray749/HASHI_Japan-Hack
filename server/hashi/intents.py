@@ -88,6 +88,8 @@ def _merge_packs(cat: Catalog) -> None:
         for aid, text in pack.get("announcements", {}).items():
             if aid in anns:
                 anns[aid]["text"][code] = text
+    order = ["pa", "hi", "en", "ta", "te", "bn", "gu", "mr", "kn", "ml", "th", "vi", "id", "fil", "ms", "km", "my"]
+    cat.languages.sort(key=lambda x: order.index(x["code"]) if x["code"] in order else 99)
     # announcements() reads the same file; keep the merged copy for it
     cat_announcements.clear()
     cat_announcements.update(anns)

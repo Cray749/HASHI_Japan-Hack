@@ -66,24 +66,31 @@ def gtts_one(path: Path, lang: str, text: str) -> None:
     gTTS(text=text, lang=lang, slow=False).save(str(path))
 
 
+async def make_one(sem: asyncio.Semaphore, name: str, lang: str, text: str, force: bool) -> str:
+    path = OUT / name
+    if path.exists() and path.stat().st_size > 500 and not force:
+        return "skipped"
+    async with sem:
+        for attempt in range(4):  # the online voices fail now and then; retry before giving up
+            try:
+                if lang == "pa" or lang not in EDGE_VOICE:
+                    await asyncio.to_thread(gtts_one, path, lang, text)
+                else:
+                    await edge_one(path, lang, text)
+                return "made"
+            except Exception as exc:
+                last = exc
+                await asyncio.sleep(1 + attempt)
+        print(f"failed {name}: {last}")
+        return "failed"
+
+
 async def main(force: bool) -> int:
     OUT.mkdir(parents=True, exist_ok=True)
     await pick_voices()
-    made = skipped = failed = 0
-    for name, lang, text in jobs():
-        path = OUT / name
-        if path.exists() and path.stat().st_size > 500 and not force:
-            skipped += 1
-            continue
-        try:
-            if lang == "pa" or lang not in EDGE_VOICE:
-                await asyncio.to_thread(gtts_one, path, lang, text)
-            else:
-                await edge_one(path, lang, text)
-            made += 1
-        except Exception as exc:  # keep going; the app falls back to the phone's own voice
-            failed += 1
-            print(f"failed {name}: {exc}")
+    sem = asyncio.Semaphore(4)
+    results = await asyncio.gather(*(make_one(sem, n, lang, t, force) for n, lang, t in jobs()))
+    made, skipped, failed = (results.count(k) for k in ("made", "skipped", "failed"))
     print(f"audio: {made} made, {skipped} already there, {failed} failed -> {OUT}")
     return 1 if failed and not made else 0
 
