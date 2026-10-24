@@ -59,3 +59,20 @@ def test_announcements_and_greetings_complete():
     for g in greetings():
         for item in g["items"]:
             assert item["katakana"] and item["script"]
+
+
+def test_language_packs_are_complete_and_marked_draft():
+    cat = catalog()
+    assert len(cat.languages) >= 17
+    for lang in cat.languages:
+        assert lang["status"] in ("draft", "reviewed")
+    for code in cat.langs:
+        for intent in cat.intents.values():
+            assert intent.labels.get(code, "").strip(), f"{code} missing label for {intent.id}"
+        for reply in cat.replies.values():
+            assert reply["text"].get(code, "").strip(), f"{code} missing reply {reply['id']}"
+        for ann in announcements():
+            assert ann["text"].get(code, "").strip(), f"{code} missing announcement {ann['id']}"
+    for code, ui in cat.ui.items():
+        for key in ("askWhat", "understood", "helpBig", "consent1", "consent2", "start", "sent", "seen"):
+            assert ui.get(key, "").strip(), f"{code} missing interface string {key}"
