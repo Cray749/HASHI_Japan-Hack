@@ -4,6 +4,7 @@ from __future__ import annotations
 import io
 import logging
 import os
+import threading
 import time
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -110,6 +111,8 @@ def _translate(text: str, src: str, tgt: str) -> str | None:
 @app.get("/api/live/info")
 def live_info():
     """What the live translator page can do on this machine."""
+    if translate.available():  # warm the model up in the background so the first translation is quick
+        threading.Thread(target=translate.get_translator, daemon=True).start()
     return {"translate": translate.available(), "languages": list(translate.NLLB_CODE)}
 
 

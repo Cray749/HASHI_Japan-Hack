@@ -90,4 +90,8 @@ export function speak(text?: string, lang?: string): void {
   }
 }
 
-export const SPEECH_LANG: Record<string, string> = { hi: 'hi-IN', pa: 'pa-IN', en: 'en-US', ja: 'ja-JP' };
+export const SPEECH_LANG: Record<string, string> = {
+  hi: 'hi-IN', pa: 'pa-IN', en: 'en-US', ja: 'ja-JP', ta: 'ta-IN', te: 'te-IN', bn: 'bn-IN', gu: 'gu-IN',
+  mr: 'mr-IN', kn: 'kn-IN', ml: 'ml-IN', th: 'th-TH', vi: 'vi-VN', id: 'id-ID', fil: 'fil-PH', ms: 'ms-MY',
+  km: 'km-KH', my: 'my-MM',
+};

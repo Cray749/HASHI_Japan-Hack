@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Recorder, micAvailable } from '../passenger/recorder';
 import type { LanguageInfo } from '../shared/types';
-import { Bridge, Icon } from '../shared/ui';
+import { Bridge, Icon, SPEECH_LANG, speak } from '../shared/ui';
 
 interface Candidate { intent: string; score: number; ja: string; en: string }
 interface LiveResult {
@@ -37,6 +37,7 @@ export default function App() {
   const [seat, setSeat] = useState('24C');
   const [sent, setSent] = useState('');
   const [online, setOnline] = useState(navigator.onLine);
+  const [autoSpeak, setAutoSpeak] = useState(true);
   const rec = useRef<Recorder | null>(null);
 
   useEffect(() => {
@@ -74,7 +75,9 @@ export default function App() {
       form.append('audio', blob, 'v.wav');
       form.append('src', src);
       form.append('tgt', tgt);
-      setRes((await (await fetch('/api/live', { method: 'POST', body: form })).json()) as LiveResult);
+      const out = (await (await fetch('/api/live', { method: 'POST', body: form })).json()) as LiveResult;
+      setRes(out);
+      if (autoSpeak && out.translation) speak(out.translation, SPEECH_LANG[tgt]);
     } catch {
       setRes({ ok: false, error: 'too short or failed' });
     }
@@ -90,7 +93,8 @@ export default function App() {
         body: JSON.stringify({ text: typed, src, tgt }),
       });
       const j = await r.json();
-      setRes({ ok: r.ok, heard: typed, translation: r.ok ? j.text : null, translator: 'NLLB-200 600M', error: r.ok ? undefined : 'translation model not installed' });
+      setRes({ ok: r.ok, heard: typed, translation: r.ok ? j.text : null, translator: 'NLLB-200 600M', error: r.ok ? undefined : 'translation model is still installing, check models/nllb-600m-ct2' });
+      if (r.ok && autoSpeak) speak(j.text, SPEECH_LANG[tgt]);
     } catch {
       setRes({ ok: false, error: 'failed' });
     }
@@ -162,6 +166,11 @@ export default function App() {
         </button>
       </section>
 
+      <label className="auto">
+        <input type="checkbox" checked={autoSpeak} onChange={(e) => setAutoSpeak(e.target.checked)} />
+        翻訳を読み上げる · Read the translation aloud (uses the device voice, works offline if the voice is installed)
+      </label>
+
       {res && !res.ok && <p className="note">うまくいきませんでした。もう一度どうぞ。 Could not do that ({res.error}). Try again.</p>}
 
       {res?.ok && st && (
@@ -206,10 +215,13 @@ export default function App() {
             <span>kept in memory only, never written to disk</span>
           </li>
           {res.translation && (
-            <li className="done">
+            <li className="done big-trans">
               <b>＋ 翻訳 Translation</b>
               <span>{res.translator}, {st.translate?.ms} ms · machine translation, unverified ({name(tgt)})</span>
               <em lang={tgt}>{res.translation}</em>
+              <button className="btn" onClick={() => speak(res.translation ?? '', SPEECH_LANG[tgt])}>
+                <Icon name="Volume2" /> 聞く · Hear it in {name(tgt)}
+              </button>
             </li>
           )}
           <li className={res.match ? 'done' : 'wait'}>
